@@ -1,0 +1,66 @@
+import { useEffect, useState } from "react";
+import { Sparkles, Compass, X, Sun, Upload } from "lucide-react";
+import { COLORS, F } from "../../shared/theme";
+import { Card, SectionTitle, DetailRow, Placeholder, GoldButton, LoadingNote, ErrorNote } from "../../shared/ui";
+import { useAuth } from "../../lib/auth";
+import { fetchDressCodes } from "../../lib/queries";
+
+export default function DressCodes() {
+  const { configured } = useAuth();
+  const [codes, setCodes] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!configured) {
+      setError("Supabase isn't connected yet, so dress codes can't load.");
+      return;
+    }
+    fetchDressCodes().then(setCodes).catch((e) => setError(e.message));
+  }, [configured]);
+
+  return (
+    <div className="px-5 pt-6">
+      <SectionTitle eyebrow="Style Guide" title="Dress Codes" light sub="A look for every night of the celebration. Final details may be updated by the organizers." />
+      <ErrorNote message={error} />
+      {!error && !codes && <LoadingNote label="Loading dress codes…" />}
+      {codes && (
+        <div className="space-y-4">
+          {codes.map((dc) => (
+            <Card dark key={dc.id}>
+              <div className="flex items-center justify-between mb-1">
+                <div className="uppercase tracking-[0.28em] text-[11px] font-medium mb-2" style={{ color: COLORS.gold, fontFamily: F.mono }}>
+                  {dc.event} · {dc.date}
+                </div>
+              </div>
+              <h3 className="text-[19px] mb-2" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>
+                {dc.title}
+              </h3>
+              <div className="flex gap-2 mb-3">
+                {dc.palette.map((c) => (
+                  <span key={c} className="w-7 h-7 rounded-full" style={{ background: c, border: "1px solid rgba(255,255,255,0.15)" }} />
+                ))}
+              </div>
+              <p className="text-[13px] leading-relaxed mb-3" style={{ color: COLORS.ivoryDim }}>{dc.description}</p>
+              <div className="space-y-2 mb-3">
+                <DetailRow icon={Sparkles} label="Inspiration" value={dc.inspiration} />
+                <DetailRow icon={Compass} label="Footwear" value={dc.footwear} />
+                <DetailRow icon={X} label="Avoid" value={dc.avoid} />
+                <DetailRow icon={Sun} label="Weather" value={dc.weather} />
+              </div>
+              <Placeholder label={`Inspiration photos for "${dc.title}" go here`} ratio="aspect-[16/7]" />
+            </Card>
+          ))}
+          <Card dark className="text-center">
+            <Upload size={18} color={COLORS.gold} className="mx-auto mb-2" />
+            <p className="text-[13px] mb-3" style={{ color: COLORS.ivory }}>Share Your Look</p>
+            <p className="text-[12px] mb-3" style={{ color: COLORS.ivoryDim }}>Upload your outfit for a dress code to inspire fellow guests, from the Gallery tab.</p>
+            <GoldButton icon={Upload} variant="outline">Go to Gallery</GoldButton>
+          </Card>
+          <p className="text-[11px] text-center pt-2 pb-4" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
+            FINAL DRESS CODES &amp; EVENT DETAILS MAY BE UPDATED BY THE ORGANIZERS.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
