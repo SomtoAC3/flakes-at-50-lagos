@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
 import { Card, SectionTitle, LoadingNote, ErrorNote } from "../../shared/ui";
 import { fetchAdminStats } from "../../lib/queries";
@@ -25,14 +24,6 @@ export default function Dashboard() {
           <StatTile label="Pending Gallery Uploads" value={stats.pendingUploads} />
         </div>
       )}
-
-      <Card dark className="flex items-start gap-2.5">
-        <ShieldCheck size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
-        <p className="text-[12px] leading-relaxed min-w-0" style={{ color: COLORS.ivory }}>
-          Guest personal data (contact info, travel documents, dietary/accessibility needs) is only visible here to
-          authenticated organizers, enforced by Supabase row-level security — not just hidden in the UI.
-        </p>
-      </Card>
     </div>
   );
 }
