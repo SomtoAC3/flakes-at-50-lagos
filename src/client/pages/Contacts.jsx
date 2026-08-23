@@ -74,7 +74,7 @@ export default function Contacts() {
           <Card dark className="flex items-start gap-2.5">
             <Clock size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
             <p className="text-[12px] leading-relaxed min-w-0" style={{ color: COLORS.ivoryDim }}>
-              More contacts — {contacts.filter((c) => !isConfirmed(c)).map((c) => c.role).join(", ")} — will appear here as they're confirmed.
+              More contacts will appear here as they're confirmed.
             </p>
           </Card>
         )}
