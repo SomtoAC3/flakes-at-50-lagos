@@ -191,11 +191,11 @@ export default function Home() {
           className="text-[38px] sm:text-[42px] leading-[1.04] mb-1"
           style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}
         >
-          Folake <span style={{ color: COLORS.gold, fontStyle: "italic" }}>at 50</span>
+          Folake at 50
         </h1>
         <h2
           className="text-[20px] sm:text-[22px] leading-tight mb-4"
-          style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivoryDim, fontStyle: "italic" }}
+          style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}
         >
           The Egypt Takeover
         </h2>
