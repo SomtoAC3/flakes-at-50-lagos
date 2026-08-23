@@ -1,9 +1,23 @@
-import { useEffect, useState } from "react";
-import { Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Camera } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
-import { Card, SectionTitle, FieldGroup, Field, SelectField, GoldButton, Placeholder, ErrorNote, LoadingNote } from "../../shared/ui";
+import { Card, SectionTitle, FieldGroup, Field, SelectField, GoldButton, ErrorNote, LoadingNote } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
-import { updateGuestProfile } from "../../lib/queries";
+import { updateGuestProfile, uploadGuestAvatar, publicGalleryUrl } from "../../lib/queries";
+
+async function toAvatarBlob(file) {
+  const img = await createImageBitmap(file);
+  const px = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = px;
+  canvas.height = px;
+  const ctx = canvas.getContext("2d");
+  const side = Math.min(img.width, img.height);
+  ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, px, px);
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Couldn't process the image."))), "image/jpeg", 0.85)
+  );
+}
 
 const CHECKLIST_LABELS = {
   rsvp: "RSVP completed",
@@ -92,6 +106,49 @@ export default function MyTrip() {
 
   if (!profile) return <LoadingNote label="Loading your profile…" />;
 
+  function AvatarUpload({ onError }) {
+    const fileRef = useRef(null);
+    const [uploading, setUploading] = useState(false);
+
+    async function handleFile(e) {
+      const file = e.target.files?.[0];
+      e.target.value = "";
+      if (!file) return;
+      setUploading(true);
+      try {
+        const blob = await toAvatarBlob(file);
+        await uploadGuestAvatar(user.id, blob);
+        await refreshProfile();
+      } catch (err) {
+        onError(err.message || "Upload failed.");
+      } finally {
+        setUploading(false);
+      }
+    }
+
+    return (
+      <button
+        onClick={() => fileRef.current?.click()}
+        disabled={uploading}
+        aria-label={profile.avatar_path ? "Change profile photo" : "Add profile photo"}
+        className="w-16 h-16 rounded-full shrink-0 overflow-hidden flex flex-col items-center justify-center gap-0.5 disabled:opacity-50"
+        style={{ border: profile.avatar_path ? "1px solid rgba(201,166,103,0.4)" : `1.5px dashed ${COLORS.gold}77`, background: "rgba(201,166,103,0.06)" }}
+      >
+        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFile} />
+        {profile.avatar_path ? (
+          <img src={publicGalleryUrl(profile.avatar_path)} alt="Your profile" className="w-full h-full object-cover" />
+        ) : (
+          <>
+            <Camera size={14} color={COLORS.gold} />
+            <span className="text-[9px]" style={{ color: COLORS.gold, fontFamily: F.mono }}>
+              {uploading ? "…" : "Add photo"}
+            </span>
+          </>
+        )}
+      </button>
+    );
+  }
+
   return (
     <div className="px-5 pt-6">
       <SectionTitle eyebrow="Your Profile" title="My Trip" light sub="Private to you and the organizing team." />
@@ -123,7 +180,7 @@ export default function MyTrip() {
       </Card>
 
       <Card dark className="mb-5 flex items-center gap-3">
-        <Placeholder label="Profile photo" ratio="aspect-square w-16 h-16 shrink-0 !rounded-full" />
+        <AvatarUpload onError={setError} />
         <div className="min-w-0">
           <div className="text-[13px] font-semibold truncate" style={{ color: COLORS.ivory }}>{form.full_name || "Your Name"}</div>
           <div className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>RSVP: {form.rsvp_status.toUpperCase()}</div>

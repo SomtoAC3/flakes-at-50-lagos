@@ -1,8 +1,27 @@
 import { useEffect, useState } from "react";
-import { COLORS } from "../../shared/theme";
-import { Card, SectionTitle, Badge, Placeholder, LoadingNote, ErrorNote } from "../../shared/ui";
+import { COLORS, F } from "../../shared/theme";
+import { Card, SectionTitle, Badge, LoadingNote, ErrorNote } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
-import { fetchDirectory, updateGuestProfile } from "../../lib/queries";
+import { fetchDirectory, updateGuestProfile, publicGalleryUrl } from "../../lib/queries";
+
+function GuestAvatar({ guest }) {
+  const [imgOk, setImgOk] = useState(true);
+  const showImg = guest.avatar_path && imgOk;
+  return (
+    <div
+      className="w-14 h-14 rounded-full shrink-0 overflow-hidden flex items-center justify-center"
+      style={{ border: "1px solid rgba(201,166,103,0.35)", background: "rgba(201,166,103,0.1)" }}
+    >
+      {showImg ? (
+        <img src={publicGalleryUrl(guest.avatar_path)} alt={guest.name || "Guest"} className="w-full h-full object-cover" onError={() => setImgOk(false)} />
+      ) : (
+        <span className="text-[18px]" style={{ color: COLORS.gold, fontFamily: F.display, fontWeight: 600 }}>
+          {(guest.name || "?").trim().charAt(0).toUpperCase()}
+        </span>
+      )}
+    </div>
+  );
+}
 
 export default function Directory() {
   const { user, profile, refreshProfile } = useAuth();
@@ -59,7 +78,7 @@ export default function Directory() {
           )}
           {guests.map((g) => (
             <Card dark key={g.id} className="flex items-start gap-3">
-              <Placeholder label="Photo" ratio="aspect-square w-14 h-14 shrink-0 !rounded-full" />
+              <GuestAvatar guest={g} />
               <div className="min-w-0">
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-[14px] font-semibold" style={{ color: COLORS.ivory, fontFamily: "'Fraunces', serif" }}>{g.name || "A guest"}</span>

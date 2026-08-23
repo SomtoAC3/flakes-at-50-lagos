@@ -71,6 +71,20 @@ export async function updateGuestProfile(guestId, fields) {
   if (error) throw error;
 }
 
+// The gallery bucket only allows inserts (no overwrites), so each avatar
+// upload gets a fresh path and the guest row points at the current one.
+export async function uploadGuestAvatar(guestId, blob) {
+  const db = requireSupabase();
+  const path = `avatars/${guestId}-${Date.now()}.jpg`;
+  const { error: uploadError } = await db.storage
+    .from("gallery")
+    .upload(path, blob, { contentType: "image/jpeg", cacheControl: "3600" });
+  if (uploadError) throw uploadError;
+  const { error } = await db.from("guests").update({ avatar_path: path }).eq("id", guestId);
+  if (error) throw error;
+  return path;
+}
+
 // ---------------------------------------------------------------------------
 // Guest directory (opted-in, attending guests — requires a session)
 // ---------------------------------------------------------------------------
