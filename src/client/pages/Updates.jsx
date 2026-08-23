@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Bell, BellOff } from "lucide-react";
 import { COLORS } from "../../shared/theme";
-import { Card, SectionTitle, Badge, LoadingNote, ErrorNote } from "../../shared/ui";
+import { Card, SectionTitle, Badge, GoldButton, LoadingNote, ErrorNote } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 import { fetchAnnouncements, fetchReadAnnouncementIds, markAnnouncementRead } from "../../lib/queries";
+import { isPushSupported, getPermissionState, getExistingSubscription, subscribeToPush, unsubscribeFromPush } from "../../lib/push";
 
 const priorityTone = { urgent: "urgent", normal: "gold" };
 
@@ -42,6 +44,7 @@ export default function Updates() {
     <div className="px-5 pt-6">
       <SectionTitle eyebrow="Stay in the Loop" title="Announcements" light sub="Real-time updates from the organizing team. Urgent items also appear as a banner." />
       <ErrorNote message={error} />
+      <NotificationOptIn userId={user?.id ?? null} />
       {!announcements && !error && <LoadingNote label="Loading announcements…" />}
       {announcements && (
         <div className="space-y-3">
@@ -73,5 +76,94 @@ export default function Updates() {
         </div>
       )}
     </div>
+  );
+}
+
+function NotificationOptIn({ userId }) {
+  const supported = isPushSupported();
+  const [subscribed, setSubscribed] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!supported) return;
+    getExistingSubscription().then((sub) => setSubscribed(Boolean(sub))).catch(() => {});
+  }, [supported]);
+
+  async function enable() {
+    setBusy(true);
+    setError("");
+    try {
+      await subscribeToPush(userId);
+      setSubscribed(true);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function disable() {
+    setBusy(true);
+    setError("");
+    try {
+      await unsubscribeFromPush();
+      setSubscribed(false);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!supported) {
+    // Most commonly an iPhone opening the site in a Safari tab — push there
+    // only exists once the site is saved to the home screen (iOS 16.4+).
+    return (
+      <Card dark className="!p-4 mb-4 flex items-start gap-2.5">
+        <Bell size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
+        <p className="text-[12px] leading-relaxed" style={{ color: COLORS.ivoryDim }}>
+          To get notified about new announcements, add this site to your home screen (Share → Add to Home
+          Screen) and open it from there.
+        </p>
+      </Card>
+    );
+  }
+
+  if (getPermissionState() === "denied") {
+    return (
+      <Card dark className="!p-4 mb-4 flex items-start gap-2.5">
+        <BellOff size={15} color={COLORS.ivoryDim} className="shrink-0 mt-0.5" />
+        <p className="text-[12px] leading-relaxed" style={{ color: COLORS.ivoryDim }}>
+          Notifications are blocked for this site. Enable them in your device's settings to get announcement
+          alerts.
+        </p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card dark className="!p-4 mb-4">
+      <ErrorNote message={error} />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start gap-2.5 min-w-0">
+          <Bell size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
+          <p className="text-[12px] leading-relaxed" style={{ color: subscribed ? COLORS.ivory : COLORS.ivoryDim }}>
+            {subscribed
+              ? "Notifications are on — you'll hear about new announcements."
+              : "Get a notification on this device when a new announcement is posted."}
+          </p>
+        </div>
+        {subscribed ? (
+          <button onClick={disable} disabled={busy} className="text-[11.5px] shrink-0 min-h-[36px] px-3 rounded-full" style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}>
+            {busy ? "…" : "Turn off"}
+          </button>
+        ) : (
+          <GoldButton onClick={enable} disabled={busy} className="shrink-0 !px-4">
+            {busy ? "…" : "Enable"}
+          </GoldButton>
+        )}
+      </div>
+    </Card>
   );
 }

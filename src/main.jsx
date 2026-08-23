@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 
 import { AuthProvider } from "./lib/auth";
+import { registerServiceWorker } from "./lib/push";
 
 import ClientLayout from "./client/ClientLayout";
 import RequireGuestAuth from "./client/RequireGuestAuth";
@@ -28,6 +29,9 @@ import Dashboard from "./admin/pages/Dashboard";
 import Guests from "./admin/pages/Guests";
 import Announcements from "./admin/pages/Announcements";
 import AdminGallery from "./admin/pages/Gallery";
+import AdminSettings from "./admin/pages/Settings";
+
+registerServiceWorker();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -65,6 +69,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="guests" element={<Guests />} />
             <Route path="announcements" element={<Announcements />} />
             <Route path="gallery" element={<AdminGallery />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

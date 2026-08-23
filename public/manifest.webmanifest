@@ -1,0 +1,22 @@
+{
+  "name": "Folake at 50 — The Egypt Takeover",
+  "short_name": "Folake at 50",
+  "description": "Itinerary, updates, and everything for Folake's 50th birthday trip.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0C",
+  "theme_color": "#0B0B0C",
+  "icons": [
+    {
+      "src": "https://mianexjnzykxarbrxatg.supabase.co/storage/v1/object/public/branding/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://mianexjnzykxarbrxatg.supabase.co/storage/v1/object/public/branding/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

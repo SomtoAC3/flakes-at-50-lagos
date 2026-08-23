@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { COLORS } from "../../shared/theme";
 import { Card, SectionTitle, Badge, Field, SelectField, GoldButton, LoadingNote, ErrorNote } from "../../shared/ui";
 import { fetchAnnouncements, postAnnouncement } from "../../lib/queries";
+import { supabase } from "../../lib/supabaseClient";
 
 const priorityTone = { urgent: "urgent", normal: "gold" };
 
@@ -10,6 +11,7 @@ export default function Announcements() {
   const [error, setError] = useState("");
   const [form, setForm] = useState({ category: "", priority: "normal", message: "" });
   const [posting, setPosting] = useState(false);
+  const [pushNote, setPushNote] = useState("");
 
   function load() {
     fetchAnnouncements().then(setAnnouncements).catch((e) => setError(e.message));
@@ -22,8 +24,19 @@ export default function Announcements() {
     if (!form.category || !form.message) return;
     setPosting(true);
     setError("");
+    setPushNote("");
     try {
       await postAnnouncement(form);
+      // Push failures are non-fatal — the announcement itself is already live.
+      try {
+        const { data, error: fnError } = await supabase.functions.invoke("send-push", {
+          body: { title: `Folake at 50 — ${form.category}`, body: form.message, url: "/updates" },
+        });
+        if (fnError) throw fnError;
+        setPushNote(`Posted. Notification sent to ${data?.sent ?? 0} device${data?.sent === 1 ? "" : "s"}.`);
+      } catch {
+        setPushNote("Posted. Notifications couldn't be sent — guests will still see it in the app.");
+      }
       setForm({ category: "", priority: "normal", message: "" });
       load();
     } catch (e) {
@@ -37,6 +50,11 @@ export default function Announcements() {
     <div>
       <SectionTitle eyebrow="Communicate" title="Announcements" light sub="Posted announcements are visible to every guest immediately, no login required." />
       <ErrorNote message={error} />
+      {pushNote && (
+        <p className="text-[11.5px] mb-3" style={{ color: COLORS.gold }}>
+          {pushNote}
+        </p>
+      )}
 
       <Card dark className="mb-6">
         <form onSubmit={handlePost} className="space-y-3">
