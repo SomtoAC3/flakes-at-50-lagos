@@ -155,6 +155,62 @@ export async function fetchAdminStats() {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Admin: itinerary editing
+// ---------------------------------------------------------------------------
+export async function saveItineraryDay({ id, date, label, weekday, theme, city }) {
+  const db = requireSupabase();
+  const row = { date, label, weekday, theme, city };
+  const { error } = id
+    ? await db.from("itinerary_days").update(row).eq("id", id)
+    : await db.from("itinerary_days").insert(row);
+  if (error) throw error;
+  await renumberItineraryDays();
+}
+
+// Guests see days ordered by sort_order, so keep it aligned with the dates.
+async function renumberItineraryDays() {
+  const db = requireSupabase();
+  const { data: days, error } = await db.from("itinerary_days").select("id, sort_order").order("date");
+  if (error) throw error;
+  await Promise.all(
+    days
+      .map((d, i) => ({ ...d, next: i + 1 }))
+      .filter((d) => d.sort_order !== d.next)
+      .map((d) => db.from("itinerary_days").update({ sort_order: d.next }).eq("id", d.id))
+  );
+}
+
+export async function deleteItineraryDay(id) {
+  const db = requireSupabase();
+  const { error } = await db.from("itinerary_days").delete().eq("id", id);
+  if (error) throw error;
+  await renumberItineraryDays();
+}
+
+export async function saveItineraryActivity({ id, ...fields }) {
+  const db = requireSupabase();
+  const { error } = id
+    ? await db.from("itinerary_activities").update(fields).eq("id", id)
+    : await db.from("itinerary_activities").insert({ id: crypto.randomUUID(), ...fields });
+  if (error) throw error;
+}
+
+export async function deleteItineraryActivity(id) {
+  const db = requireSupabase();
+  const { error } = await db.from("itinerary_activities").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export async function swapActivityOrder(a, b) {
+  const db = requireSupabase();
+  const [{ error: e1 }, { error: e2 }] = await Promise.all([
+    db.from("itinerary_activities").update({ sort_order: b.sort_order }).eq("id", a.id),
+    db.from("itinerary_activities").update({ sort_order: a.sort_order }).eq("id", b.id),
+  ]);
+  if (e1 || e2) throw e1 || e2;
+}
+
 export async function setGuestOrganizer(guestId, isOrganizer) {
   const db = requireSupabase();
   const { error } = await db.from("guests").update({ is_organizer: isOrganizer }).eq("id", guestId);
