@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Clock, Shirt, Compass, Sparkles, ArrowRight, Plane, Users, Phone } from "lucide-react";
+import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, Plane, Users, Phone } from "lucide-react";
 import { COLORS, F, EVENT_START } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
-import { fetchItinerary, fetchSiteContent } from "../../lib/queries";
+import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
 import { brandingUrl, BRANDING_PATHS } from "../../lib/branding";
 
 const FALLBACK_WELCOME_NOTE =
@@ -29,10 +29,65 @@ function pad(n) {
   return String(n).padStart(2, "0");
 }
 
+const DAY_MS = 86400000;
+
+function dayStart(dateStr) {
+  return new Date(`${dateStr}T00:00:00`);
+}
+
+// "3:00 PM" on a given day -> Date; null when the time isn't a real time
+// (e.g. "—" or "TBC"), so callers can treat it as still upcoming.
+function parseTimeOn(dateStr, timeStr) {
+  const m = /(\d{1,2}):(\d{2})\s*(AM|PM)/i.exec(timeStr || "");
+  if (!m) return null;
+  let h = parseInt(m[1], 10) % 12;
+  if (/pm/i.test(m[3])) h += 12;
+  return new Date(`${dateStr}T${String(h).padStart(2, "0")}:${m[2]}:00`);
+}
+
+function tripStatus(days, now) {
+  if (!days?.length) return null;
+  const total = days.length;
+  const first = dayStart(days[0].date);
+  const lastEnd = new Date(dayStart(days[total - 1].date).getTime() + DAY_MS);
+  if (now < first) return { phase: "before", dayNum: 0, total };
+  if (now >= lastEnd) return { phase: "after", dayNum: total, total };
+  const idx = days.findIndex((d) => {
+    const s = dayStart(d.date);
+    return now >= s && now < new Date(s.getTime() + DAY_MS);
+  });
+  return {
+    phase: "during",
+    dayNum: idx >= 0 ? idx + 1 : Math.min(total, Math.floor((now - first) / DAY_MS) + 1),
+    total,
+    today: idx >= 0 ? days[idx] : null,
+  };
+}
+
+// First activity that hasn't ended yet, scanning forward from today.
+function findNextActivity(days, now) {
+  for (const day of days) {
+    if (new Date(dayStart(day.date).getTime() + DAY_MS) <= now) continue;
+    for (const act of day.activities) {
+      const ends = parseTimeOn(day.date, act.end_time) || parseTimeOn(day.date, act.start_time);
+      if (!ends || ends >= now) return act;
+    }
+  }
+  return null;
+}
+
+function formatDateRange(days) {
+  const first = dayStart(days[0].date);
+  const last = dayStart(days[days.length - 1].date);
+  const fmt = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase();
+  const cities = [...new Set(days.map((d) => d.city))].join(" & ").toUpperCase();
+  return `${fmt(first)} — ${fmt(last)}, ${last.getFullYear()}${cities ? ` · ${cities}` : ""}`;
+}
+
 export default function Home() {
   const { configured } = useAuth();
-  const cd = useCountdown(EVENT_START);
-  const [firstActivity, setFirstActivity] = useState(null);
+  const [days, setDays] = useState(null);
+  const [latestUpdate, setLatestUpdate] = useState(null);
   const [welcomeNote, setWelcomeNote] = useState(FALLBACK_WELCOME_NOTE);
   const [photoOk, setPhotoOk] = useState(true);
 
@@ -40,10 +95,10 @@ export default function Home() {
     if (!configured) return;
     let active = true;
     fetchItinerary()
-      .then((days) => {
-        if (!active) return;
-        setFirstActivity(days[0]?.activities?.[0] ?? null);
-      })
+      .then((d) => active && setDays(d))
+      .catch(() => {});
+    fetchAnnouncements()
+      .then((list) => active && setLatestUpdate(list[0] ?? null))
       .catch(() => {});
     fetchSiteContent("welcome_note")
       .then((value) => {
@@ -54,6 +109,12 @@ export default function Home() {
       active = false;
     };
   }, [configured]);
+
+  const now = new Date();
+  const status = tripStatus(days, now);
+  const nextActivity = days ? findNextActivity(days, now) : null;
+  const countdownTarget = days?.length ? dayStart(days[0].date) : EVENT_START;
+  const cd = useCountdown(countdownTarget);
 
   return (
     <div>
@@ -75,21 +136,23 @@ export default function Home() {
           The Egypt Takeover
         </h2>
         <p className="text-[13px] mb-1" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
-          OCT 28 — NOV 1, 2026 · CAIRO &amp; THE RED SEA
+          {days?.length ? formatDateRange(days) : "OCT 28 — NOV 1, 2026 · CAIRO & THE RED SEA"}
         </p>
 
-        <div className="mt-6 grid grid-cols-4 gap-2">
-          {[["DAYS", cd.days], ["HRS", cd.hours], ["MIN", cd.minutes], ["SEC", cd.seconds]].map(([label, val]) => (
-            <div key={label} className="rounded-xl py-3 flex flex-col items-center" style={{ border: "1px solid rgba(201,166,103,0.35)", background: "rgba(201,166,103,0.06)" }}>
-              <span className="text-[20px] sm:text-[22px] tabular-nums" style={{ fontFamily: F.mono, color: COLORS.gold, fontWeight: 600 }}>
-                {pad(val)}
-              </span>
-              <span className="text-[9px] tracking-[0.2em] mt-1" style={{ fontFamily: F.mono, color: COLORS.ivoryDim }}>
-                {label}
-              </span>
-            </div>
-          ))}
-        </div>
+        {status?.phase !== "after" && (
+          <div className="mt-6 grid grid-cols-4 gap-2">
+            {[["DAYS", cd.days], ["HRS", cd.hours], ["MIN", cd.minutes], ["SEC", cd.seconds]].map(([label, val]) => (
+              <div key={label} className="rounded-xl py-3 flex flex-col items-center" style={{ border: "1px solid rgba(201,166,103,0.35)", background: "rgba(201,166,103,0.06)" }}>
+                <span className="text-[20px] sm:text-[22px] tabular-nums" style={{ fontFamily: F.mono, color: COLORS.gold, fontWeight: 600 }}>
+                  {pad(val)}
+                </span>
+                <span className="text-[9px] tracking-[0.2em] mt-1" style={{ fontFamily: F.mono, color: COLORS.ivoryDim }}>
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="mt-7 flex gap-3">
           <Link to="/itinerary" className="flex-1">
@@ -136,23 +199,40 @@ export default function Home() {
 
         <Card dark className="mb-4">
           <Eyebrow>Right Now</Eyebrow>
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-[16px]" style={{ fontFamily: F.display, color: COLORS.ivory, fontWeight: 600 }}>
-              Trip has not started
+          <div className="flex items-center justify-between mb-4 gap-2">
+            <span className="text-[16px] min-w-0" style={{ fontFamily: F.display, color: COLORS.ivory, fontWeight: 600 }}>
+              {!status && "The countdown is on"}
+              {status?.phase === "before" && "Trip has not started"}
+              {status?.phase === "during" && (status.today?.theme || `Day ${status.dayNum}`)}
+              {status?.phase === "after" && "The trip has ended"}
             </span>
-            <Badge tone="gold">Day 0 of 5</Badge>
+            {status && (
+              <Badge tone="gold">{`Day ${status.dayNum} of ${status.total}`}</Badge>
+            )}
           </div>
-          {firstActivity ? (
+          {nextActivity ? (
             <div className="space-y-3">
-              <QuickRow icon={Sparkles} label="Next Activity" value={firstActivity.name} />
-              <QuickRow icon={Clock} label="Meeting Time" value={firstActivity.departure_time === "—" ? firstActivity.start_time : firstActivity.departure_time} />
-              <QuickRow icon={MapPin} label="Meeting Point" value={firstActivity.meeting_point} />
-              <QuickRow icon={Shirt} label="Dress Code" value={firstActivity.dress_code} />
-              <QuickRow icon={Compass} label="Transportation" value="On schedule — no changes reported" />
+              <QuickRow icon={Sparkles} label={status?.phase === "during" ? "Next Activity" : "First Activity"} value={nextActivity.name} />
+              {(nextActivity.departure_time || nextActivity.start_time) && (
+                <QuickRow
+                  icon={Clock}
+                  label="Meeting Time"
+                  value={parseTimeOn("1970-01-01", nextActivity.departure_time) ? nextActivity.departure_time : nextActivity.start_time}
+                />
+              )}
+              {nextActivity.meeting_point && <QuickRow icon={MapPin} label="Meeting Point" value={nextActivity.meeting_point} />}
+              {nextActivity.dress_code && <QuickRow icon={Shirt} label="Dress Code" value={nextActivity.dress_code} />}
+              {latestUpdate && (
+                <QuickRow icon={Bell} label={`Latest Update — ${latestUpdate.category}`} value={latestUpdate.message} />
+              )}
             </div>
+          ) : status?.phase === "after" ? (
+            <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
+              Five days, two destinations, one unforgettable celebration. Thank you for being part of it — check the Gallery for the memories.
+            </p>
           ) : (
             <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
-              {configured ? "Loading the itinerary…" : "Connect Supabase to show the next activity here."}
+              {configured ? "The schedule will appear here once it's published." : "Connect Supabase to show the next activity here."}
             </p>
           )}
         </Card>

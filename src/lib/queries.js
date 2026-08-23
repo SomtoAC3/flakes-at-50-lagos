@@ -171,6 +171,24 @@ export async function saveSiteContent(key, value) {
   if (error) throw error;
 }
 
+// JSON-valued site content (lists like FAQs, contacts, travel sections).
+// Falls back to the bundled defaults when the key hasn't been saved yet —
+// or when Supabase isn't reachable — so pages always render.
+export async function fetchJsonContent(key, fallback) {
+  try {
+    const raw = await fetchSiteContent(key);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return parsed ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export async function saveJsonContent(key, value) {
+  return saveSiteContent(key, JSON.stringify(value));
+}
+
 // ---------------------------------------------------------------------------
 // Admin: itinerary editing
 // ---------------------------------------------------------------------------

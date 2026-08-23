@@ -1,16 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { Card, SectionTitle } from "../../shared/ui";
 import { FAQS } from "../data/staticContent";
+import { fetchJsonContent } from "../../lib/queries";
 
 export default function Faq() {
   const [open, setOpen] = useState(null);
+  const [faqs, setFaqs] = useState(FAQS);
+
+  useEffect(() => {
+    let active = true;
+    fetchJsonContent("faqs", FAQS).then((list) => {
+      if (active && Array.isArray(list) && list.length) setFaqs(list);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="px-5 pt-6">
       <SectionTitle eyebrow="Good to Know" title="Frequently Asked Questions" light />
       <div className="space-y-2.5">
-        {FAQS.map((f, i) => {
+        {faqs.map((f, i) => {
           const isOpen = open === i;
           return (
             <Card dark key={f.q} className="!p-0 overflow-hidden">

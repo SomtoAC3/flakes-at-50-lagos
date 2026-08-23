@@ -65,6 +65,13 @@ export default function Settings() {
         sizes={[{ path: BRANDING_PATHS.folakePhoto, px: 512 }]}
         rounded="rounded-full"
       />
+      <ImageUploadCard
+        title="Story Hero Photo"
+        description="The large portrait at the top of Folake's Story page. Until one is uploaded, the page shows the story without a photo."
+        previewPath={BRANDING_PATHS.storyHero}
+        sizes={[{ path: BRANDING_PATHS.storyHero, px: 1024 }]}
+        rounded="rounded-2xl"
+      />
       <WelcomeNoteCard />
     </div>
   );

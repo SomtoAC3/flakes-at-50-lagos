@@ -12,4 +12,5 @@ export const BRANDING_PATHS = {
   icon192: "app-icon-192.png",
   appleTouch: "apple-touch-icon.png",
   folakePhoto: "folake-photo.png",
+  storyHero: "story-hero.png",
 };
