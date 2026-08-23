@@ -245,6 +245,32 @@ export async function swapActivityOrder(a, b) {
   if (e1 || e2) throw e1 || e2;
 }
 
+// ---------------------------------------------------------------------------
+// Admin: dress code editing
+// ---------------------------------------------------------------------------
+export async function saveDressCode({ id, ...fields }) {
+  const db = requireSupabase();
+  const { error } = id
+    ? await db.from("dress_codes").update(fields).eq("id", id)
+    : await db.from("dress_codes").insert({ id: crypto.randomUUID(), ...fields });
+  if (error) throw error;
+}
+
+export async function deleteDressCode(id) {
+  const db = requireSupabase();
+  const { error } = await db.from("dress_codes").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export async function swapDressCodeOrder(a, b) {
+  const db = requireSupabase();
+  const [{ error: e1 }, { error: e2 }] = await Promise.all([
+    db.from("dress_codes").update({ sort_order: b.sort_order }).eq("id", a.id),
+    db.from("dress_codes").update({ sort_order: a.sort_order }).eq("id", b.id),
+  ]);
+  if (e1 || e2) throw e1 || e2;
+}
+
 export async function setGuestOrganizer(guestId, isOrganizer) {
   const db = requireSupabase();
   const { error } = await db.from("guests").update({ is_organizer: isOrganizer }).eq("id", guestId);

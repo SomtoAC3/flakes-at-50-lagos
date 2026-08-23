@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, Users, Bell, Images, CalendarDays, FileText, Settings, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Users, Bell, Images, CalendarDays, FileText, Shirt, Settings, LogOut, ShieldCheck } from "lucide-react";
 import { COLORS, F } from "../shared/theme";
 import { useAuth } from "../lib/auth";
 
@@ -9,6 +9,7 @@ const TABS = [
   { to: "/admin/announcements", label: "Announcements", icon: Bell },
   { to: "/admin/itinerary", label: "Itinerary", icon: CalendarDays },
   { to: "/admin/content", label: "Content", icon: FileText },
+  { to: "/admin/dress-codes", label: "Dress Codes", icon: Shirt },
   { to: "/admin/gallery", label: "Gallery", icon: Images },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];

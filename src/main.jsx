@@ -32,6 +32,7 @@ import AdminGallery from "./admin/pages/Gallery";
 import AdminSettings from "./admin/pages/Settings";
 import AdminItinerary from "./admin/pages/Itinerary";
 import AdminContent from "./admin/pages/Content";
+import AdminDressCodes from "./admin/pages/DressCodes";
 
 registerServiceWorker();
 
@@ -72,6 +73,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="announcements" element={<Announcements />} />
             <Route path="itinerary" element={<AdminItinerary />} />
             <Route path="content" element={<AdminContent />} />
+            <Route path="dress-codes" element={<AdminDressCodes />} />
             <Route path="gallery" element={<AdminGallery />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>

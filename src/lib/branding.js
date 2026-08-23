@@ -14,3 +14,8 @@ export const BRANDING_PATHS = {
   folakePhoto: "folake-photo.png",
   storyHero: "story-hero.png",
 };
+
+// Per-dress-code inspiration banner, keyed by the dress code's id.
+export function dressCodePhotoPath(id) {
+  return `dress-code-${id}.jpg`;
+}
