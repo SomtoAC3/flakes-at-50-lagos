@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Clock, Shirt, Compass, Sparkles, ArrowRight, Plane, Users, Phone } from "lucide-react";
 import { COLORS, F, EVENT_START } from "../../shared/theme";
-import { Card, Eyebrow, SectionTitle, GoldButton, Placeholder, Badge, LintelDivider } from "../../shared/ui";
+import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
-import { fetchItinerary } from "../../lib/queries";
+import { fetchItinerary, fetchSiteContent } from "../../lib/queries";
+import { brandingUrl, BRANDING_PATHS } from "../../lib/branding";
+
+const FALLBACK_WELCOME_NOTE =
+  "Fifty years, and I still can't believe I get to share this chapter with all of you — in Egypt, of all places. Pack your gold, bring your energy, and let's make this a celebration for the books.";
 
 function useCountdown(target) {
   const [now, setNow] = useState(new Date());
@@ -29,6 +33,8 @@ export default function Home() {
   const { configured } = useAuth();
   const cd = useCountdown(EVENT_START);
   const [firstActivity, setFirstActivity] = useState(null);
+  const [welcomeNote, setWelcomeNote] = useState(FALLBACK_WELCOME_NOTE);
+  const [photoOk, setPhotoOk] = useState(true);
 
   useEffect(() => {
     if (!configured) return;
@@ -37,6 +43,11 @@ export default function Home() {
       .then((days) => {
         if (!active) return;
         setFirstActivity(days[0]?.activities?.[0] ?? null);
+      })
+      .catch(() => {});
+    fetchSiteContent("welcome_note")
+      .then((value) => {
+        if (active && value) setWelcomeNote(value);
       })
       .catch(() => {});
     return () => {
@@ -98,14 +109,19 @@ export default function Home() {
         <LintelDivider />
         <Card dark>
           <div className="flex items-start gap-3">
-            <Placeholder label="Folake's photo" ratio="aspect-square w-16 h-16 shrink-0 !rounded-full" />
+            {photoOk && (
+              <img
+                src={brandingUrl(BRANDING_PATHS.folakePhoto)}
+                alt="Folake"
+                className="w-16 h-16 rounded-full object-cover shrink-0"
+                style={{ border: "1px solid rgba(201,166,103,0.4)" }}
+                onError={() => setPhotoOk(false)}
+              />
+            )}
             <div className="min-w-0">
               <Eyebrow>A Note From Folake</Eyebrow>
               <p className="text-[14px] leading-relaxed italic" style={{ color: COLORS.ivory, fontFamily: F.display }}>
-                "Fifty years, and I still can't believe I get to share this chapter with all of you — in Egypt, of all places. Pack your gold, bring your energy, and let's make this a celebration for the books."
-              </p>
-              <p className="text-[11px] mt-2" style={{ color: COLORS.gold, fontFamily: F.mono }}>
-                — WELCOME MESSAGE, TO BE CONFIRMED / EDITABLE
+                "{welcomeNote}"
               </p>
             </div>
           </div>

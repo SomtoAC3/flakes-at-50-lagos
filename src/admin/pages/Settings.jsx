@@ -1,20 +1,20 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImagePlus } from "lucide-react";
 import { COLORS } from "../../shared/theme";
-import { Card, SectionTitle, GoldButton, ErrorNote } from "../../shared/ui";
+import { Card, SectionTitle, GoldButton, Field, ErrorNote } from "../../shared/ui";
 import { supabase } from "../../lib/supabaseClient";
-
-const BRANDING_BASE = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/branding`;
+import { fetchSiteContent, saveSiteContent } from "../../lib/queries";
+import { brandingUrl, BRANDING_PATHS } from "../../lib/branding";
 
 // The manifest, index.html, and service worker all reference these exact
 // paths, so uploading here updates the installed app's icon everywhere.
-const SIZES = [
-  { path: "app-icon-512.png", px: 512 },
-  { path: "app-icon-192.png", px: 192 },
-  { path: "apple-touch-icon.png", px: 180 },
+const ICON_SIZES = [
+  { path: BRANDING_PATHS.icon512, px: 512 },
+  { path: BRANDING_PATHS.icon192, px: 192 },
+  { path: BRANDING_PATHS.appleTouch, px: 180 },
 ];
 
-function renderIcon(img, px) {
+function renderSquare(img, px) {
   const canvas = document.createElement("canvas");
   canvas.width = px;
   canvas.height = px;
@@ -31,7 +31,46 @@ function renderIcon(img, px) {
   );
 }
 
+async function uploadSquares(file, sizes) {
+  const img = await createImageBitmap(file);
+  for (const { path, px } of sizes) {
+    const blob = await renderSquare(img, px);
+    const { error } = await supabase.storage
+      .from("branding")
+      .upload(path, blob, { upsert: true, contentType: "image/png", cacheControl: "3600" });
+    if (error) throw error;
+  }
+}
+
 export default function Settings() {
+  return (
+    <div>
+      <SectionTitle
+        eyebrow="Configure"
+        title="Settings"
+        light
+        sub="App identity and site copy. Changes go live for guests immediately."
+      />
+      <ImageUploadCard
+        title="App Icon"
+        description="Shown when guests save the site to their home screen, and on announcement notifications. Upload a square image, at least 512×512. Guests who already saved the app will see the new icon after re-adding it."
+        previewPath={BRANDING_PATHS.icon192}
+        sizes={ICON_SIZES}
+        rounded="rounded-2xl"
+      />
+      <ImageUploadCard
+        title="Folake's Photo"
+        description="Shown in the circle beside the welcome note on the guest home page. Until one is uploaded, guests see the note without a photo."
+        previewPath={BRANDING_PATHS.folakePhoto}
+        sizes={[{ path: BRANDING_PATHS.folakePhoto, px: 512 }]}
+        rounded="rounded-full"
+      />
+      <WelcomeNoteCard />
+    </div>
+  );
+}
+
+function ImageUploadCard({ title, description, previewPath, sizes, rounded }) {
   const fileRef = useRef(null);
   const [status, setStatus] = useState("idle"); // idle | uploading | done
   const [error, setError] = useState("");
@@ -46,14 +85,7 @@ export default function Settings() {
     setStatus("uploading");
     setError("");
     try {
-      const img = await createImageBitmap(file);
-      for (const { path, px } of SIZES) {
-        const blob = await renderIcon(img, px);
-        const { error: upErr } = await supabase.storage
-          .from("branding")
-          .upload(path, blob, { upsert: true, contentType: "image/png", cacheControl: "3600" });
-        if (upErr) throw upErr;
-      }
+      await uploadSquares(file, sizes);
       setStatus("done");
       setPreviewFailed(false);
       setVersion(Date.now());
@@ -64,53 +96,92 @@ export default function Settings() {
   }
 
   return (
-    <div>
-      <SectionTitle
-        eyebrow="Configure"
-        title="Settings"
-        light
-        sub="The app icon appears when guests save the site to their home screen, and on announcement notifications."
-      />
+    <Card dark className="mb-4">
       <ErrorNote message={error} />
-
-      <Card dark className="mb-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div
-            className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center shrink-0"
-            style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(201,166,103,0.3)" }}
-          >
-            {previewFailed ? (
-              <span className="text-[10px] text-center px-2" style={{ color: COLORS.ivoryDim }}>
-                No icon yet
-              </span>
-            ) : (
-              <img
-                src={`${BRANDING_BASE}/app-icon-192.png?v=${version}`}
-                alt="Current app icon"
-                className="w-full h-full object-cover"
-                onError={() => setPreviewFailed(true)}
-              />
-            )}
-          </div>
-          <div className="min-w-0">
-            <p className="text-[13px] mb-1" style={{ color: COLORS.ivory }}>App Icon</p>
-            <p className="text-[11.5px] leading-relaxed" style={{ color: COLORS.ivoryDim }}>
-              Upload a square image, at least 512×512. It's resized automatically for every device.
-              Guests who already saved the app will see the new icon after re-adding it.
-            </p>
-          </div>
+      <div className="flex items-center gap-4 mb-4">
+        <div
+          className={`w-20 h-20 ${rounded} overflow-hidden flex items-center justify-center shrink-0`}
+          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(201,166,103,0.3)" }}
+        >
+          {previewFailed ? (
+            <span className="text-[10px] text-center px-2" style={{ color: COLORS.ivoryDim }}>
+              None yet
+            </span>
+          ) : (
+            <img
+              src={brandingUrl(previewPath, version)}
+              alt={`Current ${title.toLowerCase()}`}
+              className="w-full h-full object-cover"
+              onError={() => setPreviewFailed(true)}
+            />
+          )}
         </div>
+        <div className="min-w-0">
+          <p className="text-[13px] mb-1" style={{ color: COLORS.ivory }}>{title}</p>
+          <p className="text-[11.5px] leading-relaxed" style={{ color: COLORS.ivoryDim }}>{description}</p>
+        </div>
+      </div>
 
-        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFile} />
-        <GoldButton icon={ImagePlus} className="w-full" disabled={status === "uploading"} onClick={() => fileRef.current?.click()}>
-          {status === "uploading" ? "Uploading…" : previewFailed ? "Upload icon" : "Replace icon"}
-        </GoldButton>
-        {status === "done" && (
-          <p className="text-[11.5px] mt-3 text-center" style={{ color: COLORS.gold }}>
-            Icon updated.
-          </p>
-        )}
-      </Card>
-    </div>
+      <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFile} />
+      <GoldButton icon={ImagePlus} className="w-full" disabled={status === "uploading"} onClick={() => fileRef.current?.click()}>
+        {status === "uploading" ? "Uploading…" : previewFailed ? "Upload image" : "Replace image"}
+      </GoldButton>
+      {status === "done" && (
+        <p className="text-[11.5px] mt-3 text-center" style={{ color: COLORS.gold }}>
+          Updated.
+        </p>
+      )}
+    </Card>
+  );
+}
+
+function WelcomeNoteCard() {
+  const [note, setNote] = useState("");
+  const [status, setStatus] = useState("loading"); // loading | idle | saving | saved
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchSiteContent("welcome_note")
+      .then((value) => {
+        setNote(value ?? "");
+        setStatus("idle");
+      })
+      .catch((e) => {
+        setError(e.message);
+        setStatus("idle");
+      });
+  }, []);
+
+  async function save() {
+    setStatus("saving");
+    setError("");
+    try {
+      await saveSiteContent("welcome_note", note.trim());
+      setStatus("saved");
+    } catch (e) {
+      setError(e.message);
+      setStatus("idle");
+    }
+  }
+
+  return (
+    <Card dark className="mb-4">
+      <ErrorNote message={error} />
+      <p className="text-[13px] mb-1" style={{ color: COLORS.ivory }}>Welcome Note</p>
+      <p className="text-[11.5px] leading-relaxed mb-3" style={{ color: COLORS.ivoryDim }}>
+        The quote from Folake on the guest home page. Shown in quotation marks — write it as she'd say it.
+      </p>
+      <div className="mb-3">
+        <Field label="Note" value={note} onChange={(v) => { setNote(v); setStatus("idle"); }} multiline />
+      </div>
+      <GoldButton className="w-full" disabled={status === "loading" || status === "saving" || !note.trim()} onClick={save}>
+        {status === "saving" ? "Saving…" : "Save Note"}
+      </GoldButton>
+      {status === "saved" && (
+        <p className="text-[11.5px] mt-3 text-center" style={{ color: COLORS.gold }}>
+          Saved — live on the guest home page.
+        </p>
+      )}
+    </Card>
   );
 }

@@ -156,6 +156,22 @@ export async function fetchAdminStats() {
 }
 
 // ---------------------------------------------------------------------------
+// Site content (welcome note, etc.) — public read, organizer write
+// ---------------------------------------------------------------------------
+export async function fetchSiteContent(key) {
+  const db = requireSupabase();
+  const { data, error } = await db.from("site_content").select("value").eq("key", key).maybeSingle();
+  if (error) throw error;
+  return data?.value ?? null;
+}
+
+export async function saveSiteContent(key, value) {
+  const db = requireSupabase();
+  const { error } = await db.from("site_content").upsert({ key, value });
+  if (error) throw error;
+}
+
+// ---------------------------------------------------------------------------
 // Admin: itinerary editing
 // ---------------------------------------------------------------------------
 export async function saveItineraryDay({ id, date, label, weekday, theme, city }) {
