@@ -19,7 +19,7 @@ function renderSquare(img, px) {
   canvas.width = px;
   canvas.height = px;
   const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "#0B0B0C";
+  ctx.fillStyle = "#FAFAF9";
   ctx.fillRect(0, 0, px, px);
   // Center-crop to a square, then scale to fit.
   const side = Math.min(img.width, img.height);
@@ -60,10 +60,10 @@ export default function Settings() {
       />
       <ImageUploadCard
         title="Folake's Photo"
-        description="Shown in the circle beside the welcome note on the guest home page. Until one is uploaded, guests see the note without a photo."
+        description="Shown beside the welcome note on the guest home page. Until one is uploaded, guests see the note without a photo."
         previewPath={BRANDING_PATHS.folakePhoto}
         sizes={[{ path: BRANDING_PATHS.folakePhoto, px: 512 }]}
-        rounded="rounded-full"
+        rounded="rounded-2xl"
       />
       <ImageUploadCard
         title="Story Hero Photo"
@@ -108,7 +108,7 @@ function ImageUploadCard({ title, description, previewPath, sizes, rounded }) {
       <div className="flex items-center gap-4 mb-4">
         <div
           className={`w-20 h-20 ${rounded} overflow-hidden flex items-center justify-center shrink-0`}
-          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(201,166,103,0.3)" }}
+          style={{ background: "#F0F0EE", border: "1px solid rgba(17,17,17,0.09)" }}
         >
           {previewFailed ? (
             <span className="text-[10px] text-center px-2" style={{ color: COLORS.ivoryDim }}>

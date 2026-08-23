@@ -39,8 +39,8 @@ export default function MagicLinkForm({ redirectPath = "/", helperText }) {
     return (
       <div className="text-center">
         <div
-          className="w-14 h-14 rounded-full flex items-center justify-center mb-4 mx-auto"
-          style={{ background: "rgba(201,166,103,0.14)" }}
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto"
+          style={{ background: COLORS.chip }}
         >
           <Check size={22} color={COLORS.gold} />
         </div>
@@ -72,8 +72,8 @@ export default function MagicLinkForm({ redirectPath = "/", helperText }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="w-full rounded-lg px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
-          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(201,166,103,0.3)", color: COLORS.ivory, fontFamily: F.body }}
+          className="w-full rounded-xl px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
+          style={{ background: "#FFFFFF", border: "1px solid rgba(17,17,17,0.09)", color: COLORS.ivory, fontFamily: F.body }}
         />
       </label>
       <GoldButton type="submit" icon={Mail} className="w-full" disabled={status === "sending"}>

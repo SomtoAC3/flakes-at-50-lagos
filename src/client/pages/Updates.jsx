@@ -60,13 +60,13 @@ export default function Updates() {
                     <Badge tone={priorityTone[a.priority]}>{a.category}</Badge>
                     {!isRead && <span className="w-1.5 h-1.5 rounded-full" style={{ background: COLORS.gold }} />}
                   </div>
-                  <span className="text-[10.5px] shrink-0" style={{ color: COLORS.ivoryDim, fontFamily: "'IBM Plex Mono', monospace" }}>
+                  <span className="text-[10.5px] shrink-0" style={{ color: COLORS.ivoryDim, fontVariantNumeric: "tabular-nums" }}>
                     {new Date(a.created_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
                   </span>
                 </div>
                 <p className="text-[13px] leading-relaxed" style={{ color: COLORS.ivory }}>{a.message}</p>
                 {!isRead && (
-                  <button onClick={() => markRead(a.id)} className="text-[11px] mt-2 min-h-[28px]" style={{ color: COLORS.gold }}>
+                  <button onClick={() => markRead(a.id)} className="text-[11px] font-semibold mt-2 min-h-[28px]" style={{ color: COLORS.gold }}>
                     {user ? "Mark as read" : "Mark as read (sign in to sync)"}
                   </button>
                 )}
@@ -155,7 +155,7 @@ function NotificationOptIn({ userId }) {
           </p>
         </div>
         {subscribed ? (
-          <button onClick={disable} disabled={busy} className="text-[11.5px] shrink-0 min-h-[36px] px-3 rounded-full" style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}>
+          <button onClick={disable} disabled={busy} className="text-[11.5px] font-semibold shrink-0 min-h-[36px] px-3 rounded-xl" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             {busy ? "…" : "Turn off"}
           </button>
         ) : (

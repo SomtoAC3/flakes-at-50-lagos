@@ -22,22 +22,22 @@ export default function AdminLayout() {
       <div className="w-full max-w-2xl mx-auto min-h-screen flex flex-col">
         <div
           className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
-          style={{ background: `${COLORS.ink}E6`, borderBottom: "1px solid rgba(201,166,103,0.15)" }}
+          style={{ background: "rgba(250,250,249,0.92)", borderBottom: `1px solid ${COLORS.line}` }}
         >
           <div className="flex items-center gap-2 min-w-0">
             <ShieldCheck size={16} color={COLORS.gold} className="shrink-0" />
-            <span className="text-[12px] sm:text-[13px] tracking-[0.1em] uppercase truncate" style={{ fontFamily: F.mono, color: COLORS.ivory }}>
+            <span className="text-[13px] font-semibold truncate" style={{ fontFamily: F.body, color: COLORS.ivory }}>
               Folake at 50 · Admin
             </span>
           </div>
-          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] px-3 py-2 rounded-full shrink-0 min-h-[36px]" style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}>
+          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl shrink-0 min-h-[36px]" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogOut size={13} />
             <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>
 
         {user && (
-          <div className="px-5 pt-2 text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
+          <div className="px-5 pt-2 text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
             {user.email}
           </div>
         )}
@@ -47,11 +47,11 @@ export default function AdminLayout() {
             <NavLink key={tab.to} to={tab.to} end={tab.end} className="shrink-0">
               {({ isActive }) => (
                 <span
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12.5px] min-h-[40px]"
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12.5px] font-medium min-h-[40px]"
                   style={{
-                    background: isActive ? `linear-gradient(135deg, ${COLORS.goldLight}, ${COLORS.gold})` : "rgba(255,255,255,0.04)",
+                    background: isActive ? COLORS.gold : "#FFFFFF",
                     color: isActive ? COLORS.ink : COLORS.ivory,
-                    border: isActive ? "none" : "1px solid rgba(201,166,103,0.2)",
+                    border: isActive ? "none" : `1px solid ${COLORS.line}`,
                   }}
                 >
                   <tab.icon size={14} />

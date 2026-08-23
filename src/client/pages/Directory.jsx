@@ -9,8 +9,8 @@ function GuestAvatar({ guest }) {
   const showImg = guest.avatar_path && imgOk;
   return (
     <div
-      className="w-14 h-14 rounded-full shrink-0 overflow-hidden flex items-center justify-center"
-      style={{ border: "1px solid rgba(201,166,103,0.35)", background: "rgba(201,166,103,0.1)" }}
+      className="w-14 h-14 rounded-2xl shrink-0 overflow-hidden flex items-center justify-center"
+      style={{ border: "1px solid rgba(17,17,17,0.09)", background: "#F0F0EE" }}
     >
       {showImg ? (
         <img src={publicGalleryUrl(guest.avatar_path)} alt={guest.name || "Guest"} className="w-full h-full object-cover" onError={() => setImgOk(false)} />
@@ -59,7 +59,7 @@ export default function Directory() {
           <button
             onClick={toggleOptIn}
             className="w-11 h-6 rounded-full relative shrink-0"
-            style={{ background: profile.directory_opt_in ? COLORS.gold : "rgba(255,255,255,0.15)" }}
+            style={{ background: profile.directory_opt_in ? COLORS.gold : "rgba(17,17,17,0.15)" }}
             aria-label="Toggle directory visibility"
           >
             <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all" style={{ left: profile.directory_opt_in ? 22 : 2 }} />
@@ -81,7 +81,7 @@ export default function Directory() {
               <GuestAvatar guest={g} />
               <div className="min-w-0">
                 <div className="flex items-baseline gap-2 flex-wrap">
-                  <span className="text-[14px] font-semibold" style={{ color: COLORS.ivory, fontFamily: "'Fraunces', serif" }}>{g.name || "A guest"}</span>
+                  <span className="text-[14px] font-semibold" style={{ color: COLORS.ivory, fontFamily: F.display, letterSpacing: "-0.02em", fontWeight: 500 }}>{g.name || "A guest"}</span>
                   {g.relationship && <Badge tone="emerald">{g.relationship}</Badge>}
                 </div>
                 {g.location && <div className="text-[11.5px] mb-1.5" style={{ color: COLORS.ivoryDim }}>{g.location}</div>}

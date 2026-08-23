@@ -29,7 +29,7 @@ export default function Story() {
           src={brandingUrl(BRANDING_PATHS.storyHero)}
           alt="Folake"
           className="w-full rounded-2xl object-cover aspect-[4/5] mb-5"
-          style={{ border: "1px solid rgba(201,166,103,0.3)" }}
+          style={{ border: `1px solid ${COLORS.line}` }}
           onError={() => setHeroOk(false)}
         />
       )}
@@ -37,14 +37,14 @@ export default function Story() {
         <div className="space-y-5 pb-4">
           {sections.map((s, i) => (
             <div key={`${s.title}-${i}`}>
-              <h3 className="text-[17px] mb-1.5" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>{s.title}</h3>
+              <h3 className="text-[17px] mb-1.5" style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}>{s.title}</h3>
               <p className="text-[13px] leading-relaxed whitespace-pre-line" style={{ color: COLORS.ivoryDim }}>{s.body}</p>
             </div>
           ))}
         </div>
       ) : (
         <Card dark>
-          <p className="text-[13px] leading-relaxed italic text-center py-4" style={{ color: COLORS.ivoryDim, fontFamily: F.display }}>
+          <p className="text-[13px] leading-relaxed text-center py-4" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
             Her story is still being written — check back soon.
           </p>
         </Card>

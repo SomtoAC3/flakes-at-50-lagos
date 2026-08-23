@@ -54,7 +54,7 @@ export default function Guests() {
                   <ChevronDown size={16} color={COLORS.gold} style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} className="shrink-0" />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 space-y-2.5" style={{ borderTop: "1px solid rgba(201,166,103,0.15)" }}>
+                  <div className="px-4 pb-4 pt-1 space-y-2.5" style={{ borderTop: `1px solid ${COLORS.line}` }}>
                     <div className="pt-3 space-y-2">
                       <DetailRow label="Phone" value={g.phone || "—"} />
                       <DetailRow label="Emergency Contact" value={g.emergency_contact || "—"} />
@@ -69,8 +69,8 @@ export default function Guests() {
                     <button
                       onClick={() => toggleOrganizer(g)}
                       disabled={g.id === currentUser?.id}
-                      className="mt-2 inline-flex items-center gap-1.5 text-[11px] px-3 py-2 rounded-full min-h-[36px] disabled:opacity-40"
-                      style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}
+                      className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-xl min-h-[36px] disabled:opacity-40"
+                      style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
                     >
                       <ShieldCheck size={12} />
                       {g.is_organizer ? "Remove organizer access" : "Grant organizer access"}

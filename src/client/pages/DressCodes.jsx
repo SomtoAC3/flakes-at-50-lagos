@@ -38,8 +38,8 @@ export default function DressCodes() {
               <GoldButton icon={Upload} variant="outline">Go to Gallery</GoldButton>
             </Link>
           </Card>
-          <p className="text-[11px] text-center pt-2 pb-4" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
-            FINAL DRESS CODES &amp; EVENT DETAILS MAY BE UPDATED BY THE ORGANIZERS.
+          <p className="text-[11px] text-center pt-2 pb-4" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
+            Final dress codes &amp; event details may be updated by the organizers.
           </p>
         </div>
       )}
@@ -53,17 +53,17 @@ function DressCodeCard({ dc }) {
   return (
     <Card dark>
       <div className="flex items-center justify-between mb-1">
-        <div className="uppercase tracking-[0.28em] text-[11px] font-medium mb-2" style={{ color: COLORS.gold, fontFamily: F.mono }}>
+        <div className="text-[11px] font-semibold mb-2" style={{ color: COLORS.gold, fontFamily: F.body }}>
           {dc.event} · {dc.date}
         </div>
       </div>
-      <h3 className="text-[19px] mb-2" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>
+      <h3 className="text-[19px] mb-2" style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}>
         {dc.title}
       </h3>
       {dc.palette?.length > 0 && (
         <div className="flex gap-2 mb-3">
           {dc.palette.map((c) => (
-            <span key={c} className="w-7 h-7 rounded-full" style={{ background: c, border: "1px solid rgba(255,255,255,0.15)" }} />
+            <span key={c} className="w-7 h-7 rounded-lg" style={{ background: c, border: "1px solid rgba(17,17,17,0.12)" }} />
           ))}
         </div>
       )}
@@ -81,7 +81,7 @@ function DressCodeCard({ dc }) {
           src={brandingUrl(dressCodePhotoPath(dc.id))}
           alt={`Inspiration for ${dc.title}`}
           className="w-full rounded-2xl object-cover aspect-[16/7]"
-          style={{ border: "1px solid rgba(201,166,103,0.25)" }}
+          style={{ border: `1px solid ${COLORS.line}` }}
           onError={() => setPhotoOk(false)}
         />
       )}

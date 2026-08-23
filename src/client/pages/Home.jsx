@@ -10,6 +10,72 @@ import { brandingUrl, BRANDING_PATHS } from "../../lib/branding";
 const FALLBACK_WELCOME_NOTE =
   "Fifty years, and I still can't believe I get to share this chapter with all of you — in Egypt, of all places. Pack your gold, bring your energy, and let's make this a celebration for the books.";
 
+// Built-in hero slideshow. Photos live in public/landmarks/ (Wikimedia
+// Commons, credited on the More page).
+const LANDMARKS = [
+  { src: "/landmarks/giza.jpg", name: "Pyramids of Giza", place: "Giza" },
+  { src: "/landmarks/sphinx.jpg", name: "Great Sphinx", place: "Giza" },
+  { src: "/landmarks/citadel.jpg", name: "Mosque of Muhammad Ali", place: "Cairo Citadel" },
+  { src: "/landmarks/karnak.jpg", name: "Karnak Temple", place: "Luxor" },
+  { src: "/landmarks/abusimbel.jpg", name: "Abu Simbel Temples", place: "Aswan" },
+  { src: "/landmarks/redsea.jpg", name: "Coral Reefs", place: "Red Sea" },
+];
+
+function LandmarkSlideshow() {
+  const [index, setIndex] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e) => setReducedMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => setIndex((i) => (i + 1) % LANDMARKS.length), 4200);
+    return () => clearInterval(t);
+  }, []);
+
+  const current = LANDMARKS[index];
+  return (
+    <div
+      className="relative w-full overflow-hidden rounded-2xl mb-6"
+      style={{ height: 190, background: COLORS.chip, border: `1px solid ${COLORS.line}` }}
+    >
+      {LANDMARKS.map((l, i) => (
+        <img
+          key={l.src}
+          src={l.src}
+          alt={i === index ? `${l.name}, ${l.place}` : ""}
+          className="absolute inset-0 w-full h-full object-cover"
+          loading={i === 0 ? "eager" : "lazy"}
+          style={{
+            opacity: i === index ? 1 : 0,
+            transition: reducedMotion ? "none" : "opacity 0.9s ease",
+          }}
+        />
+      ))}
+      <div
+        className="absolute left-2.5 bottom-2.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold"
+        style={{ background: "rgba(255,255,255,0.94)", color: COLORS.ivory }}
+      >
+        {current.name} <span style={{ color: COLORS.ivoryDim, fontWeight: 500 }}>· {current.place}</span>
+      </div>
+      <div className="absolute right-3 bottom-3.5 flex gap-1.5" aria-hidden="true">
+        {LANDMARKS.map((l, i) => (
+          <span
+            key={l.src}
+            className="w-[5px] h-[5px] rounded-full"
+            style={{ background: i === index ? "#FFFFFF" : "rgba(255,255,255,0.55)" }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function useCountdown(target) {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
@@ -79,9 +145,9 @@ function findNextActivity(days, now) {
 function formatDateRange(days) {
   const first = dayStart(days[0].date);
   const last = dayStart(days[days.length - 1].date);
-  const fmt = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase();
-  const cities = [...new Set(days.map((d) => d.city))].join(" & ").toUpperCase();
-  return `${fmt(first)} — ${fmt(last)}, ${last.getFullYear()}${cities ? ` · ${cities}` : ""}`;
+  const fmt = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const cities = [...new Set(days.map((d) => d.city))].join(" & ");
+  return `${fmt(first)} – ${fmt(last)}, ${last.getFullYear()}${cities ? ` · ${cities}` : ""}`;
 }
 
 export default function Home() {
@@ -118,35 +184,37 @@ export default function Home() {
 
   return (
     <div>
-      <div className="relative px-5 pt-8 pb-10 overflow-hidden">
-        <div
-          className="absolute -top-24 left-1/2 -translate-x-1/2 w-[420px] h-[420px] max-w-[110vw] rounded-full opacity-30 pointer-events-none"
-          style={{ background: `radial-gradient(circle, ${COLORS.gold}55, transparent 70%)` }}
-        />
-        <svg width="100%" height="90" viewBox="0 0 400 90" className="mb-6 relative" aria-hidden="true">
-          <path d="M 20 80 Q 200 -10 380 80" stroke={COLORS.gold} strokeWidth="1" fill="none" opacity="0.6" />
-          <path d="M 60 82 Q 200 20 340 82" stroke={COLORS.gold} strokeWidth="1" fill="none" opacity="0.35" />
-          <circle cx="200" cy="46" r="5" fill={COLORS.gold} opacity="0.9" />
-        </svg>
+      <div className="px-5 pt-6 pb-10">
+        <LandmarkSlideshow />
         <Eyebrow>A Golden Jubilee Across Cairo &amp; The Red Sea</Eyebrow>
-        <h1 className="text-[38px] sm:text-[42px] leading-[1.02] mb-1" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>
-          Folake <span style={{ color: COLORS.gold, fontStyle: "italic", fontWeight: 500 }}>at 50</span>
+        <h1
+          className="text-[38px] sm:text-[42px] leading-[1.04] mb-1"
+          style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}
+        >
+          Folake <span style={{ color: COLORS.gold, fontStyle: "italic" }}>at 50</span>
         </h1>
-        <h2 className="text-[20px] sm:text-[22px] leading-tight mb-4" style={{ fontFamily: F.display, fontWeight: 500, color: COLORS.ivoryDim, fontStyle: "italic" }}>
+        <h2
+          className="text-[20px] sm:text-[22px] leading-tight mb-4"
+          style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivoryDim, fontStyle: "italic" }}
+        >
           The Egypt Takeover
         </h2>
-        <p className="text-[13px] mb-1" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
-          {days?.length ? formatDateRange(days) : "OCT 28 — NOV 1, 2026 · CAIRO & THE RED SEA"}
+        <p className="text-[13px] mb-1 font-medium" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
+          {days?.length ? formatDateRange(days) : "Oct 28 – Nov 1, 2026 · Cairo & the Red Sea"}
         </p>
 
         {status?.phase !== "after" && (
           <div className="mt-6 grid grid-cols-4 gap-2">
-            {[["DAYS", cd.days], ["HRS", cd.hours], ["MIN", cd.minutes], ["SEC", cd.seconds]].map(([label, val]) => (
-              <div key={label} className="rounded-xl py-3 flex flex-col items-center" style={{ border: "1px solid rgba(201,166,103,0.35)", background: "rgba(201,166,103,0.06)" }}>
-                <span className="text-[20px] sm:text-[22px] tabular-nums" style={{ fontFamily: F.mono, color: COLORS.gold, fontWeight: 600 }}>
+            {[["Days", cd.days], ["Hrs", cd.hours], ["Min", cd.minutes], ["Sec", cd.seconds]].map(([label, val]) => (
+              <div
+                key={label}
+                className="rounded-xl py-3 flex flex-col items-center"
+                style={{ border: `1px solid ${COLORS.line}`, background: COLORS.card }}
+              >
+                <span className="text-[20px] sm:text-[22px] tabular-nums" style={{ fontFamily: F.body, color: COLORS.ivory, fontWeight: 600 }}>
                   {pad(val)}
                 </span>
-                <span className="text-[9px] tracking-[0.2em] mt-1" style={{ fontFamily: F.mono, color: COLORS.ivoryDim }}>
+                <span className="text-[10px] mt-1 font-medium" style={{ fontFamily: F.body, color: COLORS.ivoryDim }}>
                   {label}
                 </span>
               </div>
@@ -169,21 +237,20 @@ export default function Home() {
       </div>
 
       <div className="px-5">
-        <LintelDivider />
-        <Card dark>
+        <Card>
           <div className="flex items-start gap-3">
             {photoOk && (
               <img
                 src={brandingUrl(BRANDING_PATHS.folakePhoto)}
                 alt="Folake"
-                className="w-16 h-16 rounded-full object-cover shrink-0"
-                style={{ border: "1px solid rgba(201,166,103,0.4)" }}
+                className="w-16 h-16 rounded-2xl object-cover shrink-0"
+                style={{ border: `1px solid ${COLORS.line}` }}
                 onError={() => setPhotoOk(false)}
               />
             )}
             <div className="min-w-0">
               <Eyebrow>A Note From Folake</Eyebrow>
-              <p className="text-[14px] leading-relaxed italic" style={{ color: COLORS.ivory, fontFamily: F.display }}>
+              <p className="text-[13.5px] leading-relaxed" style={{ color: COLORS.ivory, fontFamily: F.body }}>
                 "{welcomeNote}"
               </p>
             </div>
@@ -200,7 +267,10 @@ export default function Home() {
         <Card dark className="mb-4">
           <Eyebrow>Right Now</Eyebrow>
           <div className="flex items-center justify-between mb-4 gap-2">
-            <span className="text-[16px] min-w-0" style={{ fontFamily: F.display, color: COLORS.ivory, fontWeight: 600 }}>
+            <span
+              className="text-[17px] min-w-0"
+              style={{ fontFamily: F.display, color: COLORS.ivory, fontWeight: 500, letterSpacing: "-0.02em" }}
+            >
               {!status && "The countdown is on"}
               {status?.phase === "before" && "Trip has not started"}
               {status?.phase === "during" && (status.today?.theme || `Day ${status.dayNum}`)}
@@ -250,15 +320,18 @@ export default function Home() {
 
 function QuickRow({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(201,166,103,0.14)" }}>
-        <Icon size={13} color={COLORS.gold} />
+    <div className="flex items-center gap-3">
+      <div
+        className="w-[38px] h-[38px] shrink-0 flex items-center justify-center"
+        style={{ background: COLORS.chip, borderRadius: 11 }}
+      >
+        <Icon size={16} color={COLORS.gold} />
       </div>
       <div className="min-w-0">
-        <div className="text-[10px] tracking-wide uppercase" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
+        <div className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
           {label}
         </div>
-        <div className="text-[13px] leading-snug" style={{ color: COLORS.ivory }}>
+        <div className="text-[13px] leading-snug font-medium" style={{ color: COLORS.ivory }}>
           {value}
         </div>
       </div>
@@ -270,7 +343,12 @@ function QuickLinkCard({ icon: Icon, title, to }) {
   return (
     <Link to={to}>
       <Card dark className="!p-4 h-full flex flex-col gap-3">
-        <Icon size={18} color={COLORS.gold} />
+        <span
+          className="w-[38px] h-[38px] flex items-center justify-center"
+          style={{ background: COLORS.chip, borderRadius: 11 }}
+        >
+          <Icon size={17} color={COLORS.gold} />
+        </span>
         <span className="text-[13px]" style={{ color: COLORS.ivory, fontWeight: 500 }}>
           {title}
         </span>

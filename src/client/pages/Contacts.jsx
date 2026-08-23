@@ -50,8 +50,8 @@ export default function Contacts() {
               <div className="flex gap-2 shrink-0">
                 <a
                   href={`tel:${c.phone}`}
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ border: "1px solid rgba(201,166,103,0.35)" }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: "#F0F0EE" }}
                   aria-label={`Call ${c.role}`}
                 >
                   <Phone size={14} color={COLORS.gold} />
@@ -59,8 +59,8 @@ export default function Contacts() {
                 {waNumber(c.phone).length >= 7 && (
                   <a
                     href={`https://wa.me/${waNumber(c.phone)}`}
-                    className="w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{ border: "1px solid rgba(201,166,103,0.35)" }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ background: "#F0F0EE" }}
                     aria-label={`Message ${c.role} on WhatsApp`}
                   >
                     <MessageCircle size={14} color={COLORS.gold} />
@@ -89,8 +89,8 @@ export default function Contacts() {
             href={whatsappLink}
             target="_blank"
             rel="noreferrer"
-            className="text-[11.5px] px-3 py-2 rounded-full min-h-[36px] flex items-center"
-            style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}
+            className="text-[11.5px] font-semibold px-3 py-2 rounded-xl min-h-[36px] flex items-center"
+            style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
           >
             Join Group
           </a>

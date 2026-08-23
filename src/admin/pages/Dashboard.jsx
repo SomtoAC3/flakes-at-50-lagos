@@ -31,7 +31,7 @@ export default function Dashboard() {
 function StatTile({ label, value }) {
   return (
     <Card dark className="!p-4">
-      <div className="text-[22px] mb-1" style={{ fontFamily: F.mono, color: COLORS.gold, fontWeight: 600 }}>{value}</div>
+      <div className="text-[22px] mb-1 tabular-nums" style={{ fontFamily: F.body, color: COLORS.ivory, fontWeight: 600 }}>{value}</div>
       <div className="text-[11px]" style={{ color: COLORS.ivoryDim }}>{label}</div>
     </Card>
   );

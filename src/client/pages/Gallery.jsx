@@ -48,11 +48,11 @@ export default function Gallery() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className="shrink-0 rounded-full px-3.5 py-1.5 text-[11.5px] min-h-[36px]"
+            className="shrink-0 rounded-xl px-3.5 py-1.5 text-[11.5px] font-medium min-h-[36px]"
             style={{
-              background: filter === f ? COLORS.gold : "rgba(255,255,255,0.05)",
+              background: filter === f ? COLORS.gold : "#FFFFFF",
               color: filter === f ? COLORS.ink : COLORS.ivoryDim,
-              border: filter === f ? "none" : "1px solid rgba(201,166,103,0.2)",
+              border: filter === f ? "none" : "1px solid rgba(17,17,17,0.09)",
             }}
           >
             {f}
@@ -75,7 +75,7 @@ export default function Gallery() {
             </p>
           )}
           {photos.map((p) => (
-            <div key={p.id} className="aspect-square rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(201,166,103,0.18)" }}>
+            <div key={p.id} className="aspect-square rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(17,17,17,0.09)" }}>
               <img src={p.url} alt={p.caption || "Guest upload"} className="w-full h-full object-cover" />
             </div>
           ))}

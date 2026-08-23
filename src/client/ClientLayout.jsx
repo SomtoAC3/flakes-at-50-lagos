@@ -42,10 +42,10 @@ export default function ClientLayout() {
   const showUrgentBanner = urgent && urgent.id !== dismissedUrgentId;
 
   return (
-    <div className="min-h-screen w-full flex justify-center" style={{ background: COLORS.ink, fontFamily: F.body }}>
+    <div className="min-h-screen w-full flex justify-center" style={{ background: COLORS.ink, fontFamily: F.body, color: COLORS.ivory }}>
       <div className="w-full max-w-[480px] min-h-screen relative flex flex-col" style={{ background: COLORS.ink }}>
         {showUrgentBanner && (
-          <div className="px-4 py-2.5 flex items-start gap-2 text-[12px]" style={{ background: "#3A1512", color: "#F3C7BE" }}>
+          <div className="px-4 py-2.5 flex items-start gap-2 text-[12px]" style={{ background: "rgba(179,38,30,0.07)", color: "#B3261E" }}>
             <AlertTriangle size={15} className="shrink-0 mt-0.5" />
             <div className="flex-1 leading-snug">
               <span className="font-semibold">{urgent.category}: </span>
@@ -59,11 +59,11 @@ export default function ClientLayout() {
 
         <div
           className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
-          style={{ background: `${COLORS.ink}E6`, borderBottom: "1px solid rgba(201,166,103,0.15)" }}
+          style={{ background: "rgba(250,250,249,0.92)", borderBottom: `1px solid ${COLORS.line}` }}
         >
           <NavLink to="/" className="flex items-center gap-2">
             <Sparkles size={16} color={COLORS.gold} />
-            <span className="text-[13px] tracking-[0.15em] uppercase" style={{ fontFamily: F.mono, color: COLORS.ivory }}>
+            <span className="text-[13.5px] font-semibold" style={{ fontFamily: F.body, color: COLORS.ivory }}>
               Folake at 50
             </span>
           </NavLink>
@@ -73,13 +73,15 @@ export default function ClientLayout() {
           <Outlet />
         </div>
 
-        <div
-          className="safe-bottom fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-3 pb-3 pt-2 z-40"
-          style={{ background: `linear-gradient(to top, ${COLORS.ink} 70%, transparent)` }}
-        >
+        <div className="safe-bottom fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-3 pb-3 pt-2 z-40">
           <div
             className="flex items-center justify-between rounded-2xl px-2 py-2"
-            style={{ background: "rgba(20,20,19,0.92)", border: "1px solid rgba(201,166,103,0.22)", backdropFilter: "blur(8px)" }}
+            style={{
+              background: "rgba(255,255,255,0.96)",
+              border: `1px solid ${COLORS.line}`,
+              boxShadow: "0 6px 20px -12px rgba(17,17,17,0.25)",
+              backdropFilter: "blur(8px)",
+            }}
           >
             {NAV_MAIN.map((item) => (
               <NavLink
@@ -90,8 +92,11 @@ export default function ClientLayout() {
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon size={18} strokeWidth={isActive ? 2.2 : 1.6} color={isActive ? COLORS.gold : "#9C9483"} />
-                    <span className="text-[9.5px] tracking-wide" style={{ color: isActive ? COLORS.gold : "#9C9483", fontFamily: F.mono }}>
+                    <item.icon size={18} strokeWidth={isActive ? 2.2 : 1.6} color={isActive ? COLORS.gold : COLORS.ivoryDim} />
+                    <span
+                      className="text-[9.5px]"
+                      style={{ color: isActive ? COLORS.gold : COLORS.ivoryDim, fontFamily: F.body, fontWeight: isActive ? 600 : 500 }}
+                    >
                       {item.label}
                     </span>
                   </>

@@ -31,11 +31,11 @@ export default function More() {
           </div>
         </div>
         {user ? (
-          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] px-3 py-2 rounded-full min-h-[36px]" style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}>
+          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogOut size={13} /> Sign out
           </button>
         ) : (
-          <Link to="/login" className="flex items-center gap-1.5 text-[12px] px-3 py-2 rounded-full min-h-[36px]" style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}>
+          <Link to="/login" className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogIn size={13} /> Sign in
           </Link>
         )}
@@ -45,7 +45,7 @@ export default function More() {
         {MORE_LINKS.map((l) => (
           <Link key={l.to} to={l.to}>
             <Card dark className="flex items-center gap-3 !py-3.5">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(201,166,103,0.14)" }}>
+              <div className="w-[38px] h-[38px] flex items-center justify-center shrink-0" style={{ background: COLORS.chip, borderRadius: 11 }}>
                 <l.icon size={16} color={COLORS.gold} />
               </div>
               <div className="flex-1 text-left min-w-0">
@@ -58,8 +58,13 @@ export default function More() {
         ))}
       </div>
 
-      <p className="text-[10.5px] text-center pt-6 pb-2 tracking-wide" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
-        FOLAKE AT 50 · THE EGYPT TAKEOVER · CAIRO &amp; THE RED SEA
+      <p className="text-[10.5px] text-center pt-6" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
+        Folake at 50 · The Egypt Takeover · Cairo &amp; the Red Sea
+      </p>
+      <p className="text-[9.5px] text-center pt-2 pb-2 leading-relaxed" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
+        Landmark photos via Wikimedia Commons (CC BY / CC BY-SA / public domain):
+        Pyramids of Giza (Ricardo Liberato), Great Sphinx, Mosque of Muhammad Ali,
+        Karnak Temple, Abu Simbel, Red Sea reefs.
       </p>
     </div>
   );

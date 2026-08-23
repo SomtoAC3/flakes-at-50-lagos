@@ -131,8 +131,8 @@ export default function MyTrip() {
         onClick={() => fileRef.current?.click()}
         disabled={uploading}
         aria-label={profile.avatar_path ? "Change profile photo" : "Add profile photo"}
-        className="w-16 h-16 rounded-full shrink-0 overflow-hidden flex flex-col items-center justify-center gap-0.5 disabled:opacity-50"
-        style={{ border: profile.avatar_path ? "1px solid rgba(201,166,103,0.4)" : `1.5px dashed ${COLORS.gold}77`, background: "rgba(201,166,103,0.06)" }}
+        className="w-16 h-16 rounded-2xl shrink-0 overflow-hidden flex flex-col items-center justify-center gap-0.5 disabled:opacity-50"
+        style={{ border: profile.avatar_path ? `1px solid ${COLORS.line}` : `1.5px dashed ${COLORS.gold}`, background: COLORS.chip }}
       >
         <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFile} />
         {profile.avatar_path ? (
@@ -140,7 +140,7 @@ export default function MyTrip() {
         ) : (
           <>
             <Camera size={14} color={COLORS.gold} />
-            <span className="text-[9px]" style={{ color: COLORS.gold, fontFamily: F.mono }}>
+            <span className="text-[9px] font-medium" style={{ color: COLORS.gold, fontFamily: F.body }}>
               {uploading ? "…" : "Add photo"}
             </span>
           </>
@@ -156,17 +156,17 @@ export default function MyTrip() {
 
       <Card dark className="mb-5">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[13px] font-semibold" style={{ color: COLORS.ivory, fontFamily: F.display }}>Trip Progress</span>
-          <span className="text-[12px]" style={{ color: COLORS.gold, fontFamily: F.mono }}>{done}/{total}</span>
+          <span className="text-[15px]" style={{ color: COLORS.ivory, fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em" }}>Trip Progress</span>
+          <span className="text-[12px]" style={{ color: COLORS.gold, fontFamily: F.body, fontWeight: 600 }}>{done}/{total}</span>
         </div>
-        <div className="h-1.5 rounded-full overflow-hidden mb-4" style={{ background: "rgba(255,255,255,0.08)" }}>
-          <div className="h-full rounded-full" style={{ width: `${(done / total) * 100}%`, background: `linear-gradient(90deg, ${COLORS.gold}, ${COLORS.goldLight})` }} />
+        <div className="h-1.5 rounded-full overflow-hidden mb-4" style={{ background: COLORS.chip }}>
+          <div className="h-full rounded-full" style={{ width: `${(done / total) * 100}%`, background: COLORS.gold }} />
         </div>
         <div className="space-y-2">
           {Object.keys(CHECKLIST_LABELS).map((k) => (
             <button key={k} onClick={() => toggleChecklistItem(k)} className="w-full flex items-center gap-2.5 min-h-[36px]">
               <div
-                className="w-5 h-5 rounded shrink-0 flex items-center justify-center"
+                className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center"
                 style={{ background: checklist[k] ? COLORS.gold : "transparent", border: `1px solid ${COLORS.gold}` }}
               >
                 {checklist[k] && <Check size={12} color={COLORS.ink} />}
@@ -183,7 +183,7 @@ export default function MyTrip() {
         <AvatarUpload onError={setError} />
         <div className="min-w-0">
           <div className="text-[13px] font-semibold truncate" style={{ color: COLORS.ivory }}>{form.full_name || "Your Name"}</div>
-          <div className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>RSVP: {form.rsvp_status.toUpperCase()}</div>
+          <div className="text-[11px] font-medium" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>RSVP: {form.rsvp_status.charAt(0).toUpperCase() + form.rsvp_status.slice(1)}</div>
         </div>
       </Card>
 

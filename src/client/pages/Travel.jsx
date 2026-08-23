@@ -35,7 +35,7 @@ export default function Travel() {
         {sections.map((s, i) => (
           <Card dark key={`${s.title}-${i}`}>
             <div className="mb-1.5">
-              <span className="text-[14px] font-semibold" style={{ color: COLORS.ivory, fontFamily: F.display }}>{s.title}</span>
+              <span className="text-[15px]" style={{ color: COLORS.ivory, fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em" }}>{s.title}</span>
             </div>
             <p className="text-[12.5px] leading-relaxed" style={{ color: COLORS.ivoryDim }}>{s.body}</p>
           </Card>

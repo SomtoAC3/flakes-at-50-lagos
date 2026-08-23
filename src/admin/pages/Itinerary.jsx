@@ -92,11 +92,11 @@ export default function AdminItinerary() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
                     <Badge>{day.label}</Badge>
-                    <span className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
+                    <span className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
                       {day.weekday} · {day.date} · {day.city}
                     </span>
                   </div>
-                  <p className="text-[14px]" style={{ color: COLORS.ivory, fontFamily: F.display, fontWeight: 600 }}>
+                  <p className="text-[15px]" style={{ color: COLORS.ivory, fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em" }}>
                     {day.theme}
                   </p>
                 </div>
@@ -117,7 +117,7 @@ export default function AdminItinerary() {
               <div className="mt-3 space-y-2">
                 {day.activities.map((activity, i) => (
                   <div key={activity.id}>
-                    <div className="flex items-center gap-2 rounded-lg px-3 py-2.5" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(201,166,103,0.15)" }}>
+                    <div className="flex items-center gap-2 rounded-lg px-3 py-2.5" style={{ background: COLORS.chip, border: `1px solid ${COLORS.line}` }}>
                       <div className="flex flex-col gap-0.5 shrink-0">
                         <IconButton small label={`Move ${activity.name} up`} disabled={i === 0} onClick={() => moveActivity(day, i, -1)}>
                           <ChevronUp size={12} />
@@ -128,7 +128,7 @@ export default function AdminItinerary() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-[12.5px] truncate" style={{ color: COLORS.ivory }}>{activity.name}</p>
-                        <p className="text-[10.5px]" style={{ color: COLORS.ivoryDim, fontFamily: F.mono }}>
+                        <p className="text-[10.5px]" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
                           {[activity.start_time, activity.end_time].filter(Boolean).join(" – ") || "No time set"}
                         </p>
                       </div>
@@ -171,7 +171,7 @@ export default function AdminItinerary() {
                 <button
                   onClick={() => setEditing({ type: "activity", dayId: day.id })}
                   className="w-full flex items-center justify-center gap-1.5 text-[11.5px] rounded-lg min-h-[38px]"
-                  style={{ border: "1px dashed rgba(201,166,103,0.35)", color: COLORS.gold }}
+                  style={{ border: `1.5px dashed ${COLORS.gold}`, color: COLORS.gold }}
                 >
                   <Plus size={13} /> Add activity
                 </button>
@@ -202,9 +202,9 @@ function IconButton({ children, onClick, label, disabled = false, small = false 
       disabled={disabled}
       className={`${small ? "w-6 h-4" : "w-8 h-8"} rounded-md flex items-center justify-center`}
       style={{
-        border: small ? "none" : "1px solid rgba(201,166,103,0.3)",
-        color: disabled ? "rgba(255,255,255,0.2)" : COLORS.gold,
-        background: small ? "transparent" : "rgba(255,255,255,0.03)",
+        border: small ? "none" : `1px solid ${COLORS.line}`,
+        color: disabled ? "rgba(17,17,17,0.2)" : COLORS.gold,
+        background: small ? "transparent" : "#FFFFFF",
       }}
     >
       {children}
@@ -217,10 +217,10 @@ function FormShell({ title, busy, onCancel, onSubmit, children }) {
     <form
       onSubmit={onSubmit}
       className="rounded-lg p-3 mt-2 space-y-3"
-      style={{ background: "rgba(201,166,103,0.06)", border: "1px solid rgba(201,166,103,0.3)" }}
+      style={{ background: COLORS.chip, border: `1px solid ${COLORS.line}` }}
     >
       <div className="flex items-center justify-between">
-        <span className="text-[11px] uppercase tracking-[0.1em]" style={{ color: COLORS.gold, fontFamily: F.mono }}>{title}</span>
+        <span className="text-[11.5px] font-semibold" style={{ color: COLORS.gold, fontFamily: F.body }}>{title}</span>
         <button type="button" onClick={onCancel} aria-label="Cancel" className="w-7 h-7 flex items-center justify-center" style={{ color: COLORS.ivoryDim }}>
           <X size={14} />
         </button>

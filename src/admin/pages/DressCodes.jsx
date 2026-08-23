@@ -97,7 +97,7 @@ export default function AdminDressCodes() {
             <Card dark key={dc.id}>
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="uppercase tracking-[0.2em] text-[10px] mb-1" style={{ color: COLORS.gold, fontFamily: F.mono }}>
+                  <div className="text-[10.5px] font-semibold mb-1" style={{ color: COLORS.gold, fontFamily: F.body }}>
                     {dc.event} · {dc.date}
                   </div>
                   <div className="text-[15px]" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>
@@ -106,7 +106,7 @@ export default function AdminDressCodes() {
                   {dc.palette?.length > 0 && (
                     <div className="flex gap-1.5 mt-2">
                       {dc.palette.map((c) => (
-                        <span key={c} className="w-5 h-5 rounded-full" style={{ background: c, border: "1px solid rgba(255,255,255,0.15)" }} />
+                        <span key={c} className="w-5 h-5 rounded-md" style={{ background: c, border: "1px solid rgba(17,17,17,0.12)" }} />
                       ))}
                     </div>
                   )}
@@ -167,7 +167,7 @@ function BannerUpload({ id, title, onError }) {
           src={brandingUrl(dressCodePhotoPath(id), version)}
           alt={`Inspiration for ${title}`}
           className="h-12 w-24 rounded-lg object-cover shrink-0"
-          style={{ border: "1px solid rgba(201,166,103,0.3)" }}
+          style={{ border: `1px solid ${COLORS.line}` }}
           onError={() => setHasPhoto(false)}
         />
       )}
@@ -175,8 +175,8 @@ function BannerUpload({ id, title, onError }) {
       <button
         onClick={() => fileRef.current?.click()}
         disabled={status === "uploading"}
-        className="flex items-center gap-1.5 text-[11.5px] px-3 py-2 rounded-full min-h-[36px] disabled:opacity-50"
-        style={{ border: "1px solid rgba(201,166,103,0.35)", color: COLORS.gold }}
+        className="flex items-center gap-1.5 text-[11.5px] font-semibold px-3 py-2 rounded-xl min-h-[36px] disabled:opacity-50"
+        style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
       >
         <ImagePlus size={13} />
         {status === "uploading" ? "Uploading…" : hasPhoto ? "Replace inspiration photo" : "Add inspiration photo"}
@@ -253,8 +253,8 @@ function IconButton({ label, onClick, disabled, children }) {
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-30"
-      style={{ border: "1px solid rgba(201,166,103,0.3)" }}
+      className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30"
+      style={{ border: `1px solid ${COLORS.line}` }}
     >
       {children}
     </button>
