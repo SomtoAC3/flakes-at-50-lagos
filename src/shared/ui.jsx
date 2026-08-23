@@ -71,9 +71,9 @@ export function Placeholder({ label, ratio = "aspect-[4/3]" }) {
 
 export function Badge({ children, tone = "gold" }) {
   const map = {
-    gold: { bg: "rgba(30,61,99,0.08)", fg: COLORS.gold },
-    emerald: { bg: "rgba(30,61,99,0.08)", fg: COLORS.gold },
-    urgent: { bg: "rgba(179,38,30,0.08)", fg: "#B3261E" },
+    gold: { bg: COLORS.accentSoft, fg: COLORS.gold },
+    emerald: { bg: COLORS.accentSoft, fg: COLORS.gold },
+    urgent: { bg: COLORS.dangerBg, fg: COLORS.danger },
     ivory: { bg: COLORS.chip, fg: COLORS.ivoryDim },
   };
   const s = map[tone] || map.gold;
@@ -94,7 +94,7 @@ export function Card({ children, className = "" }) {
       style={{
         background: COLORS.card,
         border: `1px solid ${COLORS.line}`,
-        boxShadow: "0 4px 14px -10px rgba(17,17,17,0.12)",
+        boxShadow: "var(--shadow)",
       }}
     >
       {children}
@@ -185,7 +185,7 @@ export function LoadingNote({ label = "Loading…" }) {
 export function ErrorNote({ message }) {
   if (!message) return null;
   return (
-    <div className="rounded-xl p-3 mb-4 text-[12.5px]" style={{ background: "rgba(179,38,30,0.07)", color: "#B3261E", border: "1px solid rgba(179,38,30,0.25)" }}>
+    <div className="rounded-xl p-3 mb-4 text-[12.5px]" style={{ background: COLORS.dangerBg, color: COLORS.danger, border: `1px solid ${COLORS.dangerLine}` }}>
       {message}
     </div>
   );

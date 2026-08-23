@@ -106,7 +106,7 @@ export default function AdminDressCodes() {
                   {dc.palette?.length > 0 && (
                     <div className="flex gap-1.5 mt-2">
                       {dc.palette.map((c) => (
-                        <span key={c} className="w-5 h-5 rounded-md" style={{ background: c, border: "1px solid rgba(17,17,17,0.12)" }} />
+                        <span key={c} className="w-5 h-5 rounded-md" style={{ background: c, border: "1px solid var(--line)" }} />
                       ))}
                     </div>
                   )}

@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, Users, Bell, Images, CalendarDays, FileText, Shirt, Settings, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Users, Bell, Images, CalendarDays, FileText, Shirt, Settings, LogOut, ShieldCheck, Sun, Moon } from "lucide-react";
 import { COLORS, F } from "../shared/theme";
+import { useThemeMode } from "../shared/themeMode";
 import { useAuth } from "../lib/auth";
 
 const TABS = [
@@ -16,13 +17,14 @@ const TABS = [
 
 export default function AdminLayout() {
   const { user, signOut } = useAuth();
+  const { theme, toggle } = useThemeMode();
 
   return (
     <div className="min-h-screen w-full" style={{ background: COLORS.ink, fontFamily: F.body }}>
       <div className="w-full max-w-2xl mx-auto min-h-screen flex flex-col">
         <div
           className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
-          style={{ background: "rgba(250,250,249,0.92)", borderBottom: `1px solid ${COLORS.line}` }}
+          style={{ background: "var(--header)", borderBottom: `1px solid ${COLORS.line}` }}
         >
           <div className="flex items-center gap-2 min-w-0">
             <ShieldCheck size={16} color={COLORS.gold} className="shrink-0" />
@@ -30,10 +32,20 @@ export default function AdminLayout() {
               Folake at 50 · Admin
             </span>
           </div>
-          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl shrink-0 min-h-[36px]" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
-            <LogOut size={13} />
-            <span className="hidden sm:inline">Sign out</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={toggle}
+              className="flex items-center justify-center rounded-xl min-h-[34px] min-w-[34px]"
+              style={{ background: COLORS.chip, color: COLORS.ivoryDim }}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl min-h-[36px]" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
+              <LogOut size={13} />
+              <span className="hidden sm:inline">Sign out</span>
+            </button>
+          </div>
         </div>
 
         {user && (
@@ -49,7 +61,7 @@ export default function AdminLayout() {
                 <span
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12.5px] font-medium min-h-[40px]"
                   style={{
-                    background: isActive ? COLORS.gold : "#FFFFFF",
+                    background: isActive ? COLORS.gold : COLORS.card,
                     color: isActive ? COLORS.ink : COLORS.ivory,
                     border: isActive ? "none" : `1px solid ${COLORS.line}`,
                   }}

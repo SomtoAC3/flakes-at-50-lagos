@@ -49,7 +49,7 @@ export default function Itinerary() {
             className="shrink-0 rounded-xl px-3.5 py-2.5 text-left min-h-[44px]"
             style={{
               minWidth: 92,
-              background: i === dayIdx ? COLORS.gold : "#FFFFFF",
+              background: i === dayIdx ? COLORS.gold : COLORS.card,
               border: i === dayIdx ? "none" : `1px solid ${COLORS.line}`,
             }}
           >

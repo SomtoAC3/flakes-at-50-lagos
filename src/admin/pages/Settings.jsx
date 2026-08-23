@@ -108,7 +108,7 @@ function ImageUploadCard({ title, description, previewPath, sizes, rounded }) {
       <div className="flex items-center gap-4 mb-4">
         <div
           className={`w-20 h-20 ${rounded} overflow-hidden flex items-center justify-center shrink-0`}
-          style={{ background: "#F0F0EE", border: "1px solid rgba(17,17,17,0.09)" }}
+          style={{ background: "var(--chip)", border: "1px solid var(--line)" }}
         >
           {previewFailed ? (
             <span className="text-[10px] text-center px-2" style={{ color: COLORS.ivoryDim }}>

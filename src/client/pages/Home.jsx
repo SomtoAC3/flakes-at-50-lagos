@@ -59,9 +59,9 @@ function LandmarkSlideshow() {
       ))}
       <div
         className="absolute left-2.5 bottom-2.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold"
-        style={{ background: "rgba(255,255,255,0.94)", color: COLORS.ivory }}
+        style={{ background: "rgba(255,255,255,0.94)", color: "#111111" }}
       >
-        {current.name} <span style={{ color: COLORS.ivoryDim, fontWeight: 500 }}>· {current.place}</span>
+        {current.name} <span style={{ color: "#6B6B6B", fontWeight: 500 }}>· {current.place}</span>
       </div>
       <div className="absolute right-3 bottom-3.5 flex gap-1.5" aria-hidden="true">
         {LANDMARKS.map((l, i) => (

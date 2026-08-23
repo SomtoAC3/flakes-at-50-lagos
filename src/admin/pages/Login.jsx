@@ -6,8 +6,8 @@ import { GoldButton, ErrorNote } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 
 const inputStyle = {
-  background: "#FFFFFF",
-  border: "1px solid rgba(17,17,17,0.09)",
+  background: "var(--card)",
+  border: "1px solid var(--line)",
   color: COLORS.ivory,
   fontFamily: F.body,
 };
@@ -38,7 +38,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center px-6" style={{ background: COLORS.ink }}>
       <div className="w-full max-w-xs">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: "#F0F0EE" }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: "var(--chip)" }}>
             <ShieldCheck size={22} color={COLORS.gold} />
           </div>
           <h1 className="text-[20px] mb-1" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>

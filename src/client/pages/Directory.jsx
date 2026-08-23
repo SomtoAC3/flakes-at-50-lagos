@@ -10,7 +10,7 @@ function GuestAvatar({ guest }) {
   return (
     <div
       className="w-14 h-14 rounded-2xl shrink-0 overflow-hidden flex items-center justify-center"
-      style={{ border: "1px solid rgba(17,17,17,0.09)", background: "#F0F0EE" }}
+      style={{ border: "1px solid var(--line)", background: "var(--chip)" }}
     >
       {showImg ? (
         <img src={publicGalleryUrl(guest.avatar_path)} alt={guest.name || "Guest"} className="w-full h-full object-cover" onError={() => setImgOk(false)} />
@@ -59,7 +59,7 @@ export default function Directory() {
           <button
             onClick={toggleOptIn}
             className="w-11 h-6 rounded-full relative shrink-0"
-            style={{ background: profile.directory_opt_in ? COLORS.gold : "rgba(17,17,17,0.15)" }}
+            style={{ background: profile.directory_opt_in ? COLORS.gold : "var(--toggle-off)" }}
             aria-label="Toggle directory visibility"
           >
             <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all" style={{ left: profile.directory_opt_in ? 22 : 2 }} />

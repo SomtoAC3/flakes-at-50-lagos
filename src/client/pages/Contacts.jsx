@@ -51,7 +51,7 @@ export default function Contacts() {
                 <a
                   href={`tel:${c.phone}`}
                   className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "#F0F0EE" }}
+                  style={{ background: "var(--chip)" }}
                   aria-label={`Call ${c.role}`}
                 >
                   <Phone size={14} color={COLORS.gold} />
@@ -60,7 +60,7 @@ export default function Contacts() {
                   <a
                     href={`https://wa.me/${waNumber(c.phone)}`}
                     className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: "#F0F0EE" }}
+                    style={{ background: "var(--chip)" }}
                     aria-label={`Message ${c.role} on WhatsApp`}
                   >
                     <MessageCircle size={14} color={COLORS.gold} />

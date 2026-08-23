@@ -203,8 +203,8 @@ function IconButton({ children, onClick, label, disabled = false, small = false 
       className={`${small ? "w-6 h-4" : "w-8 h-8"} rounded-md flex items-center justify-center`}
       style={{
         border: small ? "none" : `1px solid ${COLORS.line}`,
-        color: disabled ? "rgba(17,17,17,0.2)" : COLORS.gold,
-        background: small ? "transparent" : "#FFFFFF",
+        color: disabled ? "var(--toggle-off)" : COLORS.gold,
+        background: small ? "transparent" : COLORS.card,
       }}
     >
       {children}

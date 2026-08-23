@@ -73,7 +73,7 @@ export default function MagicLinkForm({ redirectPath = "/", helperText }) {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           className="w-full rounded-xl px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
-          style={{ background: "#FFFFFF", border: "1px solid rgba(17,17,17,0.09)", color: COLORS.ivory, fontFamily: F.body }}
+          style={{ background: "var(--card)", border: "1px solid var(--line)", color: COLORS.ivory, fontFamily: F.body }}
         />
       </label>
       <GoldButton type="submit" icon={Mail} className="w-full" disabled={status === "sending"}>

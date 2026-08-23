@@ -32,7 +32,7 @@ export default function Faq() {
                 <ChevronDown size={15} color={COLORS.gold} style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} className="shrink-0" />
               </button>
               {isOpen && (
-                <div className="px-4 pb-4 text-[12.5px] leading-relaxed" style={{ color: COLORS.ivoryDim, borderTop: "1px solid rgba(17,17,17,0.09)" }}>
+                <div className="px-4 pb-4 text-[12.5px] leading-relaxed" style={{ color: COLORS.ivoryDim, borderTop: "1px solid var(--line)" }}>
                   <div className="pt-3">{f.a}</div>
                 </div>
               )}

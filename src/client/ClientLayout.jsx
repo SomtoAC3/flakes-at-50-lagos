@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle, Sparkles } from "lucide-react";
+import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle, Sparkles, Sun, Moon } from "lucide-react";
 import { COLORS, F } from "../shared/theme";
+import { useThemeMode } from "../shared/themeMode";
 import { useAuth } from "../lib/auth";
 import { fetchAnnouncements } from "../lib/queries";
 
@@ -19,6 +20,7 @@ export default function ClientLayout() {
   const [dismissedUrgentId, setDismissedUrgentId] = useState(null);
   const scrollRef = useRef(null);
   const location = useLocation();
+  const { theme, toggle } = useThemeMode();
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTo(0, 0);
@@ -45,7 +47,7 @@ export default function ClientLayout() {
     <div className="min-h-screen w-full flex justify-center" style={{ background: COLORS.ink, fontFamily: F.body, color: COLORS.ivory }}>
       <div className="w-full max-w-[480px] min-h-screen relative flex flex-col" style={{ background: COLORS.ink }}>
         {showUrgentBanner && (
-          <div className="px-4 py-2.5 flex items-start gap-2 text-[12px]" style={{ background: "rgba(179,38,30,0.07)", color: "#B3261E" }}>
+          <div className="px-4 py-2.5 flex items-start gap-2 text-[12px]" style={{ background: COLORS.dangerBg, color: COLORS.danger }}>
             <AlertTriangle size={15} className="shrink-0 mt-0.5" />
             <div className="flex-1 leading-snug">
               <span className="font-semibold">{urgent.category}: </span>
@@ -59,7 +61,7 @@ export default function ClientLayout() {
 
         <div
           className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
-          style={{ background: "rgba(250,250,249,0.92)", borderBottom: `1px solid ${COLORS.line}` }}
+          style={{ background: "var(--header)", borderBottom: `1px solid ${COLORS.line}` }}
         >
           <NavLink to="/" className="flex items-center gap-2">
             <Sparkles size={16} color={COLORS.gold} />
@@ -67,6 +69,14 @@ export default function ClientLayout() {
               Folake at 50
             </span>
           </NavLink>
+          <button
+            onClick={toggle}
+            className="flex items-center justify-center rounded-xl min-h-[34px] min-w-[34px]"
+            style={{ background: COLORS.chip, color: COLORS.ivoryDim }}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto pb-28">
@@ -77,9 +87,9 @@ export default function ClientLayout() {
           <div
             className="flex items-center justify-between rounded-2xl px-2 py-2"
             style={{
-              background: "rgba(255,255,255,0.96)",
+              background: "var(--nav)",
               border: `1px solid ${COLORS.line}`,
-              boxShadow: "0 6px 20px -12px rgba(17,17,17,0.25)",
+              boxShadow: "var(--shadow-nav)",
               backdropFilter: "blur(8px)",
             }}
           >

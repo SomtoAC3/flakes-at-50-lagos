@@ -17,7 +17,7 @@ export default function RequireOrganizerAuth({ children }) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6" style={{ background: COLORS.ink }}>
         <div className="text-center max-w-xs">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: "rgba(179,38,30,0.08)" }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: "var(--danger-bg)" }}>
             <ShieldAlert size={22} color="#E0685C" />
           </div>
           <h2 className="text-[18px] mb-2" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>
