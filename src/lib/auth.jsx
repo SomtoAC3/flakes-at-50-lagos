@@ -69,6 +69,12 @@ export function AuthProvider({ children }) {
     if (error) throw error;
   }, []);
 
+  const signInWithPassword = useCallback(async (email, password) => {
+    if (!supabase) throw new Error("Supabase is not configured yet.");
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+  }, []);
+
   const signOut = useCallback(async () => {
     if (!supabase) return;
     await supabase.auth.signOut();
@@ -90,10 +96,11 @@ export function AuthProvider({ children }) {
       profile,
       isOrganizer: Boolean(profile?.is_organizer),
       signInWithMagicLink,
+      signInWithPassword,
       signOut,
       refreshProfile,
     }),
-    [loading, session, profile, signInWithMagicLink, signOut, refreshProfile]
+    [loading, session, profile, signInWithMagicLink, signInWithPassword, signOut, refreshProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
