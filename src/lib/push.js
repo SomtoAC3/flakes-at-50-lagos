@@ -57,16 +57,25 @@ export async function subscribeToPush(userId = null) {
     }));
 
   const json = sub.toJSON();
-  const { error } = await supabase.from("push_subscriptions").upsert(
-    {
-      endpoint: sub.endpoint,
-      p256dh: json.keys.p256dh,
-      auth: json.keys.auth,
-      user_id: userId,
-    },
-    { onConflict: "endpoint" }
-  );
-  if (error) throw error;
+  const row = {
+    endpoint: sub.endpoint,
+    p256dh: json.keys.p256dh,
+    auth: json.keys.auth,
+    user_id: userId,
+  };
+  // No upsert: ON CONFLICT DO UPDATE needs a SELECT policy to read the
+  // conflicting row, and this table deliberately has none. Insert, and on a
+  // duplicate endpoint fall back to updating that row.
+  const { error } = await supabase.from("push_subscriptions").insert(row);
+  if (error?.code === "23505") {
+    const { error: updateError } = await supabase
+      .from("push_subscriptions")
+      .update(row)
+      .eq("endpoint", sub.endpoint);
+    if (updateError) throw updateError;
+  } else if (error) {
+    throw error;
+  }
   return sub;
 }
 
