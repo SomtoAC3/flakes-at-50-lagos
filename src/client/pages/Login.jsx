@@ -116,7 +116,6 @@ export default function Login() {
                 maxLength={8}
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                placeholder="123456"
                 className="w-full rounded-[3px] px-3 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
                 style={{ ...inputStyle, letterSpacing: "0.3em" }}
               />
