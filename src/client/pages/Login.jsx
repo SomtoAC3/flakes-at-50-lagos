@@ -113,7 +113,7 @@ export default function Login() {
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 autoFocus
-                maxLength={8}
+                maxLength={10}
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                 className="w-full rounded-[3px] px-3 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
