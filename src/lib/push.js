@@ -33,7 +33,9 @@ export function getPermissionState() {
 export async function getExistingSubscription() {
   if (!isPushSupported()) return null;
   const reg = await navigator.serviceWorker.ready;
-  return reg.pushManager.getSubscription();
+  const sub = await reg.pushManager.getSubscription();
+  // Treat a subscription under an old VAPID key as absent so the UI offers to re-subscribe.
+  return sub && sameKey(sub.options?.applicationServerKey, urlBase64ToUint8Array(VAPID_PUBLIC_KEY)) ? sub : null;
 }
 
 function urlBase64ToUint8Array(base64String) {
@@ -43,18 +45,29 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...raw].map((ch) => ch.charCodeAt(0)));
 }
 
+function sameKey(buffer, expected) {
+  if (!buffer) return true; // browser doesn't expose it; keep the subscription
+  const actual = new Uint8Array(buffer);
+  return actual.length === expected.length && actual.every((b, i) => b === expected[i]);
+}
+
 export async function subscribeToPush(userId = null) {
   if (!isPushSupported()) throw new Error("Notifications aren't supported here.");
   const permission = await Notification.requestPermission();
   if (permission !== "granted") throw new Error("Notifications were not allowed.");
 
   const reg = await navigator.serviceWorker.ready;
-  const sub =
-    (await reg.pushManager.getSubscription()) ||
-    (await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-    }));
+  const serverKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+  let sub = await reg.pushManager.getSubscription();
+  // A subscription made under an older VAPID key can't receive our pushes;
+  // drop it and subscribe again with the current key.
+  if (sub && !sameKey(sub.options?.applicationServerKey, serverKey)) {
+    await sub.unsubscribe();
+    sub = null;
+  }
+  if (!sub) {
+    sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: serverKey });
+  }
 
   const json = sub.toJSON();
   const row = {
