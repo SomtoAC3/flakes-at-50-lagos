@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
-import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
+import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { GoldButton, ErrorNote, LoadingNote } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 
@@ -64,12 +64,10 @@ export default function Login() {
       <div className="w-full max-w-xs">
         <div className="text-center mb-8">
           <h1 className="leading-[0.95]" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.03em", color: COLORS.ivory }}>
-            <span className="block text-[48px]">Folake</span>
-            <span className="block text-[32px] italic" style={{ color: COLORS.gold }}>at Fifty</span>
+            <span className="block text-[48px]">
+              Folake<span style={{ color: COLORS.gold }}>@50</span>
+            </span>
           </h1>
-          <p className="text-[10px] font-semibold mt-4" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.32em" }}>
-            The Egypt Takeover
-          </p>
         </div>
 
         {!configured ? (

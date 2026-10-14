@@ -16,7 +16,7 @@ self.addEventListener("push", (event) => {
   } catch {
     data = { body: event.data ? event.data.text() : "" };
   }
-  const title = data.title || "Folake at 50";
+  const title = data.title || "Folake@50";
   const options = {
     body: data.body || "There's a new announcement.",
     icon: "https://aqjkxcuczeldfleibtzd.supabase.co/storage/v1/object/public/branding/app-icon-192.png",

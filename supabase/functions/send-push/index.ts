@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
     if (subsErr) return json({ error: subsErr.message }, 500);
 
     const payload = JSON.stringify({
-      title: title || "Folake at 50",
+      title: title || "Folake@50",
       body,
       url: url || "/updates",
     });

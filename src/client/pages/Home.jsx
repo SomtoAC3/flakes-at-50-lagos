@@ -218,18 +218,11 @@ export default function Home() {
         <div className="rise-in">
           <Eyebrow>A Golden Jubilee · The Red Sea</Eyebrow>
           <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.03em" }}>
-            <span className="block text-[68px] sm:text-[76px]">Folake</span>
-            <span className="block text-[44px] sm:text-[50px] italic mt-1" style={{ color: COLORS.gold, letterSpacing: "-0.02em" }}>
-              at Fifty
+            <span className="block whitespace-nowrap text-[58px] sm:text-[72px]">
+              Folake<span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </h1>
-          <div className="flex items-center gap-3 mt-6">
-            <span className="h-px w-8 shrink-0" style={{ background: COLORS.ivory }} />
-            <span className="text-[10.5px] font-semibold" style={{ color: COLORS.ivory, fontFamily: F.body, ...CAPS, letterSpacing: "0.32em" }}>
-              The Egypt Takeover
-            </span>
-          </div>
-          <p className="text-[16px] italic mt-3" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivoryDim }}>
+          <p className="text-[16px] italic mt-5" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivoryDim }}>
             {days?.length ? formatLongDateRange(days) : "28 October – 1 November 2026"}, Sharm El Sheikh
           </p>
         </div>
