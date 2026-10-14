@@ -43,15 +43,15 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           {/* Guest-facing app. No admin link or route lives anywhere in this tree. */}
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<RequireGuestAuth><ClientLayout /></RequireGuestAuth>}>
+          <Route path="/" element={<ClientLayout />}>
             <Route index element={<Home />} />
             <Route path="itinerary" element={<Itinerary />} />
             <Route path="dress-codes" element={<DressCodes />} />
             <Route path="travel" element={<Travel />} />
-            <Route path="my-trip" element={<MyTrip />} />
-            <Route path="directory" element={<Directory />} />
+            <Route path="my-trip" element={<RequireGuestAuth><MyTrip /></RequireGuestAuth>} />
+            <Route path="directory" element={<RequireGuestAuth><Directory /></RequireGuestAuth>} />
             <Route path="story" element={<Story />} />
-            <Route path="gallery" element={<Gallery />} />
+            <Route path="gallery" element={<RequireGuestAuth><Gallery /></RequireGuestAuth>} />
             <Route path="updates" element={<Updates />} />
             <Route path="faq" element={<Faq />} />
             <Route path="contacts" element={<Contacts />} />

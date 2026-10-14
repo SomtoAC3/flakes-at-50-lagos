@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
 import { GoldButton, ErrorNote, LoadingNote } from "../../shared/ui";
@@ -15,7 +15,7 @@ function friendlyError(err, step) {
   return msg || "Something went wrong. Try again.";
 }
 
-// The guest app's front door: every guest page sits behind this.
+// Optional guest sign-in for My Trip, the directory and the gallery.
 export default function Login() {
   const { configured, loading, user, sendSignInCode, verifySignInCode } = useAuth();
   const location = useLocation();
@@ -77,7 +77,7 @@ export default function Login() {
         ) : step === "email" ? (
           <form onSubmit={sendCode}>
             <p className="text-[13px] mb-5 text-center" style={{ color: COLORS.ivoryDim }}>
-              Sign in with the email the organizers have for you. We'll send you a code.
+              Sign in to RSVP, manage your trip details, and see the guest directory and gallery. Use the email the organizers have for you and we'll send you a code.
             </p>
             <ErrorNote message={error} />
             <label className="block mb-3">
@@ -144,6 +144,10 @@ export default function Login() {
             </p>
           </form>
         )}
+
+        <Link to="/" className="flex items-center justify-center gap-1 mt-8 text-[12.5px] min-h-[36px]" style={{ color: COLORS.ivoryDim }}>
+          <ArrowLeft size={13} /> Back to the site
+        </Link>
       </div>
     </div>
   );

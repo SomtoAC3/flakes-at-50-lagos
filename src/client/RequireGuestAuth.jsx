@@ -4,8 +4,10 @@ import { useAuth } from "../lib/auth";
 import { COLORS, F } from "../shared/theme";
 import { LoadingNote, GoldButton } from "../shared/ui";
 
-// Gates the whole guest app. Signed out -> /login. Signed in but not on the
-// guest list (e.g. removed by an organizer) -> an explicit screen, no content.
+// Gates My Trip / Directory / Gallery — pages that touch a guest's own
+// personal data or other guests' — behind sign-in. The rest of the guest site
+// is public. Signed in but not on the guest list (e.g. removed by an
+// organizer) -> an explicit screen, no content.
 export default function RequireGuestAuth({ children }) {
   const { loading, user, isInvited, signOut } = useAuth();
   const location = useLocation();
