@@ -19,8 +19,8 @@ self.addEventListener("push", (event) => {
   const title = data.title || "Folake at 50";
   const options = {
     body: data.body || "There's a new announcement.",
-    icon: "https://mianexjnzykxarbrxatg.supabase.co/storage/v1/object/public/branding/app-icon-192.png",
-    badge: "https://mianexjnzykxarbrxatg.supabase.co/storage/v1/object/public/branding/app-icon-192.png",
+    icon: "https://aqjkxcuczeldfleibtzd.supabase.co/storage/v1/object/public/branding/app-icon-192.png",
+    badge: "https://aqjkxcuczeldfleibtzd.supabase.co/storage/v1/object/public/branding/app-icon-192.png",
     data: { url: data.url || "/updates" },
     tag: data.tag || "announcement",
   };
