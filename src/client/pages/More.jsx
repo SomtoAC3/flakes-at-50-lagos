@@ -59,7 +59,7 @@ export default function More() {
       </div>
 
       <p className="text-[10.5px] text-center pt-6" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
-        Folake at 50 · The Egypt Takeover · Cairo &amp; the Red Sea
+        Folake at 50 · The Egypt Takeover · Sharm El Sheikh, Egypt
       </p>
       <p className="text-[9.5px] text-center pt-2 pb-2 leading-relaxed" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
         Landmark photos via Wikimedia Commons (CC BY / CC BY-SA / public domain):

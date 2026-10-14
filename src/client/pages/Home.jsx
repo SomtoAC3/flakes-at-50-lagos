@@ -8,7 +8,7 @@ import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/
 import { brandingUrl, BRANDING_PATHS } from "../../lib/branding";
 
 const FALLBACK_WELCOME_NOTE =
-  "Fifty years, and I still can't believe I get to share this chapter with all of you — in Egypt, of all places. Pack your gold, bring your energy, and let's make this a celebration for the books.";
+  "Fifty is a milestone. Celebrating it with you is the gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories with me. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
 
 // Built-in hero slideshow. Photos live in public/landmarks/ (Wikimedia
 // Commons, credited on the More page).
@@ -186,7 +186,7 @@ export default function Home() {
     <div>
       <div className="px-5 pt-6 pb-10">
         <LandmarkSlideshow />
-        <Eyebrow>A Golden Jubilee Across Cairo &amp; The Red Sea</Eyebrow>
+        <Eyebrow>A Golden Jubilee in the Red Sea</Eyebrow>
         <h1
           className="text-[38px] sm:text-[42px] leading-[1.04] mb-1"
           style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}
@@ -200,7 +200,7 @@ export default function Home() {
           The Egypt Takeover
         </h2>
         <p className="text-[13px] mb-1 font-medium" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
-          {days?.length ? formatDateRange(days) : "Oct 28 – Nov 1, 2026 · Cairo & the Red Sea"}
+          {days?.length ? formatDateRange(days) : "Oct 28 – Nov 1, 2026 · Sharm El Sheikh"}
         </p>
 
         {status?.phase !== "after" && (
@@ -261,7 +261,7 @@ export default function Home() {
           eyebrow="The Celebration"
           title="The Celebration of a Lifetime"
           light
-          sub="Five days. Two iconic destinations. One extraordinary woman turning 50 in the land of timeless wonders. We're celebrating half a century of life, love, family, friendship and unforgettable memories across Cairo and the Red Sea."
+          sub="Five days by the Red Sea, designed around sun, sea, stillness and celebration. No crowded checklist, no rushing from one thing to the next. Just beautiful places, beautiful people and enough room for the moments you cannot schedule."
         />
 
         <Card dark className="mb-4">
@@ -298,7 +298,7 @@ export default function Home() {
             </div>
           ) : status?.phase === "after" ? (
             <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
-              Five days, two destinations, one unforgettable celebration. Thank you for being part of it — check the Gallery for the memories.
+              Fifty years. Five days. One for the books. Thank you for being part of it — check the Gallery for the memories.
             </p>
           ) : (
             <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
