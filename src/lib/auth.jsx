@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { supabase, isSupabaseConfigured } from "./supabaseClient";
 
 const AuthContext = createContext(null);
@@ -12,14 +12,28 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [invited, setInvited] = useState(false);
+  // The user id whose profile is loaded; while it lags the session, access is still being checked.
+  const [loadedFor, setLoadedFor] = useState(null);
+  const loadingFor = useRef(null);
   const [loading, setLoading] = useState(isSupabaseConfigured);
 
   const loadProfile = useCallback(async (userId) => {
     if (!supabase || !userId) {
       setProfile(null);
+      setInvited(false);
+      setLoadedFor(null);
       return;
     }
-    const { data, error } = await supabase.from("guests").select("*").eq("id", userId).maybeSingle();
+    loadingFor.current = userId;
+    // RLS only returns the caller's own invite row, so any row means "on the list".
+    const [{ data, error }, invite] = await Promise.all([
+      supabase.from("guests").select("*").eq("id", userId).maybeSingle(),
+      supabase.from("guest_invites").select("email").limit(1),
+    ]);
+    if (loadingFor.current !== userId) return;
+    setInvited(Boolean(invite.data?.length) || Boolean(data?.is_organizer));
+    setLoadedFor(userId);
     if (error) {
       // RLS or network hiccup — keep session but leave profile null, pages
       // that need it will show a retry rather than crash.
@@ -49,10 +63,14 @@ export function AuthProvider({ children }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
-      if (newSession?.user?.id) {
+      // Token refreshes fire this too; only reload when the signed-in user changes.
+      if (newSession?.user?.id && newSession.user.id !== loadingFor.current) {
         loadProfile(newSession.user.id);
-      } else {
+      } else if (!newSession) {
+        loadingFor.current = null;
         setProfile(null);
+        setInvited(false);
+        setLoadedFor(null);
       }
     });
 
@@ -69,6 +87,20 @@ export function AuthProvider({ children }) {
     if (error) throw error;
   }, []);
 
+  // Guests sign in with a code typed into the app rather than a link: on iPhone
+  // a link opens Safari, which doesn't share its session with the home-screen app.
+  const sendSignInCode = useCallback(async (email) => {
+    if (!supabase) throw new Error("Supabase is not configured yet.");
+    const { error } = await supabase.auth.signInWithOtp({ email: email.trim().toLowerCase() });
+    if (error) throw error;
+  }, []);
+
+  const verifySignInCode = useCallback(async (email, code) => {
+    if (!supabase) throw new Error("Supabase is not configured yet.");
+    const { error } = await supabase.auth.verifyOtp({ email: email.trim().toLowerCase(), token: code, type: "email" });
+    if (error) throw error;
+  }, []);
+
   const signInWithPassword = useCallback(async (email, password) => {
     if (!supabase) throw new Error("Supabase is not configured yet.");
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -80,6 +112,7 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut();
     setSession(null);
     setProfile(null);
+    setInvited(false);
   }, []);
 
   const refreshProfile = useCallback(() => {
@@ -90,17 +123,20 @@ export function AuthProvider({ children }) {
   const value = useMemo(
     () => ({
       configured: isSupabaseConfigured,
-      loading,
+      loading: loading || Boolean(session?.user?.id && loadedFor !== session.user.id),
       session,
       user: session?.user ?? null,
       profile,
       isOrganizer: Boolean(profile?.is_organizer),
+      isInvited: invited,
       signInWithMagicLink,
+      sendSignInCode,
+      verifySignInCode,
       signInWithPassword,
       signOut,
       refreshProfile,
     }),
-    [loading, session, profile, signInWithMagicLink, signInWithPassword, signOut, refreshProfile]
+    [loading, loadedFor, session, profile, invited, signInWithMagicLink, sendSignInCode, verifySignInCode, signInWithPassword, signOut, refreshProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -42,20 +42,20 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <Routes>
           {/* Guest-facing app. No admin link or route lives anywhere in this tree. */}
-          <Route path="/" element={<ClientLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<RequireGuestAuth><ClientLayout /></RequireGuestAuth>}>
             <Route index element={<Home />} />
             <Route path="itinerary" element={<Itinerary />} />
             <Route path="dress-codes" element={<DressCodes />} />
             <Route path="travel" element={<Travel />} />
-            <Route path="my-trip" element={<RequireGuestAuth><MyTrip /></RequireGuestAuth>} />
-            <Route path="directory" element={<RequireGuestAuth><Directory /></RequireGuestAuth>} />
+            <Route path="my-trip" element={<MyTrip />} />
+            <Route path="directory" element={<Directory />} />
             <Route path="story" element={<Story />} />
-            <Route path="gallery" element={<RequireGuestAuth><Gallery /></RequireGuestAuth>} />
+            <Route path="gallery" element={<Gallery />} />
             <Route path="updates" element={<Updates />} />
             <Route path="faq" element={<Faq />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="more" element={<More />} />
-            <Route path="login" element={<Login />} />
           </Route>
 
           {/* Admin — a separate tree, only reachable by typing /admin directly. */}
