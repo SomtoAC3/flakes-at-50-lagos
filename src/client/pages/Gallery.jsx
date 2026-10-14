@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Upload } from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { GoldButton, SectionTitle, LoadingNote, ErrorNote } from "../../shared/ui";
@@ -8,6 +9,7 @@ import { fetchApprovedGallery, uploadGalleryPhoto } from "../../lib/queries";
 
 export default function Gallery() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState("All");
   const [photos, setPhotos] = useState(null);
   const [error, setError] = useState("");
@@ -60,10 +62,18 @@ export default function Gallery() {
         ))}
       </div>
 
-      <input ref={fileInputRef} type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
-      <GoldButton icon={Upload} className="w-full mb-2" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
-        {uploading ? "Uploading…" : "Upload Photo or Video"}
-      </GoldButton>
+      {user ? (
+        <>
+          <input ref={fileInputRef} type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
+          <GoldButton icon={Upload} className="w-full mb-2" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+            {uploading ? "Uploading…" : "Upload Photo or Video"}
+          </GoldButton>
+        </>
+      ) : (
+        <GoldButton icon={Upload} className="w-full mb-2" onClick={() => navigate("/login", { state: { from: "/gallery" } })}>
+          Sign in to share a photo
+        </GoldButton>
+      )}
       {uploadMsg && <p className="text-[12px] mb-3" style={{ color: COLORS.gold }}>{uploadMsg}</p>}
 
       {!photos && !error && <LoadingNote label="Loading the gallery…" />}

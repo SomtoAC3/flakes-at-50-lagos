@@ -9,13 +9,12 @@ const inputStyle = { background: "var(--card)", border: "1px solid var(--line)",
 
 function friendlyError(err, step) {
   const msg = err?.message || "";
-  if (/guest list/i.test(msg)) return "This email isn't on the guest list. Contact the organizers if you think that's a mistake.";
   if (step === "code" && /expired|invalid/i.test(msg)) return "That code is wrong or has expired. Check the latest email, or send a new code.";
   if (/security purposes|rate limit/i.test(msg)) return "Too many attempts. Wait a minute, then try again.";
   return msg || "Something went wrong. Try again.";
 }
 
-// Optional guest sign-in for My Trip, the directory and the gallery.
+// Optional guest sign-in for My Trip, the directory and gallery uploads.
 export default function Login() {
   const { configured, loading, user, sendSignInCode, verifySignInCode } = useAuth();
   const location = useLocation();
@@ -77,7 +76,7 @@ export default function Login() {
         ) : step === "email" ? (
           <form onSubmit={sendCode}>
             <p className="text-[13px] mb-5 text-center" style={{ color: COLORS.ivoryDim }}>
-              Sign in to RSVP, manage your trip details, and see the guest directory and gallery. Use the email the organizers have for you and we'll send you a code.
+              Sign in to RSVP, manage your trip details, see the guest directory, and share photos. We'll email you a code.
             </p>
             <ErrorNote message={error} />
             <label className="block mb-3">

@@ -290,25 +290,3 @@ export async function setGuestOrganizer(guestId, isOrganizer) {
   const { error } = await db.from("guests").update({ is_organizer: isOrganizer }).eq("id", guestId);
   if (error) throw error;
 }
-
-// ---- Guest list (who may sign in) ----
-
-export async function fetchInvites() {
-  const db = requireSupabase();
-  const { data, error } = await db.from("guest_invites").select("email, created_at").order("email");
-  if (error) throw error;
-  return data;
-}
-
-export async function addInvites(emails) {
-  const db = requireSupabase();
-  const rows = emails.map((email) => ({ email }));
-  const { error } = await db.from("guest_invites").upsert(rows, { onConflict: "email", ignoreDuplicates: true });
-  if (error) throw error;
-}
-
-export async function removeInvite(email) {
-  const db = requireSupabase();
-  const { error } = await db.from("guest_invites").delete().eq("email", email);
-  if (error) throw error;
-}

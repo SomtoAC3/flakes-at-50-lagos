@@ -12,8 +12,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [invited, setInvited] = useState(false);
-  // The user id whose profile is loaded; while it lags the session, access is still being checked.
+  // The user id whose profile is loaded; while it lags the session, the profile is still loading.
   const [loadedFor, setLoadedFor] = useState(null);
   const loadingFor = useRef(null);
   const [loading, setLoading] = useState(isSupabaseConfigured);
@@ -21,18 +20,12 @@ export function AuthProvider({ children }) {
   const loadProfile = useCallback(async (userId) => {
     if (!supabase || !userId) {
       setProfile(null);
-      setInvited(false);
       setLoadedFor(null);
       return;
     }
     loadingFor.current = userId;
-    // RLS only returns the caller's own invite row, so any row means "on the list".
-    const [{ data, error }, invite] = await Promise.all([
-      supabase.from("guests").select("*").eq("id", userId).maybeSingle(),
-      supabase.from("guest_invites").select("email").limit(1),
-    ]);
+    const { data, error } = await supabase.from("guests").select("*").eq("id", userId).maybeSingle();
     if (loadingFor.current !== userId) return;
-    setInvited(Boolean(invite.data?.length) || Boolean(data?.is_organizer));
     setLoadedFor(userId);
     if (error) {
       // RLS or network hiccup — keep session but leave profile null, pages
@@ -69,7 +62,6 @@ export function AuthProvider({ children }) {
       } else if (!newSession) {
         loadingFor.current = null;
         setProfile(null);
-        setInvited(false);
         setLoadedFor(null);
       }
     });
@@ -112,7 +104,6 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut();
     setSession(null);
     setProfile(null);
-    setInvited(false);
   }, []);
 
   const refreshProfile = useCallback(() => {
@@ -128,7 +119,6 @@ export function AuthProvider({ children }) {
       user: session?.user ?? null,
       profile,
       isOrganizer: Boolean(profile?.is_organizer),
-      isInvited: invited,
       signInWithMagicLink,
       sendSignInCode,
       verifySignInCode,
@@ -136,7 +126,7 @@ export function AuthProvider({ children }) {
       signOut,
       refreshProfile,
     }),
-    [loading, loadedFor, session, profile, invited, signInWithMagicLink, sendSignInCode, verifySignInCode, signInWithPassword, signOut, refreshProfile]
+    [loading, loadedFor, session, profile, signInWithMagicLink, sendSignInCode, verifySignInCode, signInWithPassword, signOut, refreshProfile]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

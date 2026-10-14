@@ -51,7 +51,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="my-trip" element={<RequireGuestAuth><MyTrip /></RequireGuestAuth>} />
             <Route path="directory" element={<RequireGuestAuth><Directory /></RequireGuestAuth>} />
             <Route path="story" element={<Story />} />
-            <Route path="gallery" element={<RequireGuestAuth><Gallery /></RequireGuestAuth>} />
+            <Route path="gallery" element={<Gallery />} />
             <Route path="updates" element={<Updates />} />
             <Route path="faq" element={<Faq />} />
             <Route path="contacts" element={<Contacts />} />
