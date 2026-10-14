@@ -1,45 +1,48 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Figtree:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Figtree:wght@400;500;600;700&display=swap');
 
-/* Theme tokens. Light is the default; [data-theme="dark"] is set on <html>
-   by the inline script in index.html (before first paint) and by the
-   header toggle. JS reads these through COLORS in src/shared/theme.js. */
+/* Theme tokens. Light is the default for everyone; [data-theme="dark"] is
+   set on <html> only when a guest picks dark with the header toggle (applied
+   before first paint by the inline script in index.html). JS reads these
+   through COLORS in src/shared/theme.js.
+   Palette: studio-stone ground (matched to the hero photo's backdrop),
+   near-black ink, warm grey, antique gold from the earring. */
 :root {
-  --bg: #FAFAF9;
-  --card: #FFFFFF;
-  --chip: #F0F0EE;
-  --text: #111111;
-  --text-dim: #6B6B6B;
-  --line: rgba(17, 17, 17, 0.09);
-  --accent: #1E3D63;
-  --accent-soft: rgba(30, 61, 99, 0.08);
-  --header: rgba(250, 250, 249, 0.92);
-  --nav: rgba(255, 255, 255, 0.96);
-  --toggle-off: rgba(17, 17, 17, 0.15);
-  --danger: #B3261E;
-  --danger-bg: rgba(179, 38, 30, 0.07);
-  --danger-line: rgba(179, 38, 30, 0.25);
-  --shadow: 0 4px 14px -10px rgba(17, 17, 17, 0.12);
-  --shadow-nav: 0 6px 20px -12px rgba(17, 17, 17, 0.25);
+  --bg: #F3F2EF;
+  --card: #FBFAF8;
+  --chip: #E8E6E1;
+  --text: #0F0E0D;
+  --text-dim: #6F6A62;
+  --line: rgba(15, 14, 13, 0.12);
+  --accent: #82612D;
+  --accent-soft: rgba(130, 97, 45, 0.09);
+  --header: rgba(243, 242, 239, 0.92);
+  --nav: rgba(251, 250, 248, 0.96);
+  --toggle-off: rgba(15, 14, 13, 0.15);
+  --danger: #A3271F;
+  --danger-bg: rgba(163, 39, 31, 0.07);
+  --danger-line: rgba(163, 39, 31, 0.25);
+  --shadow: none;
+  --shadow-nav: 0 10px 30px -18px rgba(15, 14, 13, 0.35);
 }
 
 :root[data-theme="dark"] {
-  --bg: #141414;
-  --card: #1E1E1D;
-  --chip: #2A2A29;
-  --text: #F4F4F2;
-  --text-dim: #A2A29E;
-  --line: rgba(255, 255, 255, 0.1);
-  --accent: #8FAFD9;
-  --accent-soft: rgba(143, 175, 217, 0.13);
-  --header: rgba(20, 20, 20, 0.92);
-  --nav: rgba(30, 30, 29, 0.96);
-  --toggle-off: rgba(255, 255, 255, 0.25);
+  --bg: #0F0E0D;
+  --card: #1A1917;
+  --chip: #26241F;
+  --text: #F3F0EA;
+  --text-dim: #A8A196;
+  --line: rgba(243, 240, 234, 0.12);
+  --accent: #CDA968;
+  --accent-soft: rgba(205, 169, 104, 0.12);
+  --header: rgba(15, 14, 13, 0.92);
+  --nav: rgba(26, 25, 23, 0.96);
+  --toggle-off: rgba(243, 240, 234, 0.25);
   --danger: #E5736C;
   --danger-bg: rgba(229, 115, 108, 0.1);
   --danger-line: rgba(229, 115, 108, 0.3);
-  --shadow: 0 4px 14px -10px rgba(0, 0, 0, 0.5);
-  --shadow-nav: 0 6px 20px -12px rgba(0, 0, 0, 0.6);
+  --shadow: none;
+  --shadow-nav: 0 10px 30px -18px rgba(0, 0, 0, 0.7);
 }
 
 html,
@@ -61,4 +64,19 @@ body {
    own padding rather than replacing it. */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Hero photo: a slow settle on load. */
+@keyframes hero-settle {
+  from { opacity: 0; transform: scale(1.04); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-photo { animation: hero-settle 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rise-in { animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo, .rise-in { animation: none; }
 }

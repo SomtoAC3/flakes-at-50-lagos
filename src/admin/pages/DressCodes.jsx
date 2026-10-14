@@ -166,7 +166,7 @@ function BannerUpload({ id, title, onError }) {
         <img
           src={brandingUrl(dressCodePhotoPath(id), version)}
           alt={`Inspiration for ${title}`}
-          className="h-12 w-24 rounded-lg object-cover shrink-0"
+          className="h-12 w-24 rounded-[3px] object-cover shrink-0"
           style={{ border: `1px solid ${COLORS.line}` }}
           onError={() => setHasPhoto(false)}
         />
@@ -175,7 +175,7 @@ function BannerUpload({ id, title, onError }) {
       <button
         onClick={() => fileRef.current?.click()}
         disabled={status === "uploading"}
-        className="flex items-center gap-1.5 text-[11.5px] font-semibold px-3 py-2 rounded-xl min-h-[36px] disabled:opacity-50"
+        className="flex items-center gap-1.5 text-[11.5px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] disabled:opacity-50"
         style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
       >
         <ImagePlus size={13} />
@@ -253,7 +253,7 @@ function IconButton({ label, onClick, disabled, children }) {
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30"
+      className="w-8 h-8 rounded-[3px] flex items-center justify-center disabled:opacity-30"
       style={{ border: `1px solid ${COLORS.line}` }}
     >
       {children}

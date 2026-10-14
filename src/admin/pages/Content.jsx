@@ -216,7 +216,7 @@ function ListEditor({ cfg }) {
       {expanded && (
         <div className="mt-4 space-y-3">
           {items.map((item, i) => (
-            <div key={i} className="rounded-xl p-3" style={{ border: "1px solid var(--line)", background: "var(--chip)" }}>
+            <div key={i} className="rounded-[3px] p-3" style={{ border: "1px solid var(--line)", background: "var(--chip)" }}>
               <div className="flex items-center justify-between gap-2 mb-2">
                 <span className="text-[11px] truncate" style={{ color: COLORS.ivoryDim }}>
                   {cfg.itemLabel(item) || `Item ${i + 1}`}
@@ -274,7 +274,7 @@ function IconButton({ label, onClick, disabled, children }) {
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30"
+      className="w-8 h-8 rounded-[3px] flex items-center justify-center disabled:opacity-30"
       style={{ border: "1px solid var(--line)" }}
     >
       {children}

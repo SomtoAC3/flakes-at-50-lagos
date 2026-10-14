@@ -31,11 +31,11 @@ export default function More() {
           </div>
         </div>
         {user ? (
-          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
+          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogOut size={13} /> Sign out
           </button>
         ) : (
-          <Link to="/login" className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
+          <Link to="/login" className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogIn size={13} /> Sign in
           </Link>
         )}
@@ -45,7 +45,7 @@ export default function More() {
         {MORE_LINKS.map((l) => (
           <Link key={l.to} to={l.to}>
             <Card dark className="flex items-center gap-3 !py-3.5">
-              <div className="w-[38px] h-[38px] flex items-center justify-center shrink-0" style={{ background: COLORS.chip, borderRadius: 11 }}>
+              <div className="w-[38px] h-[38px] flex items-center justify-center shrink-0" style={{ background: COLORS.chip, borderRadius: 2 }}>
                 <l.icon size={16} color={COLORS.gold} />
               </div>
               <div className="flex-1 text-left min-w-0">

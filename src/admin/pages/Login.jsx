@@ -38,7 +38,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center px-6" style={{ background: COLORS.ink }}>
       <div className="w-full max-w-xs">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto" style={{ background: "var(--chip)" }}>
+          <div className="w-14 h-14 rounded-[3px] flex items-center justify-center mb-4 mx-auto" style={{ background: "var(--chip)" }}>
             <ShieldCheck size={22} color={COLORS.gold} />
           </div>
           <h1 className="text-[20px] mb-1" style={{ fontFamily: F.display, fontWeight: 600, color: COLORS.ivory }}>
@@ -65,7 +65,7 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-lg px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
+                className="w-full rounded-[3px] px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
                 style={inputStyle}
               />
             </label>
@@ -80,7 +80,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-lg px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
+                className="w-full rounded-[3px] px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
                 style={inputStyle}
               />
             </label>

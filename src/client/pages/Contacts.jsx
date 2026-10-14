@@ -50,7 +50,7 @@ export default function Contacts() {
               <div className="flex gap-2 shrink-0">
                 <a
                   href={`tel:${c.phone}`}
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  className="w-10 h-10 rounded-[3px] flex items-center justify-center"
                   style={{ background: "var(--chip)" }}
                   aria-label={`Call ${c.role}`}
                 >
@@ -59,7 +59,7 @@ export default function Contacts() {
                 {waNumber(c.phone).length >= 7 && (
                   <a
                     href={`https://wa.me/${waNumber(c.phone)}`}
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    className="w-10 h-10 rounded-[3px] flex items-center justify-center"
                     style={{ background: "var(--chip)" }}
                     aria-label={`Message ${c.role} on WhatsApp`}
                   >
@@ -89,7 +89,7 @@ export default function Contacts() {
             href={whatsappLink}
             target="_blank"
             rel="noreferrer"
-            className="text-[11.5px] font-semibold px-3 py-2 rounded-xl min-h-[36px] flex items-center"
+            className="text-[11.5px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] flex items-center"
             style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
           >
             Join Group

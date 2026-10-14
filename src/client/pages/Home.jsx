@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, Plane, Users, Phone } from "lucide-react";
-import { COLORS, F, EVENT_START } from "../../shared/theme";
+import { COLORS, F, EVENT_START, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
-import { brandingUrl, BRANDING_PATHS } from "../../lib/branding";
 
 const FALLBACK_WELCOME_NOTE =
   "Fifty is a milestone. Celebrating it with you is the gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories with me. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
@@ -41,8 +40,8 @@ function LandmarkSlideshow() {
   const current = LANDMARKS[index];
   return (
     <div
-      className="relative w-full overflow-hidden rounded-2xl mb-6"
-      style={{ height: 190, background: COLORS.chip, border: `1px solid ${COLORS.line}` }}
+      className="relative w-full overflow-hidden rounded-[3px] mb-10"
+      style={{ height: 230, background: COLORS.chip }}
     >
       {LANDMARKS.map((l, i) => (
         <img
@@ -58,10 +57,10 @@ function LandmarkSlideshow() {
         />
       ))}
       <div
-        className="absolute left-2.5 bottom-2.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold"
-        style={{ background: "rgba(255,255,255,0.94)", color: "#111111" }}
+        className="absolute left-3 bottom-3 px-2.5 py-1.5 rounded-[2px] text-[9.5px] font-semibold"
+        style={{ background: "rgba(251,250,248,0.94)", color: "#0F0E0D", ...CAPS, letterSpacing: "0.16em" }}
       >
-        {current.name} <span style={{ color: "#6B6B6B", fontWeight: 500 }}>· {current.place}</span>
+        {current.name} <span style={{ color: "#6F6A62", fontWeight: 500 }}>· {current.place}</span>
       </div>
       <div className="absolute right-3 bottom-3.5 flex gap-1.5" aria-hidden="true">
         {LANDMARKS.map((l, i) => (
@@ -150,12 +149,41 @@ function formatDateRange(days) {
   return `${fmt(first)} – ${fmt(last)}, ${last.getFullYear()}${cities ? ` · ${cities}` : ""}`;
 }
 
+function formatLongDateRange(days) {
+  const first = dayStart(days[0].date);
+  const last = dayStart(days[days.length - 1].date);
+  const fmt = (d) => d.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+  return `${fmt(first)} – ${fmt(last)} ${last.getFullYear()}`;
+}
+
+function Hero() {
+  return (
+    <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4 / 5", background: "#E8E7E4" }}>
+      <img
+        src="/hero/folake.jpg"
+        alt="Folake in a black wide-brim hat and turtleneck"
+        className="hero-photo absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: "50% 18%" }}
+        fetchpriority="high"
+      />
+      {/* Sits on the photo's pale studio backdrop, so it stays ink in both themes. */}
+      <div
+        className="absolute right-3 top-5 text-[9px] font-semibold"
+        style={{ writingMode: "vertical-rl", color: "rgba(15,14,13,0.72)", fontFamily: F.body, ...CAPS, letterSpacing: "0.36em" }}
+        aria-hidden="true"
+      >
+        Sharm El Sheikh · MMXXVI
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const { configured } = useAuth();
   const [days, setDays] = useState(null);
   const [latestUpdate, setLatestUpdate] = useState(null);
   const [welcomeNote, setWelcomeNote] = useState(FALLBACK_WELCOME_NOTE);
-  const [photoOk, setPhotoOk] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!configured) return;
@@ -184,37 +212,46 @@ export default function Home() {
 
   return (
     <div>
-      <div className="px-5 pt-6 pb-10">
-        <LandmarkSlideshow />
-        <Eyebrow>A Golden Jubilee in the Red Sea</Eyebrow>
-        <h1
-          className="text-[38px] sm:text-[42px] leading-[1.04] mb-1"
-          style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}
-        >
-          Folake at 50
-        </h1>
-        <h2
-          className="text-[20px] sm:text-[22px] leading-tight mb-4"
-          style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}
-        >
-          The Egypt Takeover
-        </h2>
-        <p className="text-[13px] mb-1 font-medium" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
-          {days?.length ? formatDateRange(days) : "Oct 28 – Nov 1, 2026 · Sharm El Sheikh"}
-        </p>
+      <Hero />
+
+      <div className="px-6 pt-9 pb-12">
+        <div className="rise-in">
+          <Eyebrow>A Golden Jubilee · The Red Sea</Eyebrow>
+          <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.03em" }}>
+            <span className="block text-[68px] sm:text-[76px]">Folake</span>
+            <span className="block text-[44px] sm:text-[50px] italic mt-1" style={{ color: COLORS.gold, letterSpacing: "-0.02em" }}>
+              at Fifty
+            </span>
+          </h1>
+          <div className="flex items-center gap-3 mt-6">
+            <span className="h-px w-8 shrink-0" style={{ background: COLORS.ivory }} />
+            <span className="text-[10.5px] font-semibold" style={{ color: COLORS.ivory, fontFamily: F.body, ...CAPS, letterSpacing: "0.32em" }}>
+              The Egypt Takeover
+            </span>
+          </div>
+          <p className="text-[16px] italic mt-3" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivoryDim }}>
+            {days?.length ? formatLongDateRange(days) : "28 October – 1 November 2026"}, Sharm El Sheikh
+          </p>
+        </div>
 
         {status?.phase !== "after" && (
-          <div className="mt-6 grid grid-cols-4 gap-2">
-            {[["Days", cd.days], ["Hrs", cd.hours], ["Min", cd.minutes], ["Sec", cd.seconds]].map(([label, val]) => (
+          <div
+            className="mt-9 grid grid-cols-4"
+            style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}
+            role="timer"
+            aria-label={`${cd.days} days, ${cd.hours} hours, ${cd.minutes} minutes until the trip`}
+          >
+            {[["Days", cd.days], ["Hours", cd.hours], ["Minutes", cd.minutes], ["Seconds", cd.seconds]].map(([label, val], i) => (
               <div
                 key={label}
-                className="rounded-xl py-3 flex flex-col items-center"
-                style={{ border: `1px solid ${COLORS.line}`, background: COLORS.card }}
+                className="py-4 flex flex-col items-center"
+                style={{ borderLeft: i ? `1px solid ${COLORS.line}` : "none" }}
+                aria-hidden="true"
               >
-                <span className="text-[20px] sm:text-[22px] tabular-nums" style={{ fontFamily: F.body, color: COLORS.ivory, fontWeight: 600 }}>
+                <span className="text-[34px] leading-none tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
                   {pad(val)}
                 </span>
-                <span className="text-[10px] mt-1 font-medium" style={{ fontFamily: F.body, color: COLORS.ivoryDim }}>
+                <span className="text-[8.5px] mt-2 font-semibold" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>
                   {label}
                 </span>
               </div>
@@ -222,40 +259,30 @@ export default function Home() {
           </div>
         )}
 
-        <div className="mt-7 flex gap-3">
-          <Link to="/itinerary" className="flex-1">
-            <GoldButton icon={ArrowRight} className="w-full">
-              View Itinerary
-            </GoldButton>
-          </Link>
-          <Link to="/updates" className="flex-1">
-            <GoldButton variant="outline" className="w-full">
-              Latest Updates
-            </GoldButton>
-          </Link>
+        <div className="mt-8 flex gap-3">
+          <GoldButton icon={ArrowRight} className="flex-1 flex-row-reverse" onClick={() => navigate("/itinerary")}>
+            Itinerary
+          </GoldButton>
+          <GoldButton variant="outline" className="flex-1" onClick={() => navigate("/updates")}>
+            Updates
+          </GoldButton>
         </div>
       </div>
 
-      <div className="px-5">
-        <Card>
-          <div className="flex items-start gap-3">
-            {photoOk && (
-              <img
-                src={brandingUrl(BRANDING_PATHS.folakePhoto)}
-                alt="Folake"
-                className="w-16 h-16 rounded-2xl object-cover shrink-0"
-                style={{ border: `1px solid ${COLORS.line}` }}
-                onError={() => setPhotoOk(false)}
-              />
-            )}
-            <div className="min-w-0">
-              <Eyebrow>A Note From Folake</Eyebrow>
-              <p className="text-[13.5px] leading-relaxed" style={{ color: COLORS.ivory, fontFamily: F.body }}>
-                "{welcomeNote}"
-              </p>
-            </div>
-          </div>
-        </Card>
+      <div className="px-6">
+        <figure className="pt-10 pb-2" style={{ borderTop: `1px solid ${COLORS.line}` }}>
+          <Eyebrow>A Note From Folake</Eyebrow>
+          <span className="block text-[64px] leading-[0.6] mt-4 select-none" style={{ ...DISPLAY_LUXE, color: COLORS.gold }} aria-hidden="true">
+            &ldquo;
+          </span>
+          <blockquote className="text-[19px] leading-[1.55] italic mt-1" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
+            {welcomeNote}
+          </blockquote>
+          <figcaption className="mt-5 text-[10px] font-semibold" style={{ color: COLORS.ivoryDim, fontFamily: F.body, ...CAPS, letterSpacing: "0.3em" }}>
+            — Folake
+          </figcaption>
+        </figure>
+
         <LintelDivider />
         <SectionTitle
           eyebrow="The Celebration"
@@ -263,13 +290,14 @@ export default function Home() {
           light
           sub="Five days by the Red Sea, designed around sun, sea, stillness and celebration. No crowded checklist, no rushing from one thing to the next. Just beautiful places, beautiful people and enough room for the moments you cannot schedule."
         />
+        <LandmarkSlideshow />
 
         <Card dark className="mb-4">
           <Eyebrow>Right Now</Eyebrow>
           <div className="flex items-center justify-between mb-4 gap-2">
             <span
-              className="text-[17px] min-w-0"
-              style={{ fontFamily: F.display, color: COLORS.ivory, fontWeight: 500, letterSpacing: "-0.02em" }}
+              className="text-[22px] leading-tight min-w-0"
+              style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.01em" }}
             >
               {!status && "The countdown is on"}
               {status?.phase === "before" && "Trip has not started"}
@@ -307,7 +335,7 @@ export default function Home() {
           )}
         </Card>
 
-        <div className="grid grid-cols-2 gap-3 mb-8">
+        <div className="grid grid-cols-2 gap-3 mb-10">
           <QuickLinkCard icon={Shirt} title="Dress Codes" to="/dress-codes" />
           <QuickLinkCard icon={Plane} title="Travel Info" to="/travel" />
           <QuickLinkCard icon={Users} title="My Trip" to="/my-trip" />
@@ -323,7 +351,7 @@ function QuickRow({ icon: Icon, label, value }) {
     <div className="flex items-center gap-3">
       <div
         className="w-[38px] h-[38px] shrink-0 flex items-center justify-center"
-        style={{ background: COLORS.chip, borderRadius: 11 }}
+        style={{ background: COLORS.chip, borderRadius: 2 }}
       >
         <Icon size={16} color={COLORS.gold} />
       </div>
@@ -345,11 +373,11 @@ function QuickLinkCard({ icon: Icon, title, to }) {
       <Card dark className="!p-4 h-full flex flex-col gap-3">
         <span
           className="w-[38px] h-[38px] flex items-center justify-center"
-          style={{ background: COLORS.chip, borderRadius: 11 }}
+          style={{ background: COLORS.chip, borderRadius: 2 }}
         >
           <Icon size={17} color={COLORS.gold} />
         </span>
-        <span className="text-[13px]" style={{ color: COLORS.ivory, fontWeight: 500 }}>
+        <span className="text-[17px] leading-tight" style={{ ...DISPLAY_LUXE, fontWeight: 400, color: COLORS.ivory }}>
           {title}
         </span>
       </Card>

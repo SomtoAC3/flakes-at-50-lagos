@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
-import { COLORS, F } from "../../shared/theme";
+import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { GoldButton, ErrorNote, LoadingNote } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 
@@ -63,10 +63,11 @@ export default function Login() {
     <div className="min-h-screen w-full flex items-center justify-center px-6 py-12" style={{ background: COLORS.ink, fontFamily: F.body }}>
       <div className="w-full max-w-xs">
         <div className="text-center mb-8">
-          <h1 className="text-[34px] leading-[1.05]" style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}>
-            Folake at 50
+          <h1 className="leading-[0.95]" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.03em", color: COLORS.ivory }}>
+            <span className="block text-[48px]">Folake</span>
+            <span className="block text-[32px] italic" style={{ color: COLORS.gold }}>at Fifty</span>
           </h1>
-          <p className="text-[15px] mt-1" style={{ fontFamily: F.display, color: COLORS.ivoryDim }}>
+          <p className="text-[10px] font-semibold mt-4" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.32em" }}>
             The Egypt Takeover
           </p>
         </div>
@@ -90,7 +91,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-xl px-3 py-2.5 text-[16px] outline-none min-h-[44px]"
+                className="w-full rounded-[3px] px-3 py-2.5 text-[16px] outline-none min-h-[44px]"
                 style={inputStyle}
               />
             </label>
@@ -118,7 +119,7 @@ export default function Login() {
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                 placeholder="123456"
-                className="w-full rounded-xl px-3 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
+                className="w-full rounded-[3px] px-3 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
                 style={{ ...inputStyle, letterSpacing: "0.3em" }}
               />
             </label>

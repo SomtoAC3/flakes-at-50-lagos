@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle, Sparkles, Sun, Moon } from "lucide-react";
-import { COLORS, F } from "../shared/theme";
+import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle, Sun, Moon } from "lucide-react";
+import { COLORS, F, CAPS, DISPLAY_LUXE } from "../shared/theme";
 import { useThemeMode } from "../shared/themeMode";
 import { useAuth } from "../lib/auth";
 import { fetchAnnouncements } from "../lib/queries";
@@ -63,16 +63,18 @@ export default function ClientLayout() {
           className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
           style={{ background: "var(--header)", borderBottom: `1px solid ${COLORS.line}` }}
         >
-          <NavLink to="/" className="flex items-center gap-2">
-            <Sparkles size={16} color={COLORS.gold} />
-            <span className="text-[13.5px] font-semibold" style={{ fontFamily: F.body, color: COLORS.ivory }}>
-              Folake at 50
+          <NavLink to="/" className="flex items-baseline gap-2" aria-label="Folake at 50, home">
+            <span className="text-[21px] leading-none" style={{ ...DISPLAY_LUXE, fontWeight: 400, letterSpacing: "-0.01em", color: COLORS.ivory }}>
+              Folake
+            </span>
+            <span className="text-[9.5px] font-semibold" style={{ fontFamily: F.body, color: COLORS.gold, ...CAPS, letterSpacing: "0.3em" }}>
+              at Fifty
             </span>
           </NavLink>
           <button
             onClick={toggle}
-            className="flex items-center justify-center rounded-xl min-h-[34px] min-w-[34px]"
-            style={{ background: COLORS.chip, color: COLORS.ivoryDim }}
+            className="flex items-center justify-center rounded-[2px] min-h-[34px] min-w-[34px]"
+            style={{ border: `1px solid ${COLORS.line}`, color: COLORS.ivoryDim }}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
@@ -85,7 +87,7 @@ export default function ClientLayout() {
 
         <div className="safe-bottom fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-3 pb-3 pt-2 z-40">
           <div
-            className="flex items-center justify-between rounded-2xl px-2 py-2"
+            className="flex items-center justify-between rounded-[3px] px-2 py-2"
             style={{
               background: "var(--nav)",
               border: `1px solid ${COLORS.line}`,
@@ -98,14 +100,14 @@ export default function ClientLayout() {
                 key={item.to}
                 to={item.to}
                 end={item.end}
-                className="flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl transition-colors min-h-[44px]"
+                className="flex-1 flex flex-col items-center gap-1 py-1.5 rounded-[3px] transition-colors min-h-[44px]"
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon size={18} strokeWidth={isActive ? 2.2 : 1.6} color={isActive ? COLORS.gold : COLORS.ivoryDim} />
+                    <item.icon size={18} strokeWidth={isActive ? 1.9 : 1.4} color={isActive ? COLORS.ivory : COLORS.ivoryDim} />
                     <span
-                      className="text-[9.5px]"
-                      style={{ color: isActive ? COLORS.gold : COLORS.ivoryDim, fontFamily: F.body, fontWeight: isActive ? 600 : 500 }}
+                      className="text-[8.5px]"
+                      style={{ color: isActive ? COLORS.ivory : COLORS.ivoryDim, fontFamily: F.body, fontWeight: isActive ? 700 : 500, ...CAPS, letterSpacing: "0.1em" }}
                     >
                       {item.label}
                     </span>

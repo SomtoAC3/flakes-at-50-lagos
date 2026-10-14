@@ -131,7 +131,7 @@ export default function MyTrip() {
         onClick={() => fileRef.current?.click()}
         disabled={uploading}
         aria-label={profile.avatar_path ? "Change profile photo" : "Add profile photo"}
-        className="w-16 h-16 rounded-2xl shrink-0 overflow-hidden flex flex-col items-center justify-center gap-0.5 disabled:opacity-50"
+        className="w-16 h-16 rounded-[3px] shrink-0 overflow-hidden flex flex-col items-center justify-center gap-0.5 disabled:opacity-50"
         style={{ border: profile.avatar_path ? `1px solid ${COLORS.line}` : `1.5px dashed ${COLORS.gold}`, background: COLORS.chip }}
       >
         <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFile} />

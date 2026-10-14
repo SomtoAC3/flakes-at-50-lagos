@@ -117,7 +117,7 @@ export default function AdminItinerary() {
               <div className="mt-3 space-y-2">
                 {day.activities.map((activity, i) => (
                   <div key={activity.id}>
-                    <div className="flex items-center gap-2 rounded-lg px-3 py-2.5" style={{ background: COLORS.chip, border: `1px solid ${COLORS.line}` }}>
+                    <div className="flex items-center gap-2 rounded-[3px] px-3 py-2.5" style={{ background: COLORS.chip, border: `1px solid ${COLORS.line}` }}>
                       <div className="flex flex-col gap-0.5 shrink-0">
                         <IconButton small label={`Move ${activity.name} up`} disabled={i === 0} onClick={() => moveActivity(day, i, -1)}>
                           <ChevronUp size={12} />
@@ -170,7 +170,7 @@ export default function AdminItinerary() {
 
                 <button
                   onClick={() => setEditing({ type: "activity", dayId: day.id })}
-                  className="w-full flex items-center justify-center gap-1.5 text-[11.5px] rounded-lg min-h-[38px]"
+                  className="w-full flex items-center justify-center gap-1.5 text-[11.5px] rounded-[3px] min-h-[38px]"
                   style={{ border: `1.5px dashed ${COLORS.gold}`, color: COLORS.gold }}
                 >
                   <Plus size={13} /> Add activity
@@ -216,7 +216,7 @@ function FormShell({ title, busy, onCancel, onSubmit, children }) {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-lg p-3 mt-2 space-y-3"
+      className="rounded-[3px] p-3 mt-2 space-y-3"
       style={{ background: COLORS.chip, border: `1px solid ${COLORS.line}` }}
     >
       <div className="flex items-center justify-between">

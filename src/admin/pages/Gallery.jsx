@@ -33,7 +33,7 @@ export default function AdminGallery() {
           {pending.length === 0 && <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>Nothing pending review.</p>}
           {pending.map((p) => (
             <Card dark key={p.id} className="!p-3">
-              <div className="aspect-video rounded-xl overflow-hidden mb-3" style={{ border: "1px solid var(--line)" }}>
+              <div className="aspect-video rounded-[3px] overflow-hidden mb-3" style={{ border: "1px solid var(--line)" }}>
                 <img src={p.url} alt={p.caption || "Pending upload"} className="w-full h-full object-cover" />
               </div>
               <div className="text-[11.5px] mb-3" style={{ color: COLORS.ivoryDim }}>

@@ -46,7 +46,7 @@ export default function Itinerary() {
           <button
             key={d.id}
             onClick={() => setDayIdx(i)}
-            className="shrink-0 rounded-xl px-3.5 py-2.5 text-left min-h-[44px]"
+            className="shrink-0 rounded-[3px] px-3.5 py-2.5 text-left min-h-[44px]"
             style={{
               minWidth: 92,
               background: i === dayIdx ? COLORS.gold : COLORS.card,
@@ -103,7 +103,7 @@ export default function Itinerary() {
                   <DetailRow icon={Luggage} label="What to Bring" value={act.what_to_bring} />
                   <DetailRow icon={Compass} label="Transportation" value={act.transport} />
                   {act.notes && act.notes !== "To Be Confirmed" && (
-                    <div className="flex items-start gap-2 rounded-lg p-2.5" style={{ background: COLORS.chip }}>
+                    <div className="flex items-start gap-2 rounded-[3px] p-2.5" style={{ background: COLORS.chip }}>
                       <Info size={13} color={COLORS.gold} className="shrink-0 mt-0.5" />
                       <span className="text-[12px]" style={{ color: COLORS.ivory }}>{act.notes}</span>
                     </div>
@@ -114,7 +114,7 @@ export default function Itinerary() {
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-xl min-h-[36px]"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px]"
                         style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
                       >
                         <MapPin size={12} /> Open in Maps <ExternalLink size={10} />
@@ -122,14 +122,14 @@ export default function Itinerary() {
                     )}
                     <button
                       onClick={() => downloadICS({ ...act, location: act.location }, day.date)}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-xl min-h-[36px]"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px]"
                       style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
                     >
                       <Calendar size={12} /> Add to Calendar
                     </button>
                     <button
                       onClick={() => setNotify((s) => ({ ...s, [act.id]: !s[act.id] }))}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-xl min-h-[36px]"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px]"
                       style={{
                         background: notify[act.id] ? COLORS.gold : "transparent",
                         border: `1.5px solid ${COLORS.gold}`,

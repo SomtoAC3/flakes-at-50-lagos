@@ -56,21 +56,21 @@ export default function Settings() {
         description="Shown when guests save the site to their home screen, and on announcement notifications. Upload a square image, at least 512×512. Guests who already saved the app will see the new icon after re-adding it."
         previewPath={BRANDING_PATHS.icon192}
         sizes={ICON_SIZES}
-        rounded="rounded-2xl"
+        rounded="rounded-[3px]"
       />
       <ImageUploadCard
         title="Folake's Photo"
         description="Shown beside the welcome note on the guest home page. Until one is uploaded, guests see the note without a photo."
         previewPath={BRANDING_PATHS.folakePhoto}
         sizes={[{ path: BRANDING_PATHS.folakePhoto, px: 512 }]}
-        rounded="rounded-2xl"
+        rounded="rounded-[3px]"
       />
       <ImageUploadCard
         title="Story Hero Photo"
         description="The large portrait at the top of Folake's Story page. Until one is uploaded, the page shows the story without a photo."
         previewPath={BRANDING_PATHS.storyHero}
         sizes={[{ path: BRANDING_PATHS.storyHero, px: 1024 }]}
-        rounded="rounded-2xl"
+        rounded="rounded-[3px]"
       />
       <WelcomeNoteCard />
     </div>

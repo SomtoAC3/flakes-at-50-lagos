@@ -69,7 +69,7 @@ export default function Guests() {
                     <button
                       onClick={() => toggleOrganizer(g)}
                       disabled={g.id === currentUser?.id}
-                      className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-xl min-h-[36px] disabled:opacity-40"
+                      className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] disabled:opacity-40"
                       style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
                     >
                       <ShieldCheck size={12} />
