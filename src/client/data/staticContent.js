@@ -6,7 +6,7 @@
 export const FAQS = [
   { q: "What are the dates?", a: "28 October – 1 November 2026: five days, four nights. We leave Lagos on 28 October, land in Sharm El Sheikh at about 12:30 AM on the 29th, and fly home at 5:00 AM on 1 November." },
   { q: "Where are we going?", a: "Sharm El Sheikh on the Red Sea. We fly Lagos → Cairo → Sharm El Sheikh → Lagos. Cairo is transit only; we continue straight to Sharm." },
-  { q: "Where are we staying?", a: "A beach resort in Sharm El Sheikh: Meraki Resort or White Hills Resort. The organizers will confirm which one." },
+  { q: "Where are we staying?", a: "Meraki Resort, a beach resort in Sharm El Sheikh." },
   { q: "What is included in the package?", a: "Round-trip flight ticket, Egypt sticker visa, meet and assist at the airport, 4 nights in a beach resort, all-inclusive meal plan, private boat cruise with food and drinks, water sports, beach club hangout, and return airport transfer." },
   { q: "Do I need a visa?", a: "Yes. The Egypt sticker visa is included in the package. See Travel Information for what to submit, and for the visa-on-arrival options." },
   { q: "Is transportation included?", a: "Yes. Flights (including the Cairo connection), meet and assist, and airport transfers to and from the resort are all included." },
@@ -47,7 +47,7 @@ export const STORY_SECTIONS = [
 export const TRAVEL_SECTIONS = [
   { title: "Dates & Route", body: "28 October – 1 November 2026. Lagos → Cairo → Sharm El Sheikh → Lagos. Cairo is transit only; we continue straight to Sharm El Sheikh." },
   { title: "What's Included", body: "Round-trip flight ticket, Egypt sticker visa, meet and assist at the airport, 4 nights in a beach resort, all-inclusive meal plan, private boat cruise with food and drinks, water sports, beach club hangout, and return airport transfer." },
-  { title: "Where You'll Stay", body: "Two resort options in Sharm El Sheikh. Meraki Resort: adult-only energy, stylish design and a vibrant beachfront mood. White Hills Resort: contemporary calm, luminous spaces and a polished Red Sea setting. The organizers will confirm which one." },
+  { title: "Where You'll Stay", body: "Meraki Resort, Sharm El Sheikh: adult-only energy, stylish design and a vibrant beachfront mood." },
   { title: "Visa: Sticker Visa (Embassy Application)", body: "The sticker visa is included in the package. You'll need: your international passport data page, valid for at least 6 months from the travel date; a recent passport photograph on a plain white background; a 3-month bank statement showing a minimum balance of ₦5,000,000; and your intended travel date. Processing takes about 7–10 working days. Submit all documents as clear, properly scanned soft copies." },
   { title: "Visa on Arrival", body: "Without a valid visa: USD 36, payable to immigration on arrival. The fee may change with exchange rates and immigration rules. Holders of a valid UK, US, Canadian or Schengen visa, or a UK residence permit, may also be eligible: USD 36 on arrival. Keep all travel documents to hand on arrival. Fees and eligibility can change, so please confirm before departure." },
   { title: "Airport Transfers", body: "Meet and assist in Cairo, the connecting flight to Sharm El Sheikh (landing about 12:30 AM on 29 October), a transfer to the resort, and a return transfer to the airport for the 5:00 AM flight on 1 November. All included." },
