@@ -12,12 +12,14 @@ const FALLBACK_WELCOME_NOTE =
 // Built-in hero slideshow. Photos live in public/landmarks/ (Wikimedia
 // Commons, credited on the More page).
 const LANDMARKS = [
-  { src: "/landmarks/giza.jpg", name: "Pyramids of Giza", place: "Giza" },
-  { src: "/landmarks/sphinx.jpg", name: "Great Sphinx", place: "Giza" },
-  { src: "/landmarks/citadel.jpg", name: "Mosque of Muhammad Ali", place: "Cairo Citadel" },
-  { src: "/landmarks/karnak.jpg", name: "Karnak Temple", place: "Luxor" },
-  { src: "/landmarks/abusimbel.jpg", name: "Abu Simbel Temples", place: "Aswan" },
-  { src: "/landmarks/redsea.jpg", name: "Coral Reefs", place: "Red Sea" },
+  { src: "/landmarks/naama-bay.jpg", name: "Naama Bay", place: "Sharm El Sheikh" },
+  { src: "/landmarks/soho-square.jpg", name: "SOHO Square", place: "Sharm El Sheikh" },
+  { src: "/landmarks/dancing-fountain.jpg", name: "Dancing Fountain", place: "SOHO Square" },
+  { src: "/landmarks/al-mustafa-mosque.jpg", name: "Al Mustafa Mosque", place: "Sharm El Sheikh" },
+  { src: "/landmarks/heavenly-cathedral.jpg", name: "The Heavenly Cathedral", place: "Sharm El Sheikh" },
+  { src: "/landmarks/sharks-bay.jpg", name: "Sharks Bay", place: "Sharm El Sheikh" },
+  { src: "/landmarks/al-sahaba-mosque.jpg", name: "Al Sahaba Mosque", place: "Old Market" },
+  { src: "/landmarks/ras-mohammed.jpg", name: "Ras Mohammed", place: "National Park" },
 ];
 
 function LandmarkSlideshow() {
