@@ -105,6 +105,7 @@ export function Card({ children, className = "" }) {
 }
 
 export function DetailRow({ icon: Icon, label, value }) {
+  if (value == null || String(value).trim() === "") return null;
   return (
     <div className="flex items-center gap-3">
       {Icon && (
