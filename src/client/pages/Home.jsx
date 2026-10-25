@@ -270,7 +270,7 @@ export default function Home() {
           <span className="block text-[64px] leading-[0.6] mt-4 select-none" style={{ ...DISPLAY_LUXE, color: COLORS.gold }} aria-hidden="true">
             &ldquo;
           </span>
-          <blockquote className="text-[16px] leading-[1.65] mt-1 whitespace-pre-line" style={{ fontFamily: F.body, color: COLORS.ivory }}>
+          <blockquote className="text-[18px] leading-[1.6] italic mt-1 whitespace-pre-line" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
             {welcomeNote}
           </blockquote>
           <figcaption className="mt-5 text-[10px] font-semibold" style={{ color: COLORS.ivoryDim, fontFamily: F.body, ...CAPS, letterSpacing: "0.3em" }}>
