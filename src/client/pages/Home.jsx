@@ -9,9 +9,9 @@ import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/
 const FALLBACK_WELCOME_NOTE =
   "Dear Guests,\n\nFifty is a milestone. Celebrating it with Folake on this Egypt Escape is a rare gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories evergreen. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
 
-// Collaborative Spotify playlist for the trip. It is private, so Spotify will
-// not embed it; the invite link (with its pt/pi parameters) lets guests open
-// it, join and add songs.
+// Spotify playlist for the trip, for guests to listen to. It is private, so
+// Spotify will not embed it; the share link (with its pt/pi parameters) is
+// the only link that opens it for guests.
 const PLAYLIST_INVITE_URL =
   "https://open.spotify.com/playlist/06EWZXbWmQP6ioUeBIb1ZS?si=0fsz5LJHT2OlLnf9uqMPtw&pi=rjT01OXHSi2Rg&pt=855e6194bcd91adfe67302087f6a0b64";
 
@@ -342,7 +342,7 @@ export default function Home() {
             Flakes Egypt Takeover
           </h3>
           <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: COLORS.ivoryDim }}>
-            Our playlist for the trip. Join it and add the songs you want to hear in Sharm.
+            Our soundtrack for the trip. Press play and get in the mood for Sharm.
           </p>
           <a
             href={PLAYLIST_INVITE_URL}
@@ -352,7 +352,7 @@ export default function Home() {
             style={{ background: COLORS.ivory, color: COLORS.ink, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}
           >
             <Music size={14} strokeWidth={1.75} />
-            Join &amp; Add Songs
+            Listen on Spotify
           </a>
         </Card>
 
