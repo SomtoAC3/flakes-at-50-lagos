@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, Plane, Users, Phone } from "lucide-react";
+import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, Plane, Users, Phone, Music } from "lucide-react";
 import { COLORS, F, EVENT_START, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
@@ -8,6 +8,12 @@ import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/
 
 const FALLBACK_WELCOME_NOTE =
   "Dear Guests,\n\nFifty is a milestone. Celebrating it with Folake on this Egypt Escape is a rare gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories evergreen. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
+
+// Collaborative Spotify playlist for the trip. It is private, so Spotify will
+// not embed it; the invite link (with its pt/pi parameters) lets guests open
+// it, join and add songs.
+const PLAYLIST_INVITE_URL =
+  "https://open.spotify.com/playlist/06EWZXbWmQP6ioUeBIb1ZS?si=0fsz5LJHT2OlLnf9uqMPtw&pi=rjT01OXHSi2Rg&pt=855e6194bcd91adfe67302087f6a0b64";
 
 // Built-in hero slideshow. Photos live in public/landmarks/ (Wikimedia
 // Commons, credited on the More page).
@@ -328,6 +334,26 @@ export default function Home() {
               {configured ? "The schedule will appear here once it's published." : "Connect Supabase to show the next activity here."}
             </p>
           )}
+        </Card>
+
+        <Card dark className="mb-4">
+          <Eyebrow>The Soundtrack</Eyebrow>
+          <h3 className="text-[22px] leading-tight mb-1" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.01em" }}>
+            Flakes Egypt Takeover
+          </h3>
+          <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: COLORS.ivoryDim }}>
+            Our playlist for the trip. Join it and add the songs you want to hear in Sharm.
+          </p>
+          <a
+            href={PLAYLIST_INVITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[2px] text-[11px] font-semibold min-h-[46px] active:scale-[0.98] transition-all"
+            style={{ background: COLORS.ivory, color: COLORS.ink, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}
+          >
+            <Music size={14} strokeWidth={1.75} />
+            Join &amp; Add Songs
+          </a>
         </Card>
 
         <div className="grid grid-cols-2 gap-3 mb-10">
