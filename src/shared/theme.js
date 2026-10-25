@@ -5,7 +5,7 @@
 // accept var() strings, so every COLORS.* usage follows the active theme.
 // Editorial luxury: studio-stone ground #F3F2EF · near-black ink · warm grey ·
 // antique gold #82612D (dark: #0F0E0D ground, gold #CDA968).
-// Display: Fraunces, light weight at a high optical size. Labels: uppercase
+// Display: Fraunces, regular weight with automatic optical sizing. Labels: uppercase
 // Figtree with wide tracking. Hairlines over boxes; corners nearly square.
 // Fonts are loaded globally in src/index.css.
 
@@ -36,8 +36,9 @@ export const COLORS = {
   dangerLine: "var(--danger-line)",
 };
 
-// Fraunces at its largest optical size: high-contrast, couture-weight strokes.
-export const DISPLAY_LUXE = { fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: '"opsz" 144', fontWeight: 300 };
+// Fraunces with automatic optical sizing: sturdier strokes at small sizes
+// so it stays legible on phones, finer contrast only on large headings.
+export const DISPLAY_LUXE = { fontFamily: "'Fraunces', Georgia, serif", fontOpticalSizing: "auto", fontWeight: 400 };
 
 // Small uppercase label style used for eyebrows, buttons and captions.
 export const CAPS = { textTransform: "uppercase", letterSpacing: "0.2em" };

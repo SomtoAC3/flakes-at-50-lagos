@@ -176,7 +176,7 @@ function WelcomeNoteCard() {
       <ErrorNote message={error} />
       <p className="text-[13px] mb-1" style={{ color: COLORS.ivory }}>Welcome Note</p>
       <p className="text-[11.5px] leading-relaxed mb-3" style={{ color: COLORS.ivoryDim }}>
-        The quote from Folake on the guest home page. Shown in quotation marks — write it as she'd say it.
+        The note from the planning team on the guest home page, signed “The Planning Team”. Line breaks are kept.
       </p>
       <div className="mb-3">
         <Field label="Note" value={note} onChange={(v) => { setNote(v); setStatus("idle"); }} multiline />

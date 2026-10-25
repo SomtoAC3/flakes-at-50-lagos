@@ -7,7 +7,7 @@ import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
 
 const FALLBACK_WELCOME_NOTE =
-  "Fifty is a milestone. Celebrating it with you is the gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories with me. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
+  "Dear Guests,\n\nFifty is a milestone. Celebrating it with Folake on this Egypt Escape is a rare gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories evergreen. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
 
 // Built-in hero slideshow. Photos live in public/landmarks/ (Wikimedia
 // Commons, credited on the More page).
@@ -219,12 +219,12 @@ export default function Home() {
       <div className="px-6 pt-9 pb-12">
         <div className="rise-in">
           <Eyebrow>A Golden Jubilee · The Red Sea</Eyebrow>
-          <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.03em" }}>
+          <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivory, letterSpacing: "-0.03em" }}>
             <span className="block whitespace-nowrap text-[58px] sm:text-[72px]">
               Folake<span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </h1>
-          <p className="text-[16px] italic mt-5" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivoryDim }}>
+          <p className="text-[16px] italic mt-5" style={{ ...DISPLAY_LUXE, color: COLORS.ivoryDim }}>
             {days?.length ? formatLongDateRange(days) : "28 October – 1 November 2026"}, Sharm El Sheikh
           </p>
         </div>
@@ -266,15 +266,15 @@ export default function Home() {
 
       <div className="px-6">
         <figure className="pt-10 pb-2" style={{ borderTop: `1px solid ${COLORS.line}` }}>
-          <Eyebrow>A Note From Folake</Eyebrow>
+          <Eyebrow>A Note From the Planning Team</Eyebrow>
           <span className="block text-[64px] leading-[0.6] mt-4 select-none" style={{ ...DISPLAY_LUXE, color: COLORS.gold }} aria-hidden="true">
             &ldquo;
           </span>
-          <blockquote className="text-[19px] leading-[1.55] italic mt-1" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
+          <blockquote className="text-[16px] leading-[1.65] mt-1 whitespace-pre-line" style={{ fontFamily: F.body, color: COLORS.ivory }}>
             {welcomeNote}
           </blockquote>
           <figcaption className="mt-5 text-[10px] font-semibold" style={{ color: COLORS.ivoryDim, fontFamily: F.body, ...CAPS, letterSpacing: "0.3em" }}>
-            — Folake
+            — The Planning Team
           </figcaption>
         </figure>
 
