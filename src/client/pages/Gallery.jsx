@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Upload } from "lucide-react";
+import { Upload, Play } from "lucide-react";
 import { COLORS } from "../../shared/theme";
-import { GoldButton, SectionTitle, LoadingNote, ErrorNote } from "../../shared/ui";
+import { GoldButton, SectionTitle, LoadingNote, ErrorNote, Lightbox } from "../../shared/ui";
 import { GALLERY_FILTERS } from "../data/staticContent";
 import { useAuth } from "../../lib/auth";
 import { fetchApprovedGallery, uploadGalleryPhoto } from "../../lib/queries";
@@ -15,6 +15,7 @@ export default function Gallery() {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
+  const [open, setOpen] = useState(null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -85,12 +86,48 @@ export default function Gallery() {
             </p>
           )}
           {photos.map((p) => (
-            <div key={p.id} className="aspect-square rounded-[3px] overflow-hidden" style={{ border: "1px solid var(--line)" }}>
-              <img src={p.url} alt={p.caption || "Guest upload"} className="w-full h-full object-cover" />
-            </div>
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setOpen(p)}
+              aria-label={`View ${p.caption || (p.isVideo ? "guest video" : "guest photo")} full screen`}
+              className="relative aspect-square rounded-[3px] overflow-hidden"
+              style={{ border: "1px solid var(--line)", cursor: "zoom-in" }}
+            >
+              <GalleryThumb item={p} />
+            </button>
           ))}
         </div>
       )}
+      {open && (
+        <Lightbox
+          src={open.url}
+          alt={open.caption || (open.isVideo ? "Guest video" : "Guest photo")}
+          caption={open.caption}
+          video={open.isVideo}
+          onClose={() => setOpen(null)}
+        />
+      )}
     </div>
+  );
+}
+
+// Square tile for a gallery upload. Videos show their first frame (the #t
+// fragment makes iOS paint one) with a play badge.
+function GalleryThumb({ item }) {
+  if (!item.isVideo) {
+    return <img src={item.url} alt={item.caption || "Guest upload"} className="w-full h-full object-cover" />;
+  }
+  return (
+    <>
+      <video src={`${item.url}#t=0.1`} muted playsInline preload="metadata" className="w-full h-full object-cover" />
+      <span
+        className="absolute inset-0 m-auto w-10 h-10 flex items-center justify-center rounded-full"
+        style={{ background: "rgba(10, 10, 10, 0.55)", color: "#F4F1EC" }}
+        aria-hidden="true"
+      >
+        <Play size={16} strokeWidth={1.75} fill="currentColor" />
+      </span>
+    </>
   );
 }

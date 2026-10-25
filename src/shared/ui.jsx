@@ -200,7 +200,8 @@ export function ErrorNote({ message }) {
 // Full-screen photo viewer. Rendered into <body> so it escapes any card or
 // animated (transformed) ancestor. Tap the photo to zoom in where you tapped
 // and pan by scrolling; tap outside it, the close button or Escape to close.
-export function Lightbox({ src, alt, onClose }) {
+// With `video`, it plays the clip with the browser's own controls instead.
+export function Lightbox({ src, alt, caption, video = false, onClose }) {
   const [zoomed, setZoomed] = useState(false);
   const scrollRef = useRef(null);
   const imgRef = useRef(null);
@@ -243,18 +244,31 @@ export function Lightbox({ src, alt, onClose }) {
       onClick={onClose}
     >
       <div ref={scrollRef} className="w-full h-full overflow-auto flex p-4">
-        <img
-          ref={imgRef}
-          src={src}
-          alt={alt}
-          onClick={toggleZoom}
-          className="lightbox-img m-auto select-none"
-          style={
-            zoomed
-              ? { width: "250%", maxWidth: "none", cursor: "zoom-out" }
-              : { maxWidth: "100%", maxHeight: "100%", objectFit: "contain", cursor: "zoom-in" }
-          }
-        />
+        {video ? (
+          <video
+            src={src}
+            controls
+            autoPlay
+            playsInline
+            aria-label={alt}
+            onClick={(e) => e.stopPropagation()}
+            className="lightbox-img m-auto"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
+        ) : (
+          <img
+            ref={imgRef}
+            src={src}
+            alt={alt}
+            onClick={toggleZoom}
+            className="lightbox-img m-auto select-none"
+            style={
+              zoomed
+                ? { width: "250%", maxWidth: "none", cursor: "zoom-out" }
+                : { maxWidth: "100%", maxHeight: "100%", objectFit: "contain", cursor: "zoom-in" }
+            }
+          />
+        )}
       </div>
       <button
         type="button"
@@ -265,13 +279,14 @@ export function Lightbox({ src, alt, onClose }) {
       >
         <X size={20} strokeWidth={1.75} />
       </button>
-      {!zoomed && (
-        <p
-          className="absolute inset-x-0 text-center text-[11px] pointer-events-none"
-          style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)", color: "rgba(244, 241, 236, 0.6)", fontFamily: F.body }}
+      {!zoomed && (caption || !video) && (
+        <div
+          className="absolute inset-x-0 px-6 text-center pointer-events-none"
+          style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)", fontFamily: F.body }}
         >
-          Tap the photo to zoom
-        </p>
+          {caption && <p className="text-[13px] mb-1.5" style={{ color: "#F4F1EC" }}>{caption}</p>}
+          {!video && <p className="text-[11px]" style={{ color: "rgba(244, 241, 236, 0.6)" }}>Tap the photo to zoom</p>}
+        </div>
       )}
     </div>,
     document.body

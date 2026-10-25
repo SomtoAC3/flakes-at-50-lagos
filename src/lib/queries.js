@@ -104,7 +104,12 @@ export async function fetchApprovedGallery(category) {
   if (category && category !== "All") query = query.eq("category", category);
   const { data, error } = await query;
   if (error) throw error;
-  return data.map((row) => ({ ...row, url: publicGalleryUrl(row.storage_path) }));
+  return data.map((row) => ({ ...row, url: publicGalleryUrl(row.storage_path), isVideo: isVideoPath(row.storage_path) }));
+}
+
+// Guests can upload videos as well as photos; the file extension tells them apart.
+export function isVideoPath(storagePath) {
+  return /\.(mp4|mov|m4v|webm|3gp)$/i.test(storagePath || "");
 }
 
 export function publicGalleryUrl(storagePath) {
@@ -133,7 +138,7 @@ export async function fetchPendingGallery() {
   const db = requireSupabase();
   const { data, error } = await db.from("gallery_uploads").select("*").eq("status", "pending").order("created_at");
   if (error) throw error;
-  return data.map((row) => ({ ...row, url: publicGalleryUrl(row.storage_path) }));
+  return data.map((row) => ({ ...row, url: publicGalleryUrl(row.storage_path), isVideo: isVideoPath(row.storage_path) }));
 }
 
 export async function setGalleryStatus(id, status) {
