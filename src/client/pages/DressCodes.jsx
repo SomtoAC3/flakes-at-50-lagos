@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, Compass, X, Sun, Upload } from "lucide-react";
+import { Sparkles, Compass, X, Sun, Upload, Maximize2 } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
-import { Card, SectionTitle, DetailRow, GoldButton, LoadingNote, ErrorNote } from "../../shared/ui";
+import { Card, SectionTitle, DetailRow, GoldButton, LoadingNote, ErrorNote, Lightbox } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 import { fetchDressCodes } from "../../lib/queries";
 import { brandingUrl, dressCodePhotoPath } from "../../lib/branding";
@@ -49,6 +49,9 @@ export default function DressCodes() {
 
 function DressCodeCard({ dc }) {
   const [photoOk, setPhotoOk] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const photoUrl = brandingUrl(dressCodePhotoPath(dc.id));
+  const photoAlt = `Inspiration for ${dc.title}`;
 
   return (
     <Card dark>
@@ -77,14 +80,30 @@ function DressCodeCard({ dc }) {
         {dc.weather && <DetailRow icon={Sun} label="Weather" value={dc.weather} />}
       </div>
       {photoOk && (
-        <img
-          src={brandingUrl(dressCodePhotoPath(dc.id))}
-          alt={`Inspiration for ${dc.title}`}
-          className="w-full rounded-[3px] object-cover aspect-[16/7]"
-          style={{ border: `1px solid ${COLORS.line}` }}
-          onError={() => setPhotoOk(false)}
-        />
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          aria-label={`View ${dc.title} inspiration full screen`}
+          className="relative block w-full"
+          style={{ cursor: "zoom-in" }}
+        >
+          <img
+            src={photoUrl}
+            alt={photoAlt}
+            className="w-full rounded-[3px] object-cover aspect-[16/7]"
+            style={{ border: `1px solid ${COLORS.line}` }}
+            onError={() => setPhotoOk(false)}
+          />
+          <span
+            className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center rounded-full"
+            style={{ background: "rgba(10, 10, 10, 0.55)", color: "#F4F1EC" }}
+            aria-hidden="true"
+          >
+            <Maximize2 size={14} strokeWidth={1.75} />
+          </span>
+        </button>
       )}
+      {expanded && <Lightbox src={photoUrl} alt={photoAlt} onClose={() => setExpanded(false)} />}
     </Card>
   );
 }

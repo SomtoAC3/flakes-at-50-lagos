@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "./theme";
 
 // The `light`/`dark`/`tone` props on these components are kept for
@@ -191,5 +194,86 @@ export function ErrorNote({ message }) {
     <div className="rounded-[3px] p-3 mb-4 text-[12.5px]" style={{ background: COLORS.dangerBg, color: COLORS.danger, border: `1px solid ${COLORS.dangerLine}` }}>
       {message}
     </div>
+  );
+}
+
+// Full-screen photo viewer. Rendered into <body> so it escapes any card or
+// animated (transformed) ancestor. Tap the photo to zoom in where you tapped
+// and pan by scrolling; tap outside it, the close button or Escape to close.
+export function Lightbox({ src, alt, onClose }) {
+  const [zoomed, setZoomed] = useState(false);
+  const scrollRef = useRef(null);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const toggleZoom = (e) => {
+    e.stopPropagation();
+    const rect = imgRef.current.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width;
+    const relY = (e.clientY - rect.top) / rect.height;
+    setZoomed((z) => !z);
+    if (zoomed) return;
+    // Once the larger image has laid out, centre the spot that was tapped.
+    requestAnimationFrame(() => {
+      const box = scrollRef.current;
+      const img = imgRef.current;
+      if (!box || !img) return;
+      box.scrollLeft = img.offsetLeft + relX * img.offsetWidth - box.clientWidth / 2;
+      box.scrollTop = img.offsetTop + relY * img.offsetHeight - box.clientHeight / 2;
+    });
+  };
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt}
+      className="lightbox fixed inset-0 z-[100]"
+      style={{ background: "rgba(10, 10, 10, 0.96)" }}
+      onClick={onClose}
+    >
+      <div ref={scrollRef} className="w-full h-full overflow-auto flex p-4">
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          onClick={toggleZoom}
+          className="lightbox-img m-auto select-none"
+          style={
+            zoomed
+              ? { width: "250%", maxWidth: "none", cursor: "zoom-out" }
+              : { maxWidth: "100%", maxHeight: "100%", objectFit: "contain", cursor: "zoom-in" }
+          }
+        />
+      </div>
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close photo"
+        className="absolute right-4 w-11 h-11 flex items-center justify-center rounded-full"
+        style={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", background: "rgba(10, 10, 10, 0.6)", color: "#F4F1EC" }}
+      >
+        <X size={20} strokeWidth={1.75} />
+      </button>
+      {!zoomed && (
+        <p
+          className="absolute inset-x-0 text-center text-[11px] pointer-events-none"
+          style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)", color: "rgba(244, 241, 236, 0.6)", fontFamily: F.body }}
+        >
+          Tap the photo to zoom
+        </p>
+      )}
+    </div>,
+    document.body
   );
 }

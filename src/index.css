@@ -77,6 +77,17 @@ body {
 }
 .hero-photo { animation: hero-settle 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .rise-in { animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* Full-screen photo viewer: backdrop fades in, photo grows out of it. */
+@keyframes lightbox-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes lightbox-grow {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+.lightbox { animation: lightbox-fade 0.25s ease-out both; }
+.lightbox-img { animation: lightbox-grow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo, .rise-in { animation: none; }
+  .hero-photo, .rise-in, .lightbox, .lightbox-img { animation: none; }
 }
