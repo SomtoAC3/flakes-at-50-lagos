@@ -24,18 +24,19 @@ const THEMES = {
     name: "Blush & Mirror",
     headline: "serif",
     word: ["GL", "OW"],
-    stem: { kind: "ranunculus", flower: "#C9677E", leaf: "#6F8466", center: "#7A2E43" },
-    light: { bg: "#F7EEEE", card: "#FCF7F7", chip: "#EEDDDE", text: "#2F1C21", dim: "#7D6168", accent: "#9C3F58", panel: "#EBCFD2", onPanel: "#2F1C21" },
-    dark: { bg: "#161616", card: "#1F1F1F", chip: "#2A2A2A", text: "#F5E6E9", dim: "#BFA2A9", accent: "#E3A1B1", panel: "#4A2632", onPanel: "#F5E6E9" },
+    stem: { kind: "ranunculus", flower: "#E39AAB", leaf: "#8FA486", center: "#8A2E47" },
+    light: { bg: "#F7EEEE", card: "#FCF7F7", chip: "#EEDDDE", text: "#2F1C21", dim: "#7D6168", accent: "#9C3F58", panel: "#5A1626", onPanel: "#F6E9E2" },
+    dark: { bg: "#161616", card: "#1F1F1F", chip: "#2A2A2A", text: "#F5E6E9", dim: "#BFA2A9", accent: "#E3A1B1", panel: "#4A111E", onPanel: "#F5E6E9" },
   },
   thanksgiving: {
     name: "Blossomed in Grace",
     headline: "serif",
     word: ["GRA", "CE"],
-    // From the High Fashion Meets Couture palette.
-    stem: { kind: "poppy", flower: "#E7B5C0", leaf: "#3E7A5C", center: "#D4A017" },
-    light: { bg: "#F6F0EA", card: "#FCF8F4", chip: "#ECDFD8", text: "#2A1015", dim: "#7A5A5F", accent: "#8A1F3D", panel: "#5A1626", onPanel: "#F6E9E2" },
-    dark: { bg: "#161616", card: "#1F1F1F", chip: "#2A2A2A", text: "#F6E9E2", dim: "#C3A4A8", accent: "#E8A5B5", panel: "#4A111E", onPanel: "#F6E9E2" },
+    // From the High Fashion Meets Couture palette. The panel stays blush in
+    // dark mode too, so it reads against the burgundy Glam card above it.
+    stem: { kind: "poppy", flower: "#8A1F3D", leaf: "#3E7A5C", center: "#D4A017" },
+    light: { bg: "#F6F0EA", card: "#FCF8F4", chip: "#ECDFD8", text: "#2A1015", dim: "#7A5A5F", accent: "#8A1F3D", panel: "#EBCFD2", onPanel: "#2A1015" },
+    dark: { bg: "#161616", card: "#1F1F1F", chip: "#2A2A2A", text: "#F6E9E2", dim: "#C3A4A8", accent: "#E8A5B5", panel: "#E2C3C8", onPanel: "#2A1015" },
   },
   beach: {
     name: "All White by the Sea",
