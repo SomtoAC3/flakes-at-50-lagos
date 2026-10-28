@@ -1,7 +1,7 @@
 // One look per itinerary event. Each theme sets the six base colour tokens
 // (src/index.css) for light and dark, the botanical stem drawn in its hero
-// (see Stem in src/shared/flora.jsx), the word set large behind it, and the
-// headline face.
+// (see Stem in src/shared/flora.jsx) and the word set large behind it. Every
+// event's title is set in the display serif, like the rest of the app.
 //
 // Themes are matched by activity id; activities organizers add later fall
 // back to a keyword match on the name, then to a cycle of the soft themes.
@@ -14,7 +14,6 @@
 const THEMES = {
   arrival: {
     name: "Golden Hour",
-    headline: "serif",
     word: ["LAG", "OS"],
     stem: { kind: "tulip", flower: "#D9774A", leaf: "#6E7A45", center: "#6E7A45" },
     light: { bg: "#F6EEE4", card: "#FCF7F0", chip: "#EDDFCF", text: "#2E2019", dim: "#7A6555", accent: "#A4532F", panel: "#E9CDB0", onPanel: "#2E2019" },
@@ -22,7 +21,6 @@ const THEMES = {
   },
   glam: {
     name: "Blush & Mirror",
-    headline: "serif",
     word: ["GL", "OW"],
     stem: { kind: "ranunculus", flower: "#E39AAB", leaf: "#8FA486", center: "#8A2E47" },
     light: { bg: "#F7EEEE", card: "#FCF7F7", chip: "#EEDDDE", text: "#2F1C21", dim: "#7D6168", accent: "#9C3F58", panel: "#5A1626", onPanel: "#F6E9E2" },
@@ -30,7 +28,6 @@ const THEMES = {
   },
   thanksgiving: {
     name: "Blossomed in Grace",
-    headline: "serif",
     word: ["GRA", "CE"],
     // From the High Fashion Meets Couture palette. The panel stays blush in
     // dark mode too, so it reads against the burgundy Glam card above it.
@@ -40,7 +37,6 @@ const THEMES = {
   },
   beach: {
     name: "All White by the Sea",
-    headline: "serif",
     word: ["SHO", "RE"],
     stem: { kind: "daisy", flower: "#FFFFFF", leaf: "#5F8C82", center: "#D9C27A" },
     light: { bg: "#F4F3EF", card: "#FFFFFF", chip: "#E4E9E6", text: "#18302F", dim: "#5F7372", accent: "#2E6A6B", panel: "#CFDEDB", onPanel: "#18302F" },
@@ -48,7 +44,6 @@ const THEMES = {
   },
   breakfast: {
     name: "Butter & Sunlight",
-    headline: "sans",
     word: ["RI", "SE"],
     stem: { kind: "cosmos", flower: "#E39B3B", leaf: "#7C8A4A", center: "#6B4A12" },
     light: { bg: "#F7F3E4", card: "#FDFAF0", chip: "#EEE6C9", text: "#2C2A14", dim: "#6F6A4C", accent: "#86680C", panel: "#EFE3A6", onPanel: "#2C2A14" },
@@ -56,7 +51,6 @@ const THEMES = {
   },
   unscripted: {
     name: "Club Aesthetics",
-    headline: "sans",
     word: ["NIG", "HT"],
     stem: { kind: "tulip", flower: "#F26B4E", leaf: "#5E7D5E", center: "#5E7D5E" },
     // A night-out world: dark in both modes.
@@ -65,7 +59,6 @@ const THEMES = {
   },
   sunday: {
     name: "Sage & Lilac",
-    headline: "serif",
     word: ["SUN", "DAY"],
     stem: { kind: "sprig", flower: "#B9A5DD", leaf: "#56744A", center: "#56744A" },
     light: { bg: "#EEF0E8", card: "#F9FAF5", chip: "#DDE2D2", text: "#1E2A1E", dim: "#5E6B59", accent: "#4A6340", panel: "#BCC6AE", onPanel: "#1E2A1E" },

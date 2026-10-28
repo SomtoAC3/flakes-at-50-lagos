@@ -170,25 +170,15 @@ function EventHero({ theme, colors, act, day, number, total }) {
   );
 }
 
-function EventTitle({ theme, act }) {
+function EventTitle({ act }) {
   const { kicker, lead, joiner, tail } = splitTitle(act.name);
-  const kick = kicker && (
-    <span className="block text-[12px] font-semibold mb-3" style={{ fontFamily: F.body, color: COLORS.gold, ...CAPS, letterSpacing: "0.2em" }}>
-      {kicker}
-    </span>
-  );
-  if (theme.headline === "sans") {
-    return (
-      <h1 className="text-[36px] leading-[1.05] font-semibold" style={{ fontFamily: F.body, color: COLORS.ivory, letterSpacing: "-0.03em", textWrap: "balance" }}>
-        {kick}
-        {lead}
-        {tail && <span style={{ color: COLORS.gold }}>{joiner}{tail}</span>}
-      </h1>
-    );
-  }
   return (
     <h1 className="text-[40px] leading-[1.04]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.02em", textWrap: "balance" }}>
-      {kick}
+      {kicker && (
+        <span className="block text-[12px] font-semibold mb-3" style={{ fontFamily: F.body, color: COLORS.gold, ...CAPS, letterSpacing: "0.2em" }}>
+          {kicker}
+        </span>
+      )}
       {lead}
       {tail && <em style={{ color: COLORS.gold }}>{joiner}{tail}</em>}
     </h1>
@@ -270,7 +260,7 @@ export default function EventPage() {
 
         <header className="mt-7 rise-in">
           <Eyebrow>{day.label} · {dp.weekday} {dp.day} {dp.month}</Eyebrow>
-          <EventTitle theme={theme} act={act} />
+          <EventTitle act={act} />
         </header>
 
         <dl className="mt-7 grid grid-cols-2" style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}>

@@ -16,7 +16,6 @@ function EventCard({ act, day, index }) {
   const theme = eventTheme(act, index);
   const c = themeColors(theme, mode);
   const { kicker, lead, joiner, tail } = splitTitle(act.name);
-  const sans = theme.headline === "sans";
   const date = new Date(`${day.date}T00:00:00`);
   return (
     <Link
@@ -33,12 +32,9 @@ function EventCard({ act, day, index }) {
           {kicker}
         </div>
       )}
-      <div
-        className={sans ? "text-[23px] leading-[1.1] font-semibold" : "text-[25px] leading-[1.08]"}
-        style={sans ? { fontFamily: F.body, letterSpacing: "-0.02em", textWrap: "balance" } : { ...DISPLAY_LUXE, letterSpacing: "-0.015em", textWrap: "balance" }}
-      >
+      <div className="text-[25px] leading-[1.08]" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.015em", textWrap: "balance" }}>
         {lead}
-        {tail && (sans ? <span style={{ opacity: 0.65 }}>{joiner}{tail}</span> : <em>{joiner}{tail}</em>)}
+        {tail && <em>{joiner}{tail}</em>}
       </div>
       {act.location && (
         <div className="mt-2 text-[12px] truncate" style={{ opacity: 0.72 }}>
