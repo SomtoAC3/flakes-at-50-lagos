@@ -71,15 +71,18 @@ export default function ClientLayout() {
           </div>
         )}
 
-        <div className="px-3 pt-4 pb-2 grid grid-cols-[44px_1fr_44px] items-center sticky top-0 z-30 backdrop-blur" style={{ background: "var(--header)" }}>
-          {back ? (
+        {/* With a back arrow the wordmark sits centred between it and the
+            theme toggle; on the tab pages it sits left, in line with the page. */}
+        <div
+          className={`px-3 pt-4 pb-2 grid items-center sticky top-0 z-30 backdrop-blur ${back ? "grid-cols-[44px_1fr_44px]" : "grid-cols-[1fr_44px]"}`}
+          style={{ background: "var(--header)" }}
+        >
+          {back && (
             <Link to={back} className="flex items-center justify-center min-h-[44px] min-w-[44px]" style={{ color: COLORS.ivory }} aria-label="Back">
               <ArrowLeft size={20} strokeWidth={1.75} />
             </Link>
-          ) : (
-            <span aria-hidden="true" />
           )}
-          <NavLink to="/" className="justify-self-center" aria-label="Flakes@50 Lagos Edition, home">
+          <NavLink to="/" className={back ? "justify-self-center" : "justify-self-start pl-2"} aria-label="Flakes@50 Lagos Edition, home">
             <span className="flex items-center gap-2 text-[23px] leading-none" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.015em", color: COLORS.ivory }}>
               <Stem kind="tulip" headOnly width={15} flower={COLORS.flowerCoral} />
               <span>
