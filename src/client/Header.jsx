@@ -1,18 +1,19 @@
-import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { Moon, Sun } from "@phosphor-icons/react";
+import { Bell, Moon, Sun } from "@phosphor-icons/react";
 import { COLORS, DISPLAY_LUXE } from "../shared/theme";
-import { GoldButton } from "../shared/ui";
 import { useThemeMode } from "../shared/themeMode";
 import { Stem } from "../shared/flora";
-import { useAuth } from "../lib/auth";
-import { MAIN_LINKS, MORE_LINKS } from "./data/navigation";
+import { MAIN_LINKS } from "./data/navigation";
 
-// Event pages get a back arrow to the itinerary; every other page is reached
-// from the menu and has none.
+// Where the back arrow goes: event pages return to the itinerary, pages
+// opened from More return there, and the tab pages and Updates (opened from
+// the header bell) have none.
+const TAB_PATHS = new Set([...MAIN_LINKS.map((l) => l.to), "/updates"]);
 function backPath(pathname) {
-  return pathname.startsWith("/itinerary/") ? "/itinerary" : null;
+  if (TAB_PATHS.has(pathname)) return null;
+  if (pathname.startsWith("/itinerary/")) return "/itinerary";
+  return "/more";
 }
 
 function Wordmark() {
@@ -43,146 +44,49 @@ function ThemeButton() {
   );
 }
 
-// Two solid bars that cross into an X when the menu is open.
-function MenuGlyph({ open }) {
-  const bar = "absolute left-0 h-[2px] w-[22px] rounded-full transition-transform duration-300";
+function UpdatesBell({ hasNew }) {
   return (
-    <span className="relative block h-[10px] w-[22px]" aria-hidden="true">
-      <span className={bar} style={{ top: 0, background: "currentColor", transform: open ? "translateY(4px) rotate(45deg)" : "none" }} />
-      <span className={bar} style={{ top: 8, background: "currentColor", transform: open ? "translateY(-4px) rotate(-45deg)" : "none" }} />
-    </span>
+    <NavLink
+      to="/updates"
+      className="relative flex items-center justify-center min-h-[44px] min-w-[44px]"
+      style={({ isActive }) => ({ color: isActive ? COLORS.gold : COLORS.ivory })}
+      aria-label={hasNew ? "Updates, new posts" : "Updates"}
+    >
+      <Bell size={20} weight="fill" />
+      {hasNew && (
+        <span
+          className="absolute top-[11px] right-[11px] w-2 h-2 rounded-full"
+          style={{ background: COLORS.flowerCoral, boxShadow: "0 0 0 2px var(--bg)" }}
+          aria-hidden="true"
+        />
+      )}
+    </NavLink>
   );
 }
 
-// The drop-down panel: main pages set large, a hairline, the rest of the
-// app as label + one-line description, then the guest's sign-in pill.
-function MenuPanel({ onClose, onNavigate, pathname }) {
-  const { user, signOut } = useAuth();
-  const closeRef = useRef(null);
-
-  useEffect(() => {
-    closeRef.current?.focus();
-    const onKey = (e) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  return (
-    <div className="fixed inset-0 z-50 flex justify-center" role="dialog" aria-modal="true" aria-label="Menu">
-      <button className="menu-backdrop absolute inset-0 w-full cursor-default" style={{ background: "rgba(10, 10, 10, 0.45)" }} onClick={onClose} aria-label="Close menu" tabIndex={-1} />
-      {/* The header row and the sign-in pill stay put; the links between
-          them scroll when the panel is taller than the screen. */}
-      <div
-        className="menu-panel relative w-full max-w-[480px] self-start flex flex-col rounded-b-[28px]"
-        style={{
-          maxHeight: "calc(100dvh - 24px)",
-          background: "radial-gradient(120% 60% at 88% 0%, color-mix(in srgb, var(--flower-rose) 24%, transparent), transparent 70%), var(--card)",
-          color: COLORS.ivory,
-        }}
-      >
-        <div className="shrink-0 px-3 pt-4 pb-2 grid grid-cols-[1fr_auto] items-center">
-          <div className="pl-2">
-            <Wordmark />
-          </div>
-          <div className="flex items-center">
-            <ThemeButton />
-            <button ref={closeRef} onClick={onClose} className="flex items-center justify-center min-h-[44px] min-w-[44px]" aria-label="Close menu">
-              <MenuGlyph open />
-            </button>
-          </div>
-        </div>
-
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <nav className="px-5 pt-5 pb-6" aria-label="Main pages">
-            {MAIN_LINKS.map((l) => {
-              const current = l.end ? pathname === l.to : pathname.startsWith(l.to);
-              return (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  onClick={onNavigate}
-                  aria-current={current ? "page" : undefined}
-                  className="block text-[38px] leading-[1.2]"
-                  style={{ ...DISPLAY_LUXE, letterSpacing: "-0.02em", color: current ? COLORS.gold : COLORS.ivory }}
-                >
-                  {current ? <em>{l.label}</em> : l.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <nav className="px-5 py-6 grid gap-6" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
-            {MORE_LINKS.map((l) => (
-              <Link key={l.to} to={l.to} onClick={onNavigate} aria-current={pathname === l.to ? "page" : undefined} className="block">
-                <div className="text-[15px] leading-snug" style={{ color: COLORS.ivory, fontWeight: pathname === l.to ? 600 : 400 }}>{l.label}</div>
-                <div className="text-[13px] leading-snug" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="shrink-0 px-5 pt-5 pb-6 grid gap-3" style={{ borderTop: `1px solid ${COLORS.line}` }}>
-          {user ? (
-            <>
-              <span className="text-[12px] truncate text-center" style={{ color: COLORS.ivoryDim }}>{user.email}</span>
-              <GoldButton variant="outline" onClick={signOut}>
-                Sign out
-              </GoldButton>
-            </>
-          ) : (
-            <GoldButton as={Link} to="/login" onClick={onNavigate}>
-              Sign in
-            </GoldButton>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function Header() {
+export default function Header({ hasNew = false }) {
   const { pathname } = useLocation();
-  // The page the menu was opened on; navigating anywhere else closes it.
-  const [openOn, setOpenOn] = useState(null);
-  const open = openOn === pathname;
-  const menuButton = useRef(null);
   const back = backPath(pathname);
 
-  const close = () => {
-    setOpenOn(null);
-    menuButton.current?.focus();
-  };
-
+  // With a back arrow the wordmark sits centred between it and the bell and
+  // theme toggle; on the tab pages it sits left, in line with the page.
   return (
-    <>
-      {/* With a back arrow the wordmark sits centred; elsewhere it sits left,
-          in line with the page. */}
-      <div
-        className={`px-3 pt-4 pb-2 grid items-center sticky top-0 z-30 backdrop-blur ${back ? "grid-cols-[88px_1fr_88px]" : "grid-cols-[1fr_auto]"}`}
-        style={{ background: "var(--header)" }}
-      >
-        {back && (
-          <Link to={back} className="flex items-center justify-center min-h-[44px] min-w-[44px] w-[44px]" style={{ color: COLORS.ivory }} aria-label="Back">
-            <ArrowLeft size={20} strokeWidth={1.75} />
-          </Link>
-        )}
-        <div className={back ? "justify-self-center" : "pl-2"}>
-          <Wordmark />
-        </div>
-        <div className="flex items-center justify-self-end" style={{ color: COLORS.ivory }}>
-          <ThemeButton />
-          <button
-            ref={menuButton}
-            onClick={() => setOpenOn(pathname)}
-            className="flex items-center justify-center min-h-[44px] min-w-[44px]"
-            aria-label="Open menu"
-            aria-expanded={open}
-          >
-            <MenuGlyph open={false} />
-          </button>
-        </div>
+    <div
+      className={`px-3 pt-4 pb-2 grid items-center sticky top-0 z-30 backdrop-blur ${back ? "grid-cols-[88px_1fr_88px]" : "grid-cols-[1fr_auto]"}`}
+      style={{ background: "var(--header)" }}
+    >
+      {back && (
+        <Link to={back} className="justify-self-start flex items-center justify-center min-h-[44px] min-w-[44px]" style={{ color: COLORS.ivory }} aria-label="Back">
+          <ArrowLeft size={20} strokeWidth={1.75} />
+        </Link>
+      )}
+      <div className={back ? "justify-self-center" : "pl-2"}>
+        <Wordmark />
       </div>
-      {open && <MenuPanel onClose={close} onNavigate={() => setOpenOn(null)} pathname={pathname} />}
-    </>
+      <div className="flex justify-self-end">
+        <UpdatesBell hasNew={hasNew} />
+        <ThemeButton />
+      </div>
+    </div>
   );
 }

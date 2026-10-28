@@ -2,28 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Pencil, Trash2, ChevronUp, ChevronDown, ImagePlus } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton, Field, ErrorNote, LoadingNote } from "../../shared/ui";
-import { supabase } from "../../lib/supabaseClient";
 import { fetchDressCodes, saveDressCode, deleteDressCode, swapDressCodeOrder } from "../../lib/queries";
-import { brandingUrl, dressCodePhotoPath } from "../../lib/branding";
+import { brandingUrl, dressCodePhotoPath, uploadBrandingPhoto } from "../../lib/branding";
 
 // Banner photos are stored in the branding bucket at a fixed path per dress
 // code, so the guest page can reference them without a schema change.
-async function uploadBanner(id, file) {
-  const img = await createImageBitmap(file);
-  const maxW = 1200;
-  const scale = Math.min(1, maxW / img.width);
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(img.width * scale);
-  canvas.height = Math.round(img.height * scale);
-  canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-  const blob = await new Promise((resolve, reject) =>
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Couldn't process the image."))), "image/jpeg", 0.85)
-  );
-  const { error } = await supabase.storage
-    .from("branding")
-    .upload(dressCodePhotoPath(id), blob, { upsert: true, contentType: "image/jpeg", cacheControl: "3600" });
-  if (error) throw error;
-}
+const uploadBanner = (id, file) => uploadBrandingPhoto(dressCodePhotoPath(id), file);
 
 export default function AdminDressCodes() {
   const [codes, setCodes] = useState(null);

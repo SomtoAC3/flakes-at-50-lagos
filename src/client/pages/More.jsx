@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ArrowUpRight } from "lucide-react";
+import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, ArrowUpRight } from "lucide-react";
 import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
@@ -9,10 +9,9 @@ const ICONS = {
   "/dress-codes": Shirt,
   "/travel": Plane,
   "/my-trip": Users,
-  "/directory": Globe2,
+  "/guests": Globe2,
   "/story": BookOpen,
   "/faq": HelpCircle,
-  "/contacts": Phone,
 };
 
 function LinkIcon({ to, ...props }) {
@@ -33,7 +32,7 @@ export default function More() {
             {user ? user.email : "Not signed in"}
           </div>
           <div className="text-[11.5px]" style={{ color: COLORS.ivoryDim }}>
-            {user ? "Signed in as a guest" : "Sign in to RSVP, use My Trip, and the directory"}
+            {user ? "Signed in as a guest" : "Sign in to RSVP, use My Trip and see the guest list"}
           </div>
         </div>
         {user ? (

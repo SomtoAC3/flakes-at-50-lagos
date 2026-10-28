@@ -15,11 +15,11 @@ import DressCodes from "./client/pages/DressCodes";
 import Travel from "./client/pages/Travel";
 import MyTrip from "./client/pages/MyTrip";
 import Directory from "./client/pages/Directory";
+import GuestList from "./client/pages/GuestList";
 import Story from "./client/pages/Story";
 import Gallery from "./client/pages/Gallery";
 import Updates from "./client/pages/Updates";
 import Faq from "./client/pages/Faq";
-import Contacts from "./client/pages/Contacts";
 import More from "./client/pages/More";
 import Login from "./client/pages/Login";
 
@@ -51,12 +51,13 @@ createRoot(document.getElementById("root")).render(
             <Route path="dress-codes" element={<DressCodes />} />
             <Route path="travel" element={<Travel />} />
             <Route path="my-trip" element={<RequireGuestAuth><MyTrip /></RequireGuestAuth>} />
-            <Route path="directory" element={<RequireGuestAuth><Directory /></RequireGuestAuth>} />
+            <Route path="directory" element={<Directory />} />
+            <Route path="guests" element={<RequireGuestAuth><GuestList /></RequireGuestAuth>} />
             <Route path="story" element={<Story />} />
             <Route path="gallery" element={<Gallery />} />
             <Route path="updates" element={<Updates />} />
             <Route path="faq" element={<Faq />} />
-            <Route path="contacts" element={<Contacts />} />
+            <Route path="contacts" element={<Navigate to="/directory" replace />} />
             <Route path="more" element={<More />} />
           </Route>
 

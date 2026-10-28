@@ -3,7 +3,8 @@ import { Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton, Field, ErrorNote, LoadingNote } from "../../shared/ui";
 import { fetchJsonContent, saveJsonContent, fetchSiteContent, saveSiteContent } from "../../lib/queries";
-import { FAQS, CONTACTS, TRAVEL_SECTIONS, PACKING_LIST, STORY_SECTIONS } from "../../client/data/staticContent";
+import { directoryPhotoPath, uploadBrandingPhoto } from "../../lib/branding";
+import { FAQS, DIRECTORY, TRAVEL_SECTIONS, PACKING_LIST, STORY_SECTIONS } from "../../client/data/staticContent";
 
 // Each editor manages one JSON list in site_content. The bundled defaults
 // prefill the editor the first time, so organizers edit rather than start
@@ -22,17 +23,24 @@ const EDITORS = [
     itemLabel: (item) => item.q,
   },
   {
-    key: "contacts",
-    title: "Contacts",
-    page: "Contacts page",
-    fallback: CONTACTS,
-    blank: { role: "", name: "", phone: "" },
+    key: "directory",
+    title: "Directory",
+    page: "Directory page",
+    fallback: DIRECTORY,
+    blank: { category: "", name: "", detail: "", bio: "", address: "", image: "", rating: "", reviews: "", phone: "", whatsapp: "" },
     fields: [
-      { name: "role", label: "Role" },
+      { name: "category", label: "Category (e.g. Makeup, Host Team)" },
       { name: "name", label: "Name" },
-      { name: "phone", label: "Phone (with country code, e.g. +2010...)" },
+      { name: "detail", label: "Detail (optional, e.g. role)" },
+      { name: "bio", label: "Short description (one or two lines)", multiline: true },
+      { name: "address", label: "Address (opens in Maps)" },
+      { name: "image", label: "Cover photo link", photo: true },
+      { name: "rating", label: "Google rating (e.g. 4.6; leave blank if unsure)" },
+      { name: "reviews", label: "Number of Google reviews (e.g. 312)" },
+      { name: "phone", label: "Phone (with country code, e.g. +234...)" },
+      { name: "whatsapp", label: "WhatsApp (with country code; leave blank if none)" },
     ],
-    itemLabel: (item) => item.role,
+    itemLabel: (item) => `${item.category} · ${item.name}`,
   },
   {
     key: "travel_sections",
@@ -76,7 +84,7 @@ export default function Content() {
         eyebrow="Edit"
         title="Site Content"
         light
-        sub="Everything guests read on the FAQ, Contacts, Travel, and Story pages. Saves go live immediately."
+        sub="Everything guests read on the FAQ, Directory, Travel, and Story pages. Saves go live immediately."
       />
       <WhatsAppLinkCard />
       {EDITORS.map((cfg) => (
@@ -120,7 +128,7 @@ function WhatsAppLinkCard() {
       <ErrorNote message={error} />
       <p className="text-[13px] mb-1" style={{ color: COLORS.ivory }}>Group WhatsApp Link</p>
       <p className="text-[11.5px] leading-relaxed mb-3" style={{ color: COLORS.ivoryDim }}>
-        The invite link for the guest WhatsApp group (from WhatsApp → Group → Invite via link). The join card on the Contacts page is hidden until this is set.
+        The invite link for the guest WhatsApp group (from WhatsApp → Group → Invite via link). The join card on the Directory page is hidden until this is set.
       </p>
       <div className="mb-3">
         <Field label="Invite link" value={link} onChange={(v) => { setLink(v); setStatus("idle"); }} placeholder="https://chat.whatsapp.com/…" />
@@ -235,15 +243,24 @@ function ListEditor({ cfg }) {
               </div>
               {cfg.fields ? (
                 <div className="space-y-2">
-                  {cfg.fields.map((f) => (
-                    <Field
-                      key={f.name}
-                      label={f.label}
-                      value={item[f.name]}
-                      multiline={f.multiline}
-                      onChange={(v) => setItem(i, { ...item, [f.name]: v })}
-                    />
-                  ))}
+                  {cfg.fields.map((f) =>
+                    f.photo ? (
+                      <PhotoField
+                        key={f.name}
+                        label={f.label}
+                        value={item[f.name]}
+                        onChange={(v) => setItem(i, { ...item, [f.name]: v })}
+                      />
+                    ) : (
+                      <Field
+                        key={f.name}
+                        label={f.label}
+                        value={item[f.name]}
+                        multiline={f.multiline}
+                        onChange={(v) => setItem(i, { ...item, [f.name]: v })}
+                      />
+                    )
+                  )}
                 </div>
               ) : (
                 <Field label="Item" value={item} onChange={(v) => setItem(i, v)} />
@@ -265,6 +282,43 @@ function ListEditor({ cfg }) {
         </div>
       )}
     </Card>
+  );
+}
+
+// A photo link with an upload button beside it: the upload is shrunk, saved
+// to the branding bucket and its link filled in. Saving the list publishes it.
+function PhotoField({ label, value, onChange }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  async function upload(file) {
+    if (!file) return;
+    setBusy(true);
+    setError("");
+    try {
+      onChange(await uploadBrandingPhoto(directoryPhotoPath(), file));
+    } catch (e) {
+      setError(e.message || "Upload failed. Try another photo.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="space-y-2">
+      {value?.trim() && (
+        <img src={value} alt="" className="w-full aspect-[4/3] object-cover rounded-[20px]" style={{ background: "var(--card)" }} />
+      )}
+      <Field label={label} value={value} onChange={onChange} />
+      <label
+        className="flex items-center justify-center w-full h-12 rounded-full text-[13px] font-medium cursor-pointer"
+        style={{ border: "1px solid var(--line)", color: COLORS.gold, opacity: busy ? 0.6 : 1 }}
+      >
+        {busy ? "Uploading…" : value?.trim() ? "Replace Photo" : "Upload Photo"}
+        <input type="file" accept="image/*" className="sr-only" disabled={busy} onChange={(e) => upload(e.target.files?.[0])} />
+      </label>
+      <ErrorNote message={error} />
+    </div>
   );
 }
 

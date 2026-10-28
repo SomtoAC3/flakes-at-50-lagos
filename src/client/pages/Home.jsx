@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowUpRight, Plane, Users, Phone } from "lucide-react";
+import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowUpRight, Plane, Users } from "lucide-react";
 import { COLORS, F, EVENT_START, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
 import { Stem } from "../../shared/flora";
@@ -298,7 +298,7 @@ export default function Home() {
           <QuickLink icon={Shirt} title="Dress Codes" to="/dress-codes" />
           <QuickLink icon={Plane} title="Travel Info" to="/travel" />
           <QuickLink icon={Users} title="My Trip" to="/my-trip" />
-          <QuickLink icon={Phone} title="Emergency Contacts" to="/contacts" />
+          <QuickLink icon={MapPin} title="Directory" to="/directory" />
         </nav>
       </div>
     </div>

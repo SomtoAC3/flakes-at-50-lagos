@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { AlertTriangle, Check } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AlertTriangle, Check, ArrowUpRight } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
 import { Card, SectionTitle } from "../../shared/ui";
 import { TRAVEL_SECTIONS, PACKING_LIST } from "../data/staticContent";
@@ -41,6 +42,13 @@ export default function Travel() {
           </Card>
         ))}
       </div>
+      <Link to="/directory" className="mb-8 flex items-center gap-3 rounded-[22px] p-5" style={{ background: COLORS.card, border: `1px solid ${COLORS.line}` }}>
+        <div className="flex-1 min-w-0">
+          <div className="text-[15px]" style={{ color: COLORS.ivory, fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em" }}>Things to do &amp; who to call</div>
+          <p className="text-[12.5px] mt-1" style={{ color: COLORS.ivoryDim }}>Makeup, food, art, padel and the host team are in the Directory.</p>
+        </div>
+        <ArrowUpRight size={16} color={COLORS.gold} className="shrink-0" />
+      </Link>
       <SectionTitle eyebrow="Don't Forget" title="Packing Checklist" light />
       <Card dark className="mb-4">
         <div className="space-y-2.5">
