@@ -24,5 +24,5 @@ create trigger site_content_set_updated_at
   for each row execute function public.set_updated_at();
 
 insert into public.site_content (key, value) values
-  ('welcome_note', 'Fifty years, and I still can''t believe I get to share this chapter with all of you — in Egypt, of all places. Pack your gold, bring your energy, and let''s make this a celebration for the books.')
+  ('welcome_note', 'Fifty years, and I still can''t believe I get to share this chapter with all of you — at home in Lagos. Pack your gold, bring your energy, and let''s make this a celebration for the books.')
 on conflict (key) do nothing;

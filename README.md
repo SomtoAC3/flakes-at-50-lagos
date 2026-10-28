@@ -1,13 +1,13 @@
-# Folake at 50 — The Egypt Takeover
+# Flakes@50 — Lagos Edition
 
-A trip-companion app for a five-day 50th birthday celebration across Cairo
-and the Red Sea (Oct 28 – Nov 1, 2026): itinerary, dress codes, travel info,
-guest profiles/RSVP, a guest directory, announcements, a photo gallery, and
-an organizer admin dashboard.
+A companion app for Folake's 50th birthday celebration in Lagos: itinerary,
+dress codes, travel info, guest profiles/RSVP, a guest directory,
+announcements, a photo gallery, and an organizer admin dashboard.
 
-This started as a Claude-generated prototype (single-file React component
-with mock data) and has been scaffolded here into a real Vite + React +
-Tailwind project, ready to wire up to Supabase.
+Forked from [folake-at-50](https://github.com/SomtoAC3/folake-at-50), the
+app for the Sharm El Sheikh trip. It has its own Supabase project and
+Vercel site; the `folake` git remote is kept (fetch only) so fixes can be
+cherry-picked between the two.
 
 ## Stack
 

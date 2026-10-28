@@ -7,13 +7,12 @@ import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
 
 const FALLBACK_WELCOME_NOTE =
-  "Dear Guests,\n\nFifty is a milestone. Celebrating it with Folake on this Egypt Escape is a rare gift. Thank you for making the journey, for showing up with love, and for choosing to make these memories evergreen. Here's to the sea, the laughter, the dancing, and a few golden days in Sharm we'll never forget. See you by the Red Sea.";
+  "Dear Guests,\n\nFifty is a milestone, and celebrating it with Folake at home in Lagos is a rare gift. Thank you for showing up with love, and for choosing to make these memories evergreen. Here's to the laughter, the dancing, and a celebration we'll never forget. See you in Lagos.";
 
-// Collaborative Spotify playlist for the trip. It is private, so Spotify will
-// not embed it; the invite link (with its pt/pi parameters) lets guests open
-// it, join and add songs.
-const PLAYLIST_INVITE_URL =
-  "https://open.spotify.com/playlist/06EWZXbWmQP6ioUeBIb1ZS?si=0fsz5LJHT2OlLnf9uqMPtw&pi=rjT01OXHSi2Rg&pt=855e6194bcd91adfe67302087f6a0b64";
+// Collaborative Spotify playlist for the celebration. Paste the playlist's
+// invite link (with its pt/pi parameters) here and the Soundtrack card
+// appears on Home; guests open it, join and add songs. Empty hides the card.
+const PLAYLIST_INVITE_URL = "";
 
 // Spotify's mark in its brand green, so guests know the playlist opens there.
 function SpotifyLogo({ size = 24, className = "" }) {
@@ -27,81 +26,13 @@ function SpotifyLogo({ size = 24, className = "" }) {
   );
 }
 
-// Built-in hero slideshow. Photos live in public/landmarks/ (Wikimedia
-// Commons, credited on the More page).
-const LANDMARKS = [
-  { src: "/landmarks/naama-bay.jpg", name: "Naama Bay", place: "Sharm El Sheikh" },
-  { src: "/landmarks/soho-square.jpg", name: "SOHO Square", place: "Sharm El Sheikh" },
-  { src: "/landmarks/dancing-fountain.jpg", name: "Dancing Fountain", place: "SOHO Square" },
-  { src: "/landmarks/al-mustafa-mosque.jpg", name: "Al Mustafa Mosque", place: "Sharm El Sheikh" },
-  { src: "/landmarks/heavenly-cathedral.jpg", name: "The Heavenly Cathedral", place: "Sharm El Sheikh" },
-  { src: "/landmarks/sharks-bay.jpg", name: "Sharks Bay", place: "Sharm El Sheikh" },
-  { src: "/landmarks/al-sahaba-mosque.jpg", name: "Al Sahaba Mosque", place: "Old Market" },
-  { src: "/landmarks/ras-mohammed.jpg", name: "Ras Mohammed", place: "National Park" },
-];
-
-function LandmarkSlideshow() {
-  const [index, setIndex] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const onChange = (e) => setReducedMotion(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  useEffect(() => {
-    const t = setInterval(() => setIndex((i) => (i + 1) % LANDMARKS.length), 4200);
-    return () => clearInterval(t);
-  }, []);
-
-  const current = LANDMARKS[index];
-  return (
-    <div
-      className="relative w-full overflow-hidden rounded-[3px] mb-10"
-      style={{ height: 230, background: COLORS.chip }}
-    >
-      {LANDMARKS.map((l, i) => (
-        <img
-          key={l.src}
-          src={l.src}
-          alt={i === index ? `${l.name}, ${l.place}` : ""}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading={i === 0 ? "eager" : "lazy"}
-          style={{
-            opacity: i === index ? 1 : 0,
-            transition: reducedMotion ? "none" : "opacity 0.9s ease",
-          }}
-        />
-      ))}
-      <div
-        className="absolute left-3 bottom-3 px-2.5 py-1.5 rounded-[2px] text-[9.5px] font-semibold"
-        style={{ background: "rgba(251,250,248,0.94)", color: "#0F0E0D", ...CAPS, letterSpacing: "0.16em" }}
-      >
-        {current.name} <span style={{ color: "#6F6A62", fontWeight: 500 }}>· {current.place}</span>
-      </div>
-      <div className="absolute right-3 bottom-3.5 flex gap-1.5" aria-hidden="true">
-        {LANDMARKS.map((l, i) => (
-          <span
-            key={l.src}
-            className="w-[5px] h-[5px] rounded-full"
-            style={{ background: i === index ? "#FFFFFF" : "rgba(255,255,255,0.55)" }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function useCountdown(target) {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
-  const diff = Math.max(0, target.getTime() - now.getTime());
+  const diff = target ? Math.max(0, target.getTime() - now.getTime()) : 0;
   return {
     days: Math.floor(diff / 86400000),
     hours: Math.floor((diff % 86400000) / 3600000),
@@ -192,7 +123,7 @@ function Hero() {
         style={{ writingMode: "vertical-rl", color: "rgba(15,14,13,0.72)", fontFamily: F.body, ...CAPS, letterSpacing: "0.36em" }}
         aria-hidden="true"
       >
-        Sharm El Sheikh · MMXXVI
+        Lagos · MMXXVI
       </div>
     </div>
   );
@@ -236,23 +167,23 @@ export default function Home() {
 
       <div className="px-6 pt-9 pb-12">
         <div className="rise-in">
-          <Eyebrow>A Golden Jubilee · The Red Sea</Eyebrow>
+          <Eyebrow>A Golden Jubilee · Lagos Edition</Eyebrow>
           <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivory, letterSpacing: "-0.03em" }}>
             <span className="block whitespace-nowrap text-[58px] sm:text-[72px]">
-              Folake<span style={{ color: COLORS.gold }}>@50</span>
+              Flakes<span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </h1>
           <p className="text-[16px] italic mt-5" style={{ ...DISPLAY_LUXE, color: COLORS.ivoryDim }}>
-            {days?.length ? formatLongDateRange(days) : "28 October – 1 November 2026"}, Sharm El Sheikh
+            {days?.length ? `${formatLongDateRange(days)}, Lagos` : "Lagos · Date to be announced"}
           </p>
         </div>
 
-        {status?.phase !== "after" && (
+        {countdownTarget && status?.phase !== "after" && (
           <div
             className="mt-9 grid grid-cols-4"
             style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}
             role="timer"
-            aria-label={`${cd.days} days, ${cd.hours} hours, ${cd.minutes} minutes until the trip`}
+            aria-label={`${cd.days} days, ${cd.hours} hours, ${cd.minutes} minutes until the celebration`}
           >
             {[["Days", cd.days], ["Hours", cd.hours], ["Minutes", cd.minutes], ["Seconds", cd.seconds]].map(([label, val], i) => (
               <div
@@ -301,9 +232,8 @@ export default function Home() {
           eyebrow="The Celebration"
           title="The Celebration of a Lifetime"
           light
-          sub="Five days by the Red Sea, designed around sun, sea, stillness and celebration. No crowded checklist, no rushing from one thing to the next. Just beautiful places, beautiful people and enough room for the moments you cannot schedule."
+          sub="Fifty years, celebrated at home in Lagos. No crowded checklist, no rushing from one thing to the next. Just beautiful people, good music and enough room for the moments you cannot schedule."
         />
-        <LandmarkSlideshow />
 
         <Card dark className="mb-4">
           <Eyebrow>Right Now</Eyebrow>
@@ -313,9 +243,9 @@ export default function Home() {
               style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.01em" }}
             >
               {!status && "The countdown is on"}
-              {status?.phase === "before" && "Trip has not started"}
+              {status?.phase === "before" && "The celebration has not started"}
               {status?.phase === "during" && (status.today?.theme || `Day ${status.dayNum}`)}
-              {status?.phase === "after" && "The trip has ended"}
+              {status?.phase === "after" && "The celebration has ended"}
             </span>
             {status && (
               <Badge tone="gold">{`Day ${status.dayNum} of ${status.total}`}</Badge>
@@ -339,7 +269,7 @@ export default function Home() {
             </div>
           ) : status?.phase === "after" ? (
             <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
-              Fifty years. Five days. One for the books. Thank you for being part of it — check the Gallery for the memories.
+              Fifty years. One for the books. Thank you for being part of it — check the Gallery for the memories.
             </p>
           ) : (
             <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
@@ -348,26 +278,28 @@ export default function Home() {
           )}
         </Card>
 
-        <Card dark className="mb-4 relative">
-          <SpotifyLogo className="absolute top-5 right-5" size={24} />
-          <Eyebrow>The Soundtrack</Eyebrow>
-          <h3 className="text-[22px] leading-tight mb-1" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.01em" }}>
-            Flakes Egypt Takeover
-          </h3>
-          <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: COLORS.ivoryDim }}>
-            Our playlist for the trip. Join it on Spotify and add the songs you want to hear in Sharm.
-          </p>
-          <a
-            href={PLAYLIST_INVITE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[2px] text-[11px] font-semibold min-h-[46px] active:scale-[0.98] transition-all"
-            style={{ background: COLORS.ivory, color: COLORS.ink, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}
-          >
-            <Music size={14} strokeWidth={1.75} />
-            Join &amp; Add Songs
-          </a>
-        </Card>
+        {PLAYLIST_INVITE_URL && (
+          <Card dark className="mb-4 relative">
+            <SpotifyLogo className="absolute top-5 right-5" size={24} />
+            <Eyebrow>The Soundtrack</Eyebrow>
+            <h3 className="text-[22px] leading-tight mb-1" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.01em" }}>
+              Flakes@50 Lagos
+            </h3>
+            <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: COLORS.ivoryDim }}>
+              Our playlist for the celebration. Join it on Spotify and add the songs you want to hear in Lagos.
+            </p>
+            <a
+              href={PLAYLIST_INVITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[2px] text-[11px] font-semibold min-h-[46px] active:scale-[0.98] transition-all"
+              style={{ background: COLORS.ivory, color: COLORS.ink, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}
+            >
+              <Music size={14} strokeWidth={1.75} />
+              Join &amp; Add Songs
+            </a>
+          </Card>
+        )}
 
         <div className="grid grid-cols-2 gap-3 mb-10">
           <QuickLinkCard icon={Shirt} title="Dress Codes" to="/dress-codes" />

@@ -28,7 +28,7 @@ export default function Travel() {
       <Card dark className="mb-4 flex items-start gap-2.5">
         <AlertTriangle size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
         <p className="text-[12px] leading-relaxed min-w-0" style={{ color: COLORS.ivory }}>
-          This app does not provide legal or visa advice. Please confirm current entry requirements with official Egyptian authorities or your airline before booking travel.
+          This app does not provide legal or visa advice. Please confirm current entry requirements with the Nigeria Immigration Service or your airline before booking travel.
         </p>
       </Card>
       <div className="space-y-3 mb-6">

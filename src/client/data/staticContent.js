@@ -4,19 +4,17 @@
 // src/lib/queries.js.)
 
 export const FAQS = [
-  { q: "What are the dates?", a: "28 October – 1 November 2026: five days, four nights. We leave Lagos on 28 October, land in Sharm El Sheikh at about 12:30 AM on the 29th, and fly home at 5:00 AM on 1 November." },
-  { q: "Where are we going?", a: "Sharm El Sheikh on the Red Sea. We fly Lagos → Cairo → Sharm El Sheikh → Lagos. Cairo is transit only; we continue straight to Sharm." },
-  { q: "Where are we staying?", a: "Meraki Resort, a beach resort in Sharm El Sheikh." },
-  { q: "What is included in the package?", a: "Round-trip flight ticket, Egypt sticker visa, meet and assist at the airport, 4 nights in a beach resort, all-inclusive meal plan, private boat cruise with food and drinks, water sports, beach club hangout, and return airport transfer." },
-  { q: "Do I need a visa?", a: "Yes. The Egypt sticker visa is included in the package. See Travel Information for what to submit, and for the visa-on-arrival options." },
-  { q: "Is transportation included?", a: "Yes. Flights (including the Cairo connection), meet and assist, and airport transfers to and from the resort are all included." },
-  { q: "Will meals be provided?", a: "Yes. The resort stay is on an all-inclusive meal plan, and the private boat cruise includes food and drinks." },
-  { q: "What should I wear?", a: "All white for the private boat cruise on 30 October. Bring swimwear, evening outfits and comfortable shoes. See Dress Codes and the packing checklist." },
-  { q: "What currency should I bring?", a: "The local currency is the Egyptian Pound (EGP). Carry USD plus some EGP; USD is widely accepted in tourist areas." },
-  { q: "Can I travel on different dates?", a: "Flights, visa and transfers are arranged as a group package. If you need different dates, speak to the organizers first." },
-  { q: "Can dietary restrictions be accommodated?", a: "Please submit dietary restrictions and allergies in My Trip so the team can coordinate with the resort in advance." },
+  { q: "What are the dates?", a: "To Be Confirmed. The full schedule will appear in the Itinerary tab as soon as it is published." },
+  { q: "Where is the celebration?", a: "Lagos, Nigeria. Venue details To Be Confirmed; check the Itinerary tab for each event's location." },
+  { q: "Where should out-of-town guests stay?", a: "Hotel recommendations To Be Confirmed. See Travel Information for updates." },
+  { q: "Is transportation provided?", a: "To Be Confirmed. Any shuttle or transfer arrangements will be posted in Announcements." },
+  { q: "Will meals be provided?", a: "Yes, at the main events. Please submit dietary restrictions and allergies in My Trip so the team can plan ahead." },
+  { q: "What should I wear?", a: "Each event has its own look. See Dress Codes for colours, inspiration and what to avoid." },
+  { q: "What currency should I bring?", a: "The Nigerian Naira (NGN). Cards are widely accepted in hotels and restaurants; carry some cash for small purchases." },
+  { q: "Do I need a visa?", a: "Guests travelling from outside Nigeria may need one. See Travel Information, and confirm with the Nigeria Immigration Service or your airline." },
+  { q: "Can dietary restrictions be accommodated?", a: "Please submit dietary restrictions and allergies in My Trip so the team can coordinate in advance." },
   { q: "How will schedule changes be communicated?", a: "All changes are posted in Announcements, with urgent updates shown as a banner at the top of the app." },
-  { q: "Who should I contact if my flight is delayed?", a: "Contact the organizers listed in Contacts as soon as possible. A group concierge is on call throughout the trip; details are shared at check-in." },
+  { q: "Who should I contact if I'm running late?", a: "Contact the organizers listed in Contacts as soon as possible." },
   { q: "Can I bring a guest?", a: "Please check with the organizing team before extending an invitation." },
   { q: "How do I join the WhatsApp group?", a: "A join link is available on the Contacts page." },
   { q: "Where can I find the latest itinerary?", a: "The Itinerary tab always reflects the current schedule. Check Announcements for recent changes." },
@@ -24,15 +22,13 @@ export const FAQS = [
 
 export const CONTACTS = [
   { role: "Lead Event Organizer", name: "To Be Confirmed", phone: "" },
-  { role: "Travel Agent", name: "To Be Confirmed", phone: "" },
-  { role: "Group Concierge", name: "On call throughout the trip. Details at check-in.", phone: "" },
-  { role: "Resort Contact (Sharm El Sheikh)", name: "To Be Confirmed", phone: "" },
-  { role: "Police", name: "Egypt emergency line", phone: "122" },
-  { role: "Ambulance", name: "Egypt emergency line", phone: "123" },
-  { role: "Tourist Police", name: "Egypt tourist police", phone: "126" },
+  { role: "Guest Relations", name: "To Be Confirmed", phone: "" },
+  { role: "Venue Contact", name: "To Be Confirmed", phone: "" },
+  { role: "Emergency", name: "National emergency line", phone: "112" },
+  { role: "Lagos State Emergency", name: "Lagos State emergency line", phone: "767" },
 ];
 
-export const GALLERY_FILTERS = ["All", "Arrival", "Beach Club", "Boat Day", "Birthday Dinner", "Quad Biking", "Red Sea", "Behind the Scenes"];
+export const GALLERY_FILTERS = ["All", "The Celebration", "Dinner", "The Party", "Family & Friends", "Behind the Scenes"];
 
 export const STORY_SECTIONS = [
   { title: "About Folake", body: "A short biography celebrating who Folake is — To Be Confirmed / awaiting content." },
@@ -45,33 +41,25 @@ export const STORY_SECTIONS = [
 ];
 
 export const TRAVEL_SECTIONS = [
-  { title: "Dates & Route", body: "28 October – 1 November 2026. Lagos → Cairo → Sharm El Sheikh → Lagos. Cairo is transit only; we continue straight to Sharm El Sheikh." },
-  { title: "What's Included", body: "Round-trip flight ticket, Egypt sticker visa, meet and assist at the airport, 4 nights in a beach resort, all-inclusive meal plan, private boat cruise with food and drinks, water sports, beach club hangout, and return airport transfer." },
-  { title: "Where You'll Stay", body: "Meraki Resort, Sharm El Sheikh: adult-only energy, stylish design and a vibrant beachfront mood." },
-  { title: "Visa: Sticker Visa (Embassy Application)", body: "The sticker visa is included in the package. You'll need: your international passport data page, valid for at least 6 months from the travel date; a recent passport photograph on a plain white background; a 3-month bank statement showing a minimum balance of ₦5,000,000; and your intended travel date. Processing takes about 7–10 working days. Submit all documents as clear, properly scanned soft copies." },
-  { title: "Visa on Arrival", body: "Without a valid visa: USD 36, payable to immigration on arrival. The fee may change with exchange rates and immigration rules. Holders of a valid UK, US, Canadian or Schengen visa, or a UK residence permit, may also be eligible: USD 36 on arrival. Keep all travel documents to hand on arrival. Fees and eligibility can change, so please confirm before departure." },
-  { title: "Airport Transfers", body: "Meet and assist in Cairo, the connecting flight to Sharm El Sheikh (landing about 12:30 AM on 29 October), a transfer to the resort, and a return transfer to the airport for the 5:00 AM flight on 1 November. All included." },
-  { title: "Weather", body: "Warm days and mild evenings, 24–32°C." },
-  { title: "Currency & Cash", body: "Egyptian Pound (EGP). Carry USD plus some EGP; USD is widely accepted in tourist areas." },
-  { title: "Power & Charging", body: "220V, Type C / F plugs. Bring a phone charger, a power bank and a universal travel adapter." },
-  { title: "Language", body: "Arabic. English is widely spoken in hotels." },
-  { title: "Travel Insurance", body: "Travel insurance is strongly recommended. Bring your insurance documents with you." },
-  { title: "Emergency Numbers", body: "Police 122 · Ambulance 123 · Tourist Police 126. A group concierge is on call throughout the trip; details are shared at check-in." },
-  { title: "Egypt Travel Etiquette", body: "Resort wear is fine at the resort. Dress more modestly in town and at markets, and always ask before photographing local people." },
+  { title: "Dates & Venue", body: "Lagos, Nigeria. Dates and venue To Be Confirmed; the Itinerary tab will have the full schedule once it's published." },
+  { title: "Getting to Lagos", body: "Murtala Muhammed International Airport (LOS) serves international and domestic flights. Share your flight details in My Trip so the team knows when you land." },
+  { title: "Where to Stay", body: "Hotel recommendations for out-of-town guests To Be Confirmed." },
+  { title: "Entry & Visas", body: "Guests travelling from outside Nigeria may need a visa. Check current requirements with the Nigeria Immigration Service well before you travel, and make sure your passport is valid for at least 6 months." },
+  { title: "Getting Around", body: "Lagos traffic can be heavy, especially at rush hour and on bridges between the Island and Mainland. Allow plenty of extra time between events." },
+  { title: "Weather", body: "Warm and humid all year, usually 25–32°C. Pack light, breathable fabrics." },
+  { title: "Currency & Cash", body: "Nigerian Naira (NGN). Cards are widely accepted in hotels and restaurants; carry some cash for small purchases." },
+  { title: "Power & Charging", body: "230V, Type D / G plugs. Bring a phone charger, a power bank and a travel adapter if you're coming from abroad." },
+  { title: "Language", body: "English." },
+  { title: "Emergency Numbers", body: "National emergency line 112 · Lagos State emergency line 767." },
 ];
 
 export const PACKING_LIST = [
-  "Passport, valid for 6+ months",
-  "Travel insurance documents",
-  "Sunglasses + high-SPF sunscreen",
-  "Swimwear",
-  "Comfortable walking shoes",
-  "Evening outfits",
-  "All-white outfit for boat day",
-  "Wide-brim hat",
+  "Passport or ID",
+  "Outfits for each dress code",
+  "Comfortable shoes for dancing",
+  "Sunglasses + sunscreen",
   "Personal medication",
-  "Camera",
   "Phone charger + power bank",
-  "Universal travel adapter",
-  "Cash: USD + EGP",
+  "Travel adapter (guests from abroad)",
+  "Cash: some NGN",
 ];

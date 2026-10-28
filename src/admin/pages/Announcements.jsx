@@ -30,7 +30,7 @@ export default function Announcements() {
       // Push failures are non-fatal — the announcement itself is already live.
       try {
         const { data, error: fnError } = await supabase.functions.invoke("send-push", {
-          body: { title: `Folake@50 — ${form.category}`, body: form.message, url: "/updates" },
+          body: { title: `Flakes@50 — ${form.category}`, body: form.message, url: "/updates" },
         });
         if (fnError) throw fnError;
         setPushNote(`Posted. Notification sent to ${data?.sent ?? 0} device${data?.sent === 1 ? "" : "s"}.`);

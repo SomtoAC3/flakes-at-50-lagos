@@ -63,9 +63,9 @@ export default function ClientLayout() {
           className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
           style={{ background: "var(--header)", borderBottom: `1px solid ${COLORS.line}` }}
         >
-          <NavLink to="/" aria-label="Folake@50, home">
+          <NavLink to="/" aria-label="Flakes@50 Lagos Edition, home">
             <span className="text-[21px] leading-none" style={{ ...DISPLAY_LUXE, fontWeight: 400, letterSpacing: "-0.01em", color: COLORS.ivory }}>
-              Folake<span style={{ color: COLORS.gold }}>@50</span>
+              Flakes<span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </NavLink>
           <button

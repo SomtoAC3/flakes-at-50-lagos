@@ -1,7 +1,7 @@
 {
-  "name": "Folake@50",
-  "short_name": "Folake@50",
-  "description": "Itinerary, updates, and everything for Folake's 50th birthday trip.",
+  "name": "Flakes@50 Lagos Edition",
+  "short_name": "Flakes@50",
+  "description": "Itinerary, updates, and everything for Folake's 50th birthday celebration in Lagos.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

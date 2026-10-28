@@ -65,7 +65,7 @@ export default function Login() {
         <div className="text-center mb-8">
           <h1 className="leading-[0.95]" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.03em", color: COLORS.ivory }}>
             <span className="block text-[48px]">
-              Folake<span style={{ color: COLORS.gold }}>@50</span>
+              Flakes<span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </h1>
         </div>

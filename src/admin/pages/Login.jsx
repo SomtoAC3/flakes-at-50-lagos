@@ -45,7 +45,7 @@ export default function AdminLogin() {
             Organizer Sign-In
           </h1>
           <p className="text-[12.5px]" style={{ color: COLORS.ivoryDim }}>
-            Folake@50 · Admin
+            Flakes@50 Lagos · Admin
           </p>
         </div>
 

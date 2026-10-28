@@ -58,15 +58,8 @@ export default function More() {
         ))}
       </div>
 
-      <p className="text-[10.5px] text-center pt-6" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
-        Folake@50 · Sharm El Sheikh, Egypt
-      </p>
-      <p className="text-[9.5px] text-center pt-2 pb-2 leading-relaxed" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
-        Sharm photos via Wikimedia Commons: Naama Bay (Marc Ryckaert, CC BY 3.0),
-        SOHO Square (Kolyan ilia, CC BY-SA 4.0), Dancing Fountain (Michael Botros, CC BY 4.0),
-        Al Mustafa Mosque (Tanya Dedyukhina, CC BY 3.0), The Heavenly Cathedral (Johnny 201, CC BY-SA 3.0),
-        Sharks Bay (Daniel Csörföly, public domain), Al Sahaba Mosque (Шухрат Саъдиев, CC BY-SA 4.0),
-        Ras Mohammed (patano, CC BY-SA 3.0).
+      <p className="text-[10.5px] text-center pt-6 pb-2" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
+        Flakes@50 · Lagos Edition
       </p>
     </div>
   );

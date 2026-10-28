@@ -221,7 +221,7 @@ function DressCodeForm({ initial, onSave, onCancel }) {
       </p>
       <div className="space-y-2.5 mb-4">
         <Field label="Event" value={form.event} onChange={set("event")} placeholder="e.g. Boat Party" />
-        <Field label="Date" value={form.date} onChange={set("date")} placeholder="e.g. Oct 29" />
+        <Field label="Date" value={form.date} onChange={set("date")} placeholder="e.g. Dec 12" />
         <Field label="Title" value={form.title} onChange={set("title")} placeholder="e.g. All-White Everything" />
         <Field
           label="Palette (comma-separated colors)"

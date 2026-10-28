@@ -1,6 +1,6 @@
 export function makeICS(activity, dateStr) {
   const dt = dateStr.replace(/-/g, "");
-  const uid = `${activity.id}@folakeat50`;
+  const uid = `${activity.id}@flakesat50lagos`;
   const desc = (activity.description || "").replace(/\n/g, "\\n");
   return [
     "BEGIN:VCALENDAR",

@@ -29,7 +29,7 @@ export default function AdminLayout() {
           <div className="flex items-center gap-2 min-w-0">
             <ShieldCheck size={16} color={COLORS.gold} className="shrink-0" />
             <span className="text-[13px] font-semibold truncate" style={{ fontFamily: F.body, color: COLORS.ivory }}>
-              Folake@50 · Admin
+              Flakes@50 Lagos · Admin
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">

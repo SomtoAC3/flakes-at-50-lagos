@@ -248,7 +248,7 @@ function DayForm({ day, busy, onCancel, onSave }) {
       <Field label="Date" type="date" value={form.date} onChange={set("date")} />
       <Field label="Label" value={form.label} onChange={set("label")} placeholder="e.g. Day Six" />
       <Field label="Theme" value={form.theme} onChange={set("theme")} placeholder="e.g. The Birthday Finale" />
-      <Field label="City" value={form.city} onChange={set("city")} placeholder="e.g. Cairo" />
+      <Field label="City" value={form.city} onChange={set("city")} placeholder="e.g. Lagos" />
     </FormShell>
   );
 }
