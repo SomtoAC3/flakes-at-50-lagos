@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, Plane, Users, Phone, Music } from "lucide-react";
+import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, ArrowUpRight, Plane, Users, Phone, Music } from "lucide-react";
 import { COLORS, F, EVENT_START, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
-import { Bloom, BloomFrame, BloomIcon, BloomPhoto } from "../../shared/flora";
+import { Stem } from "../../shared/flora";
 import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
 
@@ -108,24 +108,19 @@ function formatLongDateRange(days) {
   return `${fmt(first)} – ${fmt(last)} ${last.getFullYear()}`;
 }
 
-// The portrait cropped to a soft eight-lobed flower, with a few flat blooms
-// tucked around its edge like a pressed-flower card.
+// The portrait in an arched frame, with one sprig standing beside it.
 function Hero() {
   return (
     <div className="relative px-6 pt-6">
       <div className="relative">
-        <BloomPhoto src="/hero/flakes.jpg" alt="Folake in cream ruffles and crystal hoop earrings" ratio={1.2} kind="cloud" className="hero-photo" />
-        <div className="absolute bloom-open" style={{ left: -14, bottom: "6%", width: "30%" }}>
-          <Bloom kind="petal6" color={COLORS.flowerPink} center={COLORS.flowerButter} spin />
-        </div>
-        <div className="absolute bloom-open" style={{ right: -6, top: "4%", width: "19%", animationDelay: "0.12s" }}>
-          <Bloom kind="daisy" color={COLORS.card} center={COLORS.flowerButter} />
-        </div>
-        <div className="absolute bloom-open" style={{ right: "8%", bottom: -10, width: "15%", animationDelay: "0.2s" }}>
-          <Bloom kind="petal4" color={COLORS.flowerSage} rotate={20} />
-        </div>
-        <div className="absolute bloom-open" style={{ left: "6%", top: -6, width: "10%", animationDelay: "0.26s" }}>
-          <Bloom kind="petal4" color={COLORS.flowerPeach} rotate={45} />
+        <img
+          src="/hero/flakes.jpg"
+          alt="Folake in cream ruffles and crystal hoop earrings"
+          className="hero-photo block w-full object-cover"
+          style={{ aspectRatio: "4 / 5", objectPosition: "50% 15%", borderRadius: "999px 999px 24px 24px" }}
+        />
+        <div className="absolute rise-in" style={{ left: -18, bottom: -6, width: 58, animationDelay: "0.3s" }}>
+          <Stem kind="sprig" flower={COLORS.flowerLilac} leaf={COLORS.leaf} width={58} />
         </div>
       </div>
       <div
@@ -138,14 +133,6 @@ function Hero() {
     </div>
   );
 }
-
-// Each countdown number sits in its own flower.
-const COUNTDOWN_BLOOMS = [
-  ["petal6", COLORS.flowerPink],
-  ["scallop", COLORS.flowerPeach],
-  ["petal4", COLORS.flowerSage],
-  ["daisy", COLORS.flowerButter],
-];
 
 export default function Home() {
   const { configured } = useAuth();
@@ -187,7 +174,7 @@ export default function Home() {
         <div className="rise-in">
           <Eyebrow>A Golden Jubilee · Lagos Edition</Eyebrow>
           <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.035em" }}>
-            <span className="block whitespace-nowrap text-[62px] sm:text-[76px]">
+            <span className="block whitespace-nowrap text-[56px] sm:text-[68px]">
               <em>Flakes</em><span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </h1>
@@ -198,18 +185,17 @@ export default function Home() {
 
         {countdownTarget && status?.phase !== "after" && (
           <div
-            className="mt-9 grid grid-cols-4 gap-2"
+            className="mt-9 grid grid-cols-4 py-4"
+            style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}
             role="timer"
             aria-label={`${cd.days} days, ${cd.hours} hours, ${cd.minutes} minutes until the celebration`}
           >
             {[["Days", cd.days], ["Hours", cd.hours], ["Minutes", cd.minutes], ["Seconds", cd.seconds]].map(([label, val], i) => (
-              <div key={label} className="flex flex-col items-center" aria-hidden="true">
-                <BloomFrame kind={COUNTDOWN_BLOOMS[i][0]} color={COUNTDOWN_BLOOMS[i][1]} rotate={i * 15} className="w-full aspect-square">
-                  <span className="text-[27px] leading-none tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.onFlower }}>
-                    {pad(val)}
-                  </span>
-                </BloomFrame>
-                <span className="text-[8.5px] mt-2 font-semibold" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>
+              <div key={label} className="flex flex-col items-center py-1" style={i ? { borderLeft: `1px solid ${COLORS.line}` } : undefined} aria-hidden="true">
+                <span className="text-[34px] leading-none tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
+                  {pad(val)}
+                </span>
+                <span className="text-[8.5px] mt-2.5 font-semibold" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>
                   {label}
                 </span>
               </div>
@@ -270,14 +256,13 @@ export default function Home() {
               <QuickRow icon={Sparkles} label={status?.phase === "during" ? "Next Activity" : "First Activity"} value={nextActivity.name} />
               {(nextActivity.departure_time || nextActivity.start_time) && (
                 <QuickRow
-                  kind="petal4"
                   icon={Clock}
                   label="Meeting Time"
                   value={parseTimeOn("1970-01-01", nextActivity.departure_time) ? nextActivity.departure_time : nextActivity.start_time}
                 />
               )}
-              {nextActivity.meeting_point && <QuickRow kind="scallop" icon={MapPin} label="Meeting Point" value={nextActivity.meeting_point} />}
-              {nextActivity.dress_code && <QuickRow kind="daisy" icon={Shirt} label="Dress Code" value={nextActivity.dress_code} />}
+              {nextActivity.meeting_point && <QuickRow icon={MapPin} label="Meeting Point" value={nextActivity.meeting_point} />}
+              {nextActivity.dress_code && <QuickRow icon={Shirt} label="Dress Code" value={nextActivity.dress_code} />}
               {latestUpdate && (
                 <QuickRow icon={Bell} label={`Latest Update — ${latestUpdate.category}`} value={latestUpdate.message} />
               )}
@@ -316,21 +301,21 @@ export default function Home() {
           </Card>
         )}
 
-        <div className="grid grid-cols-2 gap-3 mb-10">
-          <QuickLinkCard icon={Shirt} title="Dress Codes" to="/dress-codes" kind="petal6" color={COLORS.flowerPink} />
-          <QuickLinkCard icon={Plane} title="Travel Info" to="/travel" kind="scallop" color={COLORS.flowerPeach} />
-          <QuickLinkCard icon={Users} title="My Trip" to="/my-trip" kind="petal4" color={COLORS.flowerSage} />
-          <QuickLinkCard icon={Phone} title="Emergency Contacts" to="/contacts" kind="daisy" color={COLORS.flowerButter} />
-        </div>
+        <nav className="mt-8 mb-10" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="Guest information">
+          <QuickLink icon={Shirt} title="Dress Codes" to="/dress-codes" />
+          <QuickLink icon={Plane} title="Travel Info" to="/travel" />
+          <QuickLink icon={Users} title="My Trip" to="/my-trip" />
+          <QuickLink icon={Phone} title="Emergency Contacts" to="/contacts" />
+        </nav>
       </div>
     </div>
   );
 }
 
-function QuickRow({ icon: Icon, label, value, kind = "petal6" }) {
+function QuickRow({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-center gap-3">
-      <BloomIcon icon={Icon} kind={kind} />
+    <div className="flex items-start gap-3">
+      <Icon size={16} strokeWidth={1.5} color={COLORS.gold} className="shrink-0 mt-0.5" />
       <div className="min-w-0">
         <div className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
           {label}
@@ -343,15 +328,15 @@ function QuickRow({ icon: Icon, label, value, kind = "petal6" }) {
   );
 }
 
-function QuickLinkCard({ icon: Icon, title, to, kind, color }) {
+// A directory row: icon, name, arrow, on a hairline.
+function QuickLink({ icon: Icon, title, to }) {
   return (
-    <Link to={to}>
-      <Card dark className="!p-4 h-full flex flex-col gap-3">
-        <BloomIcon icon={Icon} kind={kind} color={color} iconColor={COLORS.onFlower} size={44} iconSize={17} />
-        <span className="text-[17px] leading-tight" style={{ ...DISPLAY_LUXE, fontWeight: 400, color: COLORS.ivory }}>
-          {title}
-        </span>
-      </Card>
+    <Link to={to} className="group flex items-center gap-4 py-4 min-h-[56px]" style={{ borderBottom: `1px solid ${COLORS.line}` }}>
+      <Icon size={17} strokeWidth={1.5} color={COLORS.ivoryDim} className="shrink-0" />
+      <span className="flex-1 text-[19px] leading-tight" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
+        {title}
+      </span>
+      <ArrowUpRight size={17} strokeWidth={1.5} color={COLORS.gold} className="shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
     </Link>
   );
 }

@@ -1,78 +1,72 @@
 // One look per itinerary event. Each theme sets the six base colour tokens
-// (src/index.css) for light and dark, the flowers its art is built from, a
-// hero layout (see EventArt in EventPage.jsx) and the headline face.
+// (src/index.css) for light and dark, the botanical stem drawn in its hero
+// (see Stem in src/shared/flora.jsx), the word set large behind it, and the
+// headline face.
 //
 // Themes are matched by activity id; activities organizers add later fall
 // back to a keyword match on the name, then to a cycle of the soft themes.
 //
-// `panel`/`onPanel` colour the hero art block and the event's card in the
-// itinerary list. `petals` feed the flower art, in order of prominence.
+// `panel`/`onPanel` colour the hero block and the event's card in the
+// itinerary list. Palettes stay muted so the stem is the one point of colour.
 
 const THEMES = {
   arrival: {
     name: "Golden Hour",
-    layout: "horizon",
     headline: "serif",
-    kinds: ["sun", "daisy", "petal4"],
-    petals: ["#F4D272", "#F08A5D", "#FBD3B6", "#FFF4EA"],
-    light: { bg: "#FCEDE3", card: "#FFF7F1", chip: "#F7D9C6", text: "#3A1E14", dim: "#83594A", accent: "#B9461E", panel: "#F4A27A", onPanel: "#3A1E14" },
-    dark: { bg: "#1D120D", card: "#2A1B14", chip: "#3A271D", text: "#FBE8DC", dim: "#C3A08F", accent: "#F4A27A", panel: "#7A3418", onPanel: "#FBE8DC" },
+    word: ["LAG", "OS"],
+    stem: { kind: "tulip", flower: "#D9774A", leaf: "#6E7A45", center: "#6E7A45" },
+    light: { bg: "#F6EEE4", card: "#FCF7F0", chip: "#EDDFCF", text: "#2E2019", dim: "#7A6555", accent: "#A4532F", panel: "#E9CDB0", onPanel: "#2E2019" },
+    dark: { bg: "#1A1410", card: "#241C16", chip: "#33281F", text: "#F3E7DA", dim: "#B9A693", accent: "#E5A27D", panel: "#4A2E1E", onPanel: "#F3E7DA" },
   },
   glam: {
     name: "Blush & Mirror",
-    layout: "scatter",
     headline: "serif",
-    kinds: ["ring", "petal6", "daisy", "petal4"],
-    petals: ["#E86A92", "#F5B8C8", "#FFF4F0", "#C9A3D9"],
-    light: { bg: "#FCE8EE", card: "#FFF6F8", chip: "#F7D3DE", text: "#3B1624", dim: "#87566A", accent: "#B8335E", panel: "#F5B8C8", onPanel: "#3B1624" },
-    dark: { bg: "#1D0F15", card: "#2B1820", chip: "#3C222D", text: "#FCE6EE", dim: "#C79DAE", accent: "#F5A0BC", panel: "#6E2440", onPanel: "#FCE6EE" },
+    word: ["GL", "OW"],
+    stem: { kind: "ranunculus", flower: "#C9677E", leaf: "#6F8466", center: "#7A2E43" },
+    light: { bg: "#F7EEEE", card: "#FCF7F7", chip: "#EEDDDE", text: "#2F1C21", dim: "#7D6168", accent: "#9C3F58", panel: "#EBCFD2", onPanel: "#2F1C21" },
+    dark: { bg: "#1A1215", card: "#24191D", chip: "#342329", text: "#F5E6E9", dim: "#BFA2A9", accent: "#E3A1B1", panel: "#4A2632", onPanel: "#F5E6E9" },
   },
   thanksgiving: {
     name: "Blossomed in Grace",
-    layout: "halo",
     headline: "serif",
-    kinds: ["petal6", "scallop", "petal4", "daisy"],
+    word: ["GRA", "CE"],
     // From the High Fashion Meets Couture palette.
-    petals: ["#B5176A", "#D4A017", "#F2C4CE", "#0B6E4F", "#C1121F", "#1F2A44"],
-    light: { bg: "#F8EFE7", card: "#FFF9F4", chip: "#F0DCD3", text: "#2A0F14", dim: "#7B5559", accent: "#9E1F45", panel: "#7B1E2B", onPanel: "#FBEDE6" },
-    dark: { bg: "#18090D", card: "#251217", chip: "#381C23", text: "#FBEDE6", dim: "#C5A2A6", accent: "#F2A0B4", panel: "#5E1420", onPanel: "#FBEDE6" },
+    stem: { kind: "poppy", flower: "#E7B5C0", leaf: "#3E7A5C", center: "#D4A017" },
+    light: { bg: "#F6F0EA", card: "#FCF8F4", chip: "#ECDFD8", text: "#2A1015", dim: "#7A5A5F", accent: "#8A1F3D", panel: "#5A1626", onPanel: "#F6E9E2" },
+    dark: { bg: "#170B0E", card: "#221216", chip: "#331B21", text: "#F6E9E2", dim: "#C3A4A8", accent: "#E8A5B5", panel: "#4A111E", onPanel: "#F6E9E2" },
   },
   beach: {
     name: "All White by the Sea",
-    layout: "horizon",
     headline: "serif",
-    kinds: ["sun", "daisy", "blob"],
-    petals: ["#FFFFFF", "#8BC1CF", "#A9C7B8", "#F3E3C3"],
-    light: { bg: "#F6F5F0", card: "#FFFFFF", chip: "#E3ECEA", text: "#13303A", dim: "#5A7279", accent: "#24707F", panel: "#BFDDE2", onPanel: "#13303A" },
-    dark: { bg: "#0C171B", card: "#132328", chip: "#1C3238", text: "#EEF6F5", dim: "#9DB8BC", accent: "#8BC1CF", panel: "#1B4752", onPanel: "#EEF6F5" },
+    word: ["SHO", "RE"],
+    stem: { kind: "daisy", flower: "#FFFFFF", leaf: "#5F8C82", center: "#D9C27A" },
+    light: { bg: "#F4F3EF", card: "#FFFFFF", chip: "#E4E9E6", text: "#18302F", dim: "#5F7372", accent: "#2E6A6B", panel: "#CFDEDB", onPanel: "#18302F" },
+    dark: { bg: "#0F1717", card: "#172222", chip: "#213030", text: "#ECF3F1", dim: "#9DB3B1", accent: "#9CC6C4", panel: "#22403F", onPanel: "#ECF3F1" },
   },
   breakfast: {
     name: "Butter & Sunlight",
-    layout: "scatter",
-    headline: "grotesk",
-    kinds: ["petal4", "clover", "daisy", "sun"],
-    petals: ["#F3B33D", "#FFFBEA", "#E8743B", "#A9B79A"],
-    light: { bg: "#FFF7DD", card: "#FFFCEF", chip: "#F8E8AE", text: "#3A2A08", dim: "#7F6A3A", accent: "#9A5F00", panel: "#F6D265", onPanel: "#3A2A08" },
-    dark: { bg: "#1A1406", card: "#26200E", chip: "#3A3015", text: "#FFF4D2", dim: "#C9B88A", accent: "#F6D265", panel: "#6B5310", onPanel: "#FFF4D2" },
+    headline: "sans",
+    word: ["RI", "SE"],
+    stem: { kind: "cosmos", flower: "#E39B3B", leaf: "#7C8A4A", center: "#6B4A12" },
+    light: { bg: "#F7F3E4", card: "#FDFAF0", chip: "#EEE6C9", text: "#2C2A14", dim: "#6F6A4C", accent: "#86680C", panel: "#EFE3A6", onPanel: "#2C2A14" },
+    dark: { bg: "#17150C", card: "#211E12", chip: "#302C1A", text: "#F5F0DC", dim: "#BDB596", accent: "#E8D58A", panel: "#4A4318", onPanel: "#F5F0DC" },
   },
   unscripted: {
     name: "Club Aesthetics",
-    layout: "cluster",
-    headline: "grotesk",
-    kinds: ["clover", "ring", "petal6", "petal4"],
-    petals: ["#F26B2A", "#F2A2C0", "#9B6BE0", "#F6D33C"],
-    // A night-out world: black in both modes.
-    light: { bg: "#0E0B0C", card: "#1B1617", chip: "#2A2224", text: "#F8EDE6", dim: "#B9A7A2", accent: "#F2A2C0", panel: "#000000", onPanel: "#F8EDE6" },
-    dark: { bg: "#0E0B0C", card: "#1B1617", chip: "#2A2224", text: "#F8EDE6", dim: "#B9A7A2", accent: "#F2A2C0", panel: "#000000", onPanel: "#F8EDE6" },
+    headline: "sans",
+    word: ["NIG", "HT"],
+    stem: { kind: "tulip", flower: "#F26B4E", leaf: "#5E7D5E", center: "#5E7D5E" },
+    // A night-out world: dark in both modes.
+    light: { bg: "#121011", card: "#1C191A", chip: "#2A2627", text: "#F2ECE6", dim: "#A9A19B", accent: "#F08A6E", panel: "#1E1A1B", onPanel: "#F2ECE6" },
+    dark: { bg: "#121011", card: "#1C191A", chip: "#2A2627", text: "#F2ECE6", dim: "#A9A19B", accent: "#F08A6E", panel: "#1E1A1B", onPanel: "#F2ECE6" },
   },
   sunday: {
     name: "Sage & Lilac",
-    layout: "halo",
     headline: "serif",
-    kinds: ["daisy", "petal4", "blob"],
-    petals: ["#FFFFFF", "#C9B6E4", "#A9B79A", "#E9DDF4"],
-    light: { bg: "#EFF2EA", card: "#FAFBF6", chip: "#DCE3D2", text: "#1F2A1C", dim: "#5F6E58", accent: "#4F6B42", panel: "#B9C6A8", onPanel: "#1F2A1C" },
-    dark: { bg: "#10140E", card: "#1A2017", chip: "#283023", text: "#EEF2E8", dim: "#A6B39C", accent: "#C9B6E4", panel: "#3B4A32", onPanel: "#EEF2E8" },
+    word: ["SUN", "DAY"],
+    stem: { kind: "sprig", flower: "#B9A5DD", leaf: "#56744A", center: "#56744A" },
+    light: { bg: "#EEF0E8", card: "#F9FAF5", chip: "#DDE2D2", text: "#1E2A1E", dim: "#5E6B59", accent: "#4A6340", panel: "#BCC6AE", onPanel: "#1E2A1E" },
+    dark: { bg: "#10140F", card: "#192017", chip: "#263023", text: "#EDF1E7", dim: "#A5B19C", accent: "#C7B8E6", panel: "#34412E", onPanel: "#EDF1E7" },
   },
 };
 

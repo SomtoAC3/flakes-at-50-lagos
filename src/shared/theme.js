@@ -3,11 +3,11 @@
 // light palette lives on :root and the dark palette on [data-theme="dark"]
 // (toggled by src/shared/themeMode.js; light is the default). Inline styles
 // accept var() strings, so every COLORS.* usage follows the active theme.
-// Floral editorial: blush-cream ground #FBF1EA · aubergine ink · raspberry
-// accent #B8335E, with flat flower shapes from src/shared/flora.jsx
-// (dark: #141012 ground, pink accent #F29BB5, the same bright flowers).
+// Quiet botanical: garden-paper ground #F2EFE7 · deep green ink and accent
+// #2E4B3B, hairline rules, and one flat flower on its stem where a page needs
+// colour (src/shared/flora.jsx). Dark: #121A15 ground, pale sage accent.
 // Display: Bodoni Moda with automatic optical sizing, italics for flourish.
-// Body and bold headlines: Bricolage Grotesque. Soft round cards, pill buttons.
+// Body: Bricolage Grotesque. Soft round cards, pill buttons.
 // Fonts are loaded globally in src/index.css.
 
 export const F = {
@@ -33,13 +33,11 @@ export const COLORS = {
   chip: "var(--chip)",
   line: "var(--line)",
   accentSoft: "var(--accent-soft)",
-  onFlower: "var(--on-flower)",
-  flowerPink: "var(--flower-pink)",
-  flowerPeach: "var(--flower-peach)",
-  flowerSage: "var(--flower-sage)",
-  flowerButter: "var(--flower-butter)",
+  flowerRose: "var(--flower-rose)",
+  flowerCoral: "var(--flower-coral)",
   flowerLilac: "var(--flower-lilac)",
-  flowerOrange: "var(--flower-orange)",
+  flowerButter: "var(--flower-butter)",
+  leaf: "var(--leaf)",
   danger: "var(--danger)",
   dangerBg: "var(--danger-bg)",
   dangerLine: "var(--danger-line)",
@@ -51,9 +49,6 @@ export const DISPLAY_LUXE = { fontFamily: F.display, fontOpticalSizing: "auto", 
 
 // Small uppercase label style used for eyebrows, buttons and captions.
 export const CAPS = { textTransform: "uppercase", letterSpacing: "0.2em" };
-
-// The flower set in order, for cycling colours across a list.
-export const FLOWER_SET = [COLORS.flowerPink, COLORS.flowerPeach, COLORS.flowerSage, COLORS.flowerButter, COLORS.flowerLilac];
 
 // Countdown target until the itinerary loads (the first day of the weekend).
 export const EVENT_START = new Date("2026-11-04T00:00:00");

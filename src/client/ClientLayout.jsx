@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle, Sun, Moon } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../shared/theme";
 import { useThemeMode } from "../shared/themeMode";
-import { Bloom } from "../shared/flora";
+import { Stem } from "../shared/flora";
 import { useAuth } from "../lib/auth";
 import { fetchAnnouncements } from "../lib/queries";
 
@@ -66,7 +66,7 @@ export default function ClientLayout() {
         >
           <NavLink to="/" aria-label="Flakes@50 Lagos Edition, home">
             <span className="flex items-center gap-2 text-[23px] leading-none" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.015em", color: COLORS.ivory }}>
-              <Bloom kind="petal6" color={COLORS.flowerPink} center={COLORS.flowerButter} size={20} />
+              <Stem kind="tulip" headOnly width={15} flower={COLORS.flowerCoral} />
               <span>
                 <em>Flakes</em>
                 <span style={{ color: COLORS.gold }}>@50</span>
@@ -102,20 +102,18 @@ export default function ClientLayout() {
                 key={item.to}
                 to={item.to}
                 end={item.end}
-                className="flex-1 flex flex-col items-center gap-0.5 py-1 transition-colors min-h-[48px]"
+                className="flex-1 flex flex-col items-center justify-center pt-1.5 pb-1 transition-colors min-h-[48px]"
               >
                 {({ isActive }) => (
                   <>
-                    <span className="relative flex items-center justify-center" style={{ width: 30, height: 30 }}>
-                      {isActive && <Bloom kind="petal6" color={COLORS.flowerPink} className="absolute inset-0 bloom-open" />}
-                      <item.icon size={17} strokeWidth={isActive ? 2 : 1.5} color={isActive ? COLORS.onFlower : COLORS.ivoryDim} className="relative" />
-                    </span>
+                    <item.icon size={18} strokeWidth={isActive ? 1.9 : 1.5} color={isActive ? COLORS.ivory : COLORS.ivoryDim} />
                     <span
-                      className="text-[8.5px]"
+                      className="text-[8.5px] mt-1"
                       style={{ color: isActive ? COLORS.ivory : COLORS.ivoryDim, fontFamily: F.body, fontWeight: isActive ? 700 : 500, ...CAPS, letterSpacing: "0.1em" }}
                     >
                       {item.label}
                     </span>
+                    <span className="block h-[2px] w-4 rounded-full mt-1" style={{ background: isActive ? COLORS.gold : "transparent" }} aria-hidden="true" />
                   </>
                 )}
               </NavLink>

@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
-import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ChevronRight, LogIn, LogOut } from "lucide-react";
-import { COLORS, F } from "../../shared/theme";
+import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ArrowUpRight, LogIn, LogOut } from "lucide-react";
+import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, SectionTitle } from "../../shared/ui";
-import { BloomIcon } from "../../shared/flora";
 import { useAuth } from "../../lib/auth";
-
-const MORE_KINDS = ["petal6", "scallop", "petal4", "daisy"];
 
 const MORE_LINKS = [
   { to: "/dress-codes", label: "Dress Codes", icon: Shirt, desc: "Style guides for every event" },
@@ -44,20 +41,18 @@ export default function More() {
         )}
       </Card>
 
-      <div className="space-y-2.5">
-        {MORE_LINKS.map((l, i) => (
-          <Link key={l.to} to={l.to}>
-            <Card dark className="flex items-center gap-3 !py-3.5">
-              <BloomIcon icon={l.icon} kind={MORE_KINDS[i % MORE_KINDS.length]} />
-              <div className="flex-1 text-left min-w-0">
-                <div className="text-[13.5px] font-semibold" style={{ color: COLORS.ivory }}>{l.label}</div>
-                <div className="text-[11.5px]" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>
-              </div>
-              <ChevronRight size={15} color={COLORS.gold} className="shrink-0" />
-            </Card>
+      <nav className="mt-6" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
+        {MORE_LINKS.map((l) => (
+          <Link key={l.to} to={l.to} className="group flex items-center gap-4 py-4 min-h-[60px]" style={{ borderBottom: `1px solid ${COLORS.line}` }}>
+            <l.icon size={17} strokeWidth={1.5} color={COLORS.ivoryDim} className="shrink-0" />
+            <div className="flex-1 min-w-0">
+              <div className="text-[19px] leading-tight" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>{l.label}</div>
+              <div className="text-[12px] mt-0.5" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>
+            </div>
+            <ArrowUpRight size={17} strokeWidth={1.5} color={COLORS.gold} className="shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         ))}
-      </div>
+      </nav>
 
       <p className="text-[10.5px] text-center pt-6 pb-2" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
         Flakes@50 · Lagos Edition

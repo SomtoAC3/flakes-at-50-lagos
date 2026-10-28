@@ -1,129 +1,110 @@
-import { useId } from "react";
+// Flat botanical stems, in the manner of a seed-catalogue plate: one flower
+// head, a single stem and a few leaves, all solid fills with no outlines.
+// Drawn in a 120×240 box with the head centred near (60, 56). Always
+// decorative (aria-hidden); size it with `width` or a className.
 
-// Flat graphic flowers, drawn from polar equations rather than hand-traced
-// paths: each kind is a radius function r(t) sampled around a circle in a
-// 100×100 box. Used as decoration (always aria-hidden) and as frames that
-// hold short text, like the countdown numbers.
+const HEAD_Y = 56;
 
-const TAU = Math.PI * 2;
-
-const RADIUS = {
-  // Six broad, rounded petals.
-  petal6: (t) => 50 * (0.42 + 0.58 * Math.abs(Math.cos(3 * t)) ** 0.7),
-  // Four plump petals that pinch in at the middle.
-  petal4: (t) => 50 * (0.3 + 0.7 * Math.abs(Math.cos(2 * t)) ** 0.55),
-  // Twelve slim daisy petals.
-  daisy: (t) => 50 * (0.38 + 0.62 * Math.abs(Math.cos(6 * t)) ** 1.6),
-  // Scalloped edge: twelve round bumps with sharp notches between.
-  scallop: (t) => 43 + 7 * Math.abs(Math.sin(6 * t)),
-  // Sixteen pointed rays.
-  sun: (t) => 50 * (0.74 + 0.26 * (1 - Math.abs(Math.sin(8 * t))) ** 2),
-  // A soft organic pebble.
-  blob: (t) => 44 + 3.2 * Math.sin(3 * t + 1) + 2.4 * Math.sin(5 * t + 2) + 1.6 * Math.cos(2 * t),
-  // Eight soft lobes, gentle enough to crop a photo.
-  cloud: (t) => 50 * (0.86 + 0.14 * Math.abs(Math.cos(4 * t)) ** 0.8),
-};
-
-const pathCache = new Map();
-
-// Sample r(t) into a closed path centred on (cx, cy), scaled by sx/sy.
-function polarPath(kind, { cx = 50, cy = 50, sx = 1, sy = 1, steps = 240 } = {}) {
-  const key = `${kind}:${cx}:${cy}:${sx}:${sy}`;
-  if (pathCache.has(key)) return pathCache.get(key);
-  const r = RADIUS[kind] || RADIUS.petal6;
-  let d = "";
-  for (let i = 0; i <= steps; i++) {
-    const t = (i / steps) * TAU;
-    const rad = r(t);
-    const x = cx + rad * sx * Math.cos(t - Math.PI / 2);
-    const y = cy + rad * sy * Math.sin(t - Math.PI / 2);
-    d += `${i ? "L" : "M"}${x.toFixed(2)} ${y.toFixed(2)}`;
-  }
-  d += "Z";
-  pathCache.set(key, d);
-  return d;
+// A pointed leaf of length `len` and half-width `w`, rooted at (x, y) and
+// turned `angle` degrees from pointing right.
+function Leaf({ x, y, len, w, angle, color }) {
+  return <path fill={color} transform={`translate(${x} ${y}) rotate(${angle})`} d={`M0 0Q${len / 2} ${-w} ${len} 0Q${len / 2} ${w} 0 0Z`} />;
 }
 
-// Clover is literally four overlapping circles, like a cut-paper shape.
-function Clover({ color }) {
+// Petals of rx × ry set in a ring around the head, `offset` out from centre.
+function Petals({ count, rx, ry, offset, color }) {
   return (
     <g fill={color}>
-      <circle cx="50" cy="27" r="24" />
-      <circle cx="73" cy="50" r="24" />
-      <circle cx="50" cy="73" r="24" />
-      <circle cx="27" cy="50" r="24" />
-      <rect x="30" y="30" width="40" height="40" />
+      {Array.from({ length: count }, (_, i) => (
+        <ellipse key={i} cx="60" cy={HEAD_Y - offset} rx={rx} ry={ry} transform={`rotate(${(360 / count) * i} 60 ${HEAD_Y})`} />
+      ))}
     </g>
   );
 }
 
-export const BLOOM_KINDS = ["petal6", "clover", "scallop", "petal4", "daisy", "sun", "blob"];
+const HEADS = {
+  tulip: ({ flower }) => <path fill={flower} d="M38 40C38 74 48 86 60 86C72 86 82 74 82 40L71 54L60 34L49 54Z" />,
+  ranunculus: ({ flower, center }) => (
+    <g>
+      <circle cx="60" cy={HEAD_Y} r="26" fill={flower} />
+      <g fill="none" stroke={center} strokeWidth="2.2" opacity="0.55">
+        <circle cx="60" cy={HEAD_Y} r="18" />
+        <circle cx="60" cy={HEAD_Y} r="10" />
+      </g>
+      <circle cx="60" cy={HEAD_Y} r="4" fill={center} />
+    </g>
+  ),
+  poppy: ({ flower, center }) => (
+    <g>
+      <g fill={flower}>
+        <circle cx="60" cy={HEAD_Y - 13} r="17" />
+        <circle cx="73" cy={HEAD_Y} r="17" />
+        <circle cx="60" cy={HEAD_Y + 13} r="17" />
+        <circle cx="47" cy={HEAD_Y} r="17" />
+      </g>
+      <circle cx="60" cy={HEAD_Y} r="8" fill={center} />
+    </g>
+  ),
+  daisy: ({ flower, center }) => (
+    <g>
+      <Petals count={14} rx={4.5} ry={13} offset={17} color={flower} />
+      <circle cx="60" cy={HEAD_Y} r="8.5" fill={center} />
+    </g>
+  ),
+  cosmos: ({ flower, center }) => (
+    <g>
+      <Petals count={8} rx={9} ry={15} offset={15} color={flower} />
+      <circle cx="60" cy={HEAD_Y} r="6.5" fill={center} />
+    </g>
+  ),
+  // Lavender-like: buds climbing the top of the stem.
+  sprig: ({ flower }) => (
+    <g fill={flower}>
+      {[[60, 30, 6], [54, 42, 6.5], [66, 50, 7], [53, 61, 7.5], [67, 71, 7.5], [55, 82, 8], [65, 92, 8]].map(([x, y, r]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r={r} />
+      ))}
+    </g>
+  ),
+};
+
+// Where the stem starts under each head, and that kind's leaves.
+const STEMS = {
+  tulip: { top: 82, leaves: [[60, 168, 62, 12, -62], [60, 196, 56, 11, -122]] },
+  ranunculus: { top: 80, leaves: [[60, 150, 44, 11, -32], [60, 186, 48, 12, -150]] },
+  poppy: { top: 84, leaves: [[60, 172, 54, 7, -58]] },
+  daisy: { top: 70, leaves: [[60, 140, 40, 9, -28], [60, 176, 44, 10, -152]] },
+  cosmos: { top: 64, leaves: [[60, 130, 46, 4, -24], [60, 150, 42, 4, -160], [60, 188, 38, 4, -36]] },
+  sprig: { top: 92, leaves: [[60, 120, 34, 7, -34], [60, 120, 34, 7, -146], [60, 158, 38, 8, -30], [60, 158, 38, 8, -150], [60, 198, 40, 8, -28], [60, 198, 40, 8, -152]] },
+};
+
+export const STEM_KINDS = Object.keys(HEADS);
 
 /**
- * A single flower.
- * kind: petal6 | petal4 | daisy | scallop | ring | clover | sun | blob | cloud
- * center: colour of the centre dot (null for none). `ring` is a scallop with
- * a hole through the middle.
+ * One flower on its stem.
+ * kind: tulip | ranunculus | poppy | daisy | cosmos | sprig
+ * headOnly crops to the flower head, for small marks like the wordmark.
  */
-export function Bloom({ kind = "petal6", color = "currentColor", center = null, size, rotate = 0, spin = false, className = "", style }) {
-  const dims = size != null ? { width: size, height: size } : { width: "100%", height: "100%" };
-  let shape;
-  if (kind === "clover") shape = <Clover color={color} />;
-  else if (kind === "ring")
-    shape = (
-      <path
-        fill={color}
-        fillRule="evenodd"
-        d={`${polarPath("scallop")}M50 28a22 22 0 1 0 0.01 0Z`}
-      />
-    );
-  else shape = <path fill={color} d={polarPath(kind)} />;
-
+export function Stem({ kind = "tulip", flower = "currentColor", leaf = "currentColor", center = "currentColor", width, headOnly = false, className = "", style }) {
+  const Head = HEADS[kind] || HEADS.tulip;
+  const { top, leaves } = STEMS[kind] || STEMS.tulip;
   return (
-    <svg viewBox="0 0 100 100" {...dims} className={className} style={{ overflow: "visible", display: "block", ...style }} aria-hidden="true" focusable="false">
-      <g className={spin ? "bloom-spin" : undefined} style={spin ? { transformBox: "fill-box" } : undefined}>
-        <g transform={`rotate(${rotate} 50 50)`}>
-          {shape}
-          {center && <circle cx="50" cy="50" r={kind === "daisy" ? 15 : 11} fill={center} />}
+    <svg
+      viewBox={headOnly ? "28 20 64 72" : "0 0 120 240"}
+      width={width}
+      className={className}
+      style={{ display: "block", overflow: "visible", height: width == null ? undefined : "auto", ...style }}
+      aria-hidden="true"
+      focusable="false"
+    >
+      {!headOnly && (
+        <g>
+          <path d={`M60 ${top}C58 130 62 186 60 240`} fill="none" stroke={leaf} strokeWidth="3" strokeLinecap="round" />
+          {leaves.map(([x, y, len, w, angle], i) => (
+            <Leaf key={i} x={x} y={y} len={len} w={w} angle={angle} color={leaf} />
+          ))}
         </g>
-      </g>
-    </svg>
-  );
-}
-
-/** Short content (a number, a word) set inside a flower. */
-export function BloomFrame({ kind = "petal6", color, rotate = 0, className = "", style, children }) {
-  return (
-    <div className={`relative flex items-center justify-center ${className}`} style={style}>
-      <Bloom kind={kind} color={color} rotate={rotate} className="absolute inset-0" />
-      <div className="relative text-center">{children}</div>
-    </div>
-  );
-}
-
-/** A lucide icon on a small flower, used in place of square icon chips. */
-export function BloomIcon({ icon: Icon, kind = "petal6", color = "var(--chip)", iconColor = "var(--accent)", size = 40, iconSize = 16 }) {
-  return (
-    <span className="relative shrink-0 flex items-center justify-center" style={{ width: size, height: size }}>
-      <Bloom kind={kind} color={color} className="absolute inset-0" />
-      <Icon size={iconSize} strokeWidth={1.9} color={iconColor} className="relative" />
-    </span>
-  );
-}
-
-/** A photo cropped to a flower silhouette (stretched to the box's ratio). */
-export function BloomPhoto({ src, alt, ratio = 1.25, kind = "cloud", position = "xMidYMin", className = "" }) {
-  const id = useId().replace(/:/g, "");
-  const h = 100 * ratio;
-  const d = polarPath(kind, { cx: 50, cy: h / 2, sx: 1, sy: ratio });
-  return (
-    <svg viewBox={`0 0 100 ${h}`} className={className} style={{ display: "block", width: "100%", height: "auto" }} role="img" aria-label={alt}>
-      <defs>
-        <clipPath id={`bloom-clip-${id}`}>
-          <path d={d} />
-        </clipPath>
-      </defs>
-      <image href={src} width="100" height={h} preserveAspectRatio={`${position} slice`} clipPath={`url(#bloom-clip-${id})`} />
+      )}
+      <Head flower={flower} center={center} />
     </svg>
   );
 }

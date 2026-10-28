@@ -2,18 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "./theme";
-import { Bloom, BloomIcon } from "./flora";
+import { Stem } from "./flora";
 
 // The `light`/`dark`/`tone` props on these components are kept for
 // compatibility with existing call sites; the light theme renders one look.
 
 export function LintelDivider() {
   return (
-    <div className="flex items-center gap-3 my-10 select-none" aria-hidden="true">
+    <div className="flex items-center gap-4 my-10 select-none" aria-hidden="true">
       <div className="h-px flex-1" style={{ background: COLORS.line }} />
-      <Bloom kind="petal4" size={12} color={COLORS.flowerSage} rotate={45} />
-      <Bloom kind="petal6" size={18} color={COLORS.flowerPink} center={COLORS.flowerButter} />
-      <Bloom kind="petal4" size={12} color={COLORS.flowerPeach} rotate={45} />
+      <Stem kind="tulip" headOnly width={14} flower={COLORS.flowerCoral} />
       <div className="h-px flex-1" style={{ background: COLORS.line }} />
     </div>
   );
@@ -21,9 +19,8 @@ export function LintelDivider() {
 
 export function Eyebrow({ children }) {
   return (
-    <div className="flex items-center gap-2 text-[10.5px] font-semibold mb-3" style={{ color: COLORS.gold, fontFamily: F.body, ...CAPS, letterSpacing: "0.22em" }}>
-      <Bloom kind="petal6" size={11} color="currentColor" />
-      <span>{children}</span>
+    <div className="text-[10.5px] font-semibold mb-3" style={{ color: COLORS.gold, fontFamily: F.body, ...CAPS, letterSpacing: "0.22em" }}>
+      {children}
     </div>
   );
 }
@@ -99,7 +96,7 @@ export function Badge({ children, tone = "gold" }) {
 export function Card({ children, className = "" }) {
   return (
     <div
-      className={`rounded-[26px] p-5 ${className}`}
+      className={`rounded-[22px] p-5 ${className}`}
       style={{
         background: COLORS.card,
         border: `1px solid ${COLORS.line}`,
@@ -114,8 +111,8 @@ export function Card({ children, className = "" }) {
 export function DetailRow({ icon: Icon, label, value }) {
   if (value == null || String(value).trim() === "") return null;
   return (
-    <div className="flex items-center gap-3">
-      {Icon && <BloomIcon icon={Icon} />}
+    <div className="flex items-start gap-3">
+      {Icon && <Icon size={16} strokeWidth={1.5} color={COLORS.gold} className="shrink-0 mt-0.5" />}
       <div className="leading-snug min-w-0">
         <div className="text-[11px]" style={{ color: COLORS.ivoryDim }}>{label}</div>
         <div className="text-[12.5px] font-medium" style={{ color: COLORS.ivory }}>{value}</div>

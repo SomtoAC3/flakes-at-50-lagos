@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, MapPin, Clock, Shirt, Luggage, Compass, Info, Calendar, Bell } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, DetailRow, Eyebrow, LoadingNote, ErrorNote } from "../../shared/ui";
-import { Bloom, BloomFrame } from "../../shared/flora";
+import { Stem } from "../../shared/flora";
 import { META_COLORS, useObservedTheme } from "../../shared/themeMode";
 import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchDressCodes } from "../../lib/queries";
@@ -30,16 +30,6 @@ function useEventTokens(colors) {
   }, [colors]);
 }
 
-// Dark or light ink, whichever reads better on a flower's fill.
-function inkOn(hex) {
-  const n = parseInt(hex.slice(1), 16);
-  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
-    const s = c / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.36 ? "#24151B" : "#FFF8F3";
-}
-
 function dateParts(dateStr) {
   const d = new Date(`${dateStr}T00:00:00`);
   return {
@@ -56,111 +46,28 @@ function timeRange(act) {
   return `${act.start_time || "Time TBC"}${end}`;
 }
 
-const at = (x, y, s) => ({ position: "absolute", left: `${x}%`, top: `${y}%`, width: `${s}%`, height: `${s}%` });
-
-// The hero block. Four compositions; each theme picks one and supplies the
-// flowers and colours, so two events on the same layout still differ.
-function EventArt({ theme, colors, act, day }) {
-  const { kinds, petals, layout } = theme;
-  const p = (i) => petals[i % petals.length];
-  const k = (i) => kinds[i % kinds.length];
+// The hero: the event's word set huge and tonal behind a single stem, like
+// a botanical plate. The word is cropped by the panel edge on purpose.
+function EventHero({ theme, colors, act, day, number, total }) {
   const dp = dateParts(day.date);
-  const box = "relative w-full overflow-hidden rounded-[34px]";
-
-  if (layout === "cluster") {
-    // Bold flat flowers on black, in a loose 2×2 grid.
-    return (
-      <div className={box} style={{ background: colors.panel, aspectRatio: "1 / 1" }}>
-        <div className="bloom-open" style={at(3, 3, 48)}><Bloom kind="clover" color={p(0)} rotate={8} /></div>
-        <div className="bloom-open" style={{ ...at(50, 2, 48), animationDelay: "0.08s" }}>
-          <BloomFrame kind="ring" color={p(1)} className="w-full h-full">
-            <span className="block text-[13px] font-extrabold leading-none" style={{ color: colors.onPanel, fontFamily: F.grotesk, ...CAPS, letterSpacing: "0.04em" }}>
-              {act.start_time?.replace(":00", "").replace(" ", "")}
-            </span>
-          </BloomFrame>
-        </div>
-        <div className="bloom-open" style={{ ...at(2, 50, 48), animationDelay: "0.16s" }}><Bloom kind="petal6" color={p(2)} center={colors.panel} spin /></div>
-        <div className="bloom-open" style={{ ...at(50, 50, 48), animationDelay: "0.24s" }}><Bloom kind="petal4" color={p(3)} rotate={45} /></div>
-      </div>
-    );
-  }
-
-  if (layout === "horizon") {
-    // A sun rising over bands of sea or sand, with the start time in the sun.
-    const sunInk = inkOn(p(0));
-    return (
-      <div className={box} style={{ background: colors.panel, aspectRatio: "1 / 1" }}>
-        <div className="bloom-open" style={at(8, 8, 13)}><Bloom kind={k(1)} color={p(3)} center={p(0)} /></div>
-        <div className="bloom-open" style={{ ...at(80, 16, 9), animationDelay: "0.1s" }}><Bloom kind={k(2)} color={p(3)} rotate={20} /></div>
-        <div className="absolute" style={{ left: "17%", top: "20%", width: "66%", aspectRatio: "1 / 1" }}>
-          <BloomFrame kind={k(0)} color={p(0)} className="w-full h-full bloom-open">
-            <div style={{ color: sunInk, marginTop: "-14%" }}>
-              <div className="text-[10px] font-semibold mb-1" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.24em" }}>{dp.short} {dp.day} {dp.monthShort}</div>
-              <div className="text-[30px] leading-none" style={{ ...DISPLAY_LUXE, fontStyle: "italic" }}>{act.start_time}</div>
-            </div>
-          </BloomFrame>
-        </div>
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="absolute"
-            style={{
-              left: `${-12 + i * 4}%`,
-              right: `${-12 + i * 4}%`,
-              top: `${66 + i * 9}%`,
-              height: "60%",
-              borderRadius: "50% 50% 0 0 / 22% 22% 0 0",
-              background: i === 1 ? p(2) : i === 2 ? colors.bg : p(1),
-            }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  if (layout === "scatter") {
-    // Flowers tossed across the panel around a pebble that holds the date.
-    const spots = [
-      [4, 6, 24, 10], [70, 4, 18, 30], [82, 30, 14, 0], [2, 40, 15, 45],
-      [10, 72, 22, 15], [72, 66, 28, 0], [44, 82, 12, 20], [40, 2, 11, 0],
-    ];
-    return (
-      <div className={box} style={{ background: colors.panel, aspectRatio: "1 / 1" }}>
-        {spots.map(([x, y, s, r], i) => (
-          <div key={i} className="bloom-open" style={{ ...at(x, y, s), animationDelay: `${i * 0.05}s` }}>
-            <Bloom kind={k(i)} color={p(i)} rotate={r} center={k(i) === "daisy" ? p(i + 1) : null} />
-          </div>
-        ))}
-        <div className="absolute" style={{ left: "22%", top: "22%", width: "56%", aspectRatio: "1 / 1" }}>
-          <BloomFrame kind="blob" color={colors.card} className="w-full h-full bloom-open">
-            <div style={{ color: colors.text }}>
-              <div className="text-[10px] font-semibold" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.24em", color: colors.accent }}>{dp.weekday}</div>
-              <div className="text-[64px] leading-[0.95]" style={{ ...DISPLAY_LUXE, fontWeight: theme.headline === "grotesk" ? 400 : 400 }}>{String(dp.day).padStart(2, "0")}</div>
-              <div className="text-[15px] italic" style={DISPLAY_LUXE}>{dp.month}</div>
-            </div>
-          </BloomFrame>
-        </div>
-      </div>
-    );
-  }
-
-  // halo: one great flower with the date set in its heart, smaller ones around.
-  const heartInk = inkOn(p(0));
+  const ghost = `color-mix(in srgb, ${colors.onPanel} 13%, ${colors.panel})`;
+  const label = { fontFamily: F.body, ...CAPS, letterSpacing: "0.22em" };
   return (
-    <div className={box} style={{ background: colors.panel, aspectRatio: "1 / 1" }}>
-      <div className="bloom-open" style={at(-6, -6, 30)}><Bloom kind={k(1)} color={p(1)} rotate={30} /></div>
-      <div className="bloom-open" style={{ ...at(78, 8, 16), animationDelay: "0.1s" }}><Bloom kind={k(2)} color={p(2)} center={p(1)} /></div>
-      <div className="bloom-open" style={{ ...at(74, 72, 32), animationDelay: "0.15s" }}><Bloom kind={k(3) || k(1)} color={p(3)} rotate={15} /></div>
-      <div className="bloom-open" style={{ ...at(4, 80, 12), animationDelay: "0.2s" }}><Bloom kind={k(1)} color={p(4)} rotate={45} /></div>
-      <div className="absolute" style={{ left: "14%", top: "14%", width: "72%", aspectRatio: "1 / 1" }}>
-        <Bloom kind={k(0)} color={p(0)} spin className="absolute inset-0 bloom-open" />
-        <div className="absolute inset-0 flex items-center justify-center text-center" style={{ color: heartInk }}>
-          <div>
-            <div className="text-[10px] font-semibold" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.26em" }}>{dp.weekday}</div>
-            <div className="text-[70px] leading-[0.92]" style={DISPLAY_LUXE}>{dp.day}</div>
-            <div className="text-[16px] italic" style={DISPLAY_LUXE}>{dp.month}</div>
-          </div>
-        </div>
+    <div className="relative w-full overflow-hidden rounded-[28px]" style={{ background: colors.panel, color: colors.onPanel, aspectRatio: "4 / 5" }}>
+      <div className="absolute inset-x-5 top-5 flex justify-between pb-3 text-[10px] font-semibold" style={{ ...label, borderBottom: `1px solid color-mix(in srgb, ${colors.onPanel} 22%, transparent)` }}>
+        <span>{dp.short} {dp.day} {dp.monthShort}</span>
+        <span>{act.start_time || "Time TBC"}</span>
+      </div>
+      <div className="absolute inset-x-0 select-none" style={{ top: "17%", ...DISPLAY_LUXE, color: ghost, fontSize: "clamp(120px, 44vw, 190px)", lineHeight: 0.8, letterSpacing: "-0.04em" }} aria-hidden="true">
+        <div style={{ marginLeft: "-0.04em" }}>{theme.word[0]}</div>
+        <div className="text-right" style={{ marginRight: "-0.06em" }}>{theme.word[1]}</div>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 flex justify-center rise-in" style={{ height: "80%" }}>
+        <Stem {...theme.stem} style={{ height: "100%", width: "auto" }} />
+      </div>
+      <div className="absolute inset-x-5 bottom-5 flex justify-between items-end text-[10px] font-semibold" style={label}>
+        <span className="italic normal-case text-[15px] font-normal" style={{ ...DISPLAY_LUXE, letterSpacing: 0 }}>{theme.name}</span>
+        <span>{number} / {total}</span>
       </div>
     </div>
   );
@@ -168,34 +75,39 @@ function EventArt({ theme, colors, act, day }) {
 
 function EventTitle({ theme, act }) {
   const { kicker, lead, joiner, tail } = splitTitle(act.name);
-  if (theme.headline === "grotesk") {
+  const kick = kicker && (
+    <span className="block text-[12px] font-semibold mb-3" style={{ fontFamily: F.body, color: COLORS.gold, ...CAPS, letterSpacing: "0.2em" }}>
+      {kicker}
+    </span>
+  );
+  if (theme.headline === "sans") {
     return (
-      <h1 className="text-[44px] leading-[0.92] font-extrabold" style={{ fontFamily: F.grotesk, color: COLORS.ivory, letterSpacing: "-0.035em", textTransform: "uppercase", textWrap: "balance" }}>
-        {kicker && <span className="block text-[13px] tracking-[0.2em] mb-3 font-semibold" style={{ color: COLORS.gold, letterSpacing: "0.2em" }}>{kicker}</span>}
+      <h1 className="text-[36px] leading-[1.05] font-semibold" style={{ fontFamily: F.body, color: COLORS.ivory, letterSpacing: "-0.03em", textWrap: "balance" }}>
+        {kick}
         {lead}
         {tail && <span style={{ color: COLORS.gold }}>{joiner}{tail}</span>}
       </h1>
     );
   }
   return (
-    <h1 className="text-[44px] leading-[1] " style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.025em", textWrap: "balance" }}>
-      {kicker && <span className="block text-[12px] font-semibold mb-3" style={{ fontFamily: F.body, color: COLORS.gold, ...CAPS, letterSpacing: "0.22em" }}>{kicker}</span>}
+    <h1 className="text-[40px] leading-[1.04]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.02em", textWrap: "balance" }}>
+      {kick}
       {lead}
       {tail && <em style={{ color: COLORS.gold }}>{joiner}{tail}</em>}
     </h1>
   );
 }
 
-function DressCodeCard({ dc, theme }) {
+function DressCodeCard({ dc }) {
   return (
     <Link to="/dress-codes" className="block">
-      <Card className="relative overflow-hidden">
+      <Card>
         <Eyebrow>Dress Code</Eyebrow>
         <div className="text-[24px] leading-tight mb-4 pr-10" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, fontStyle: "italic" }}>{dc.title}</div>
         {dc.palette?.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4" aria-label={dc.inspiration || "Colour palette"}>
-            {dc.palette.map((c, i) => (
-              <Bloom key={c} kind={theme.kinds[i % theme.kinds.length] === "ring" ? "scallop" : theme.kinds[i % theme.kinds.length]} color={c} size={30} rotate={i * 12} style={{ filter: "drop-shadow(0 0 0.5px var(--line))" }} />
+            {dc.palette.map((c) => (
+              <span key={c} className="block w-7 h-7 rounded-full" style={{ background: c, boxShadow: `inset 0 0 0 1px ${COLORS.line}` }} />
             ))}
           </div>
         )}
@@ -281,7 +193,7 @@ export default function EventPage() {
   return (
     <article className="px-5 pt-5 pb-6">
       {back}
-      <EventArt theme={theme} colors={colors} act={act} day={day} />
+      <EventHero theme={theme} colors={colors} act={act} day={day} number={idx + 1} total={all.length} />
 
       <header className="mt-7 rise-in">
         <Eyebrow>{day.label} · {dp.weekday} {dp.day} {dp.month}</Eyebrow>
@@ -300,7 +212,7 @@ export default function EventPage() {
       </dl>
 
       {act.description && (
-        <p className="mt-8 text-[23px] leading-[1.35] italic" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, textWrap: "pretty" }}>
+        <p className="mt-8 text-[19px] leading-[1.5] italic" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, textWrap: "pretty" }}>
           {act.description}
         </p>
       )}
@@ -339,11 +251,11 @@ export default function EventPage() {
 
       {dc && (
         <div className="mt-4">
-          <DressCodeCard dc={dc} theme={theme} />
+          <DressCodeCard dc={dc} />
         </div>
       )}
 
-      <nav className="mt-10 grid grid-cols-2 gap-3" aria-label="Other events">
+      <nav className="mt-12 pt-5 grid grid-cols-2 gap-4" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="Other events">
         {prev ? <EventStep entry={prev} index={idx - 1} dir="prev" /> : <span />}
         {next ? <EventStep entry={next} index={idx + 1} dir="next" /> : <span />}
       </nav>
@@ -351,23 +263,22 @@ export default function EventPage() {
   );
 }
 
-// A small card in the next event's own colours, so the hand-off previews it.
+// A quiet text link to the neighbouring event, with its flower as a marker.
 function EventStep({ entry, index, dir }) {
-  const mode = useObservedTheme();
   const t = eventTheme(entry.act, index);
-  const c = themeColors(t, mode);
   const { lead } = splitTitle(entry.act.name);
+  const next = dir === "next";
   return (
-    <Link
-      to={`/itinerary/${entry.act.id}`}
-      className={`relative overflow-hidden rounded-[24px] p-4 min-h-[112px] flex flex-col justify-between ${dir === "next" ? "text-right items-end" : ""}`}
-      style={{ background: c.panel, color: c.onPanel }}
-    >
-      <Bloom kind={t.kinds[0]} color={t.petals[0]} size={70} className="absolute" style={{ [dir === "next" ? "left" : "right"]: -20, top: -20, opacity: 0.9 }} />
-      <span className="relative inline-flex items-center gap-1 text-[10px] font-semibold" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}>
-        {dir === "prev" && <ArrowLeft size={12} />} {dir === "prev" ? "Before" : "Next"} {dir === "next" && <ArrowRight size={12} />}
+    <Link to={`/itinerary/${entry.act.id}`} className={`group flex flex-col gap-2 min-h-[72px] ${next ? "items-end text-right" : ""}`}>
+      <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold" style={{ color: COLORS.ivoryDim, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}>
+        {!next && <ArrowLeft size={12} />}
+        {next ? "Next" : "Before"}
+        {next && <ArrowRight size={12} />}
       </span>
-      <span className="relative text-[16px] leading-tight mt-3" style={{ ...DISPLAY_LUXE, textWrap: "balance" }}>{lead}</span>
+      <span className={`flex items-start gap-2 ${next ? "flex-row-reverse" : ""}`}>
+        <Stem kind={t.stem.kind} flower={t.stem.flower} center={t.stem.center} headOnly width={14} className="shrink-0 mt-1" />
+        <span className="text-[17px] leading-snug group-hover:underline underline-offset-4" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, textWrap: "balance", textDecorationThickness: "1px" }}>{lead}</span>
+      </span>
     </Link>
   );
 }

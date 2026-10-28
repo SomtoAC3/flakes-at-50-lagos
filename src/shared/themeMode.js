@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 // <meta name="theme-color"> tag in sync after that.
 
 const STORAGE_KEY = "theme";
-export const META_COLORS = { light: "#FBF1EA", dark: "#141012" };
+export const META_COLORS = { light: "#F2EFE7", dark: "#121A15" };
 
 export function currentTheme() {
   return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";

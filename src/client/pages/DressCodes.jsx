@@ -6,9 +6,6 @@ import { Card, SectionTitle, DetailRow, GoldButton, LoadingNote, ErrorNote, Ligh
 import { useAuth } from "../../lib/auth";
 import { fetchDressCodes } from "../../lib/queries";
 import { brandingUrl, dressCodePhotoPath } from "../../lib/branding";
-import { Bloom } from "../../shared/flora";
-
-const SWATCH_KINDS = ["petal6", "scallop", "petal4", "daisy"];
 
 export default function DressCodes() {
   const { configured } = useAuth();
@@ -67,9 +64,9 @@ function DressCodeCard({ dc }) {
         {dc.title}
       </h3>
       {dc.palette?.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {dc.palette.map((c, i) => (
-            <Bloom key={c} kind={SWATCH_KINDS[i % SWATCH_KINDS.length]} color={c} size={32} rotate={i * 12} style={{ filter: "drop-shadow(0 0 0.5px var(--line))" }} />
+        <div className="flex flex-wrap gap-2 mb-3">
+          {dc.palette.map((c) => (
+            <span key={c} className="w-7 h-7 rounded-full" style={{ background: c, boxShadow: `inset 0 0 0 1px ${COLORS.line}` }} />
           ))}
         </div>
       )}

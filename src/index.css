@@ -7,49 +7,46 @@
    through COLORS in src/shared/theme.js. Event pages (EventPage.jsx) override
    the six base tokens inline on <html> while they're open; everything after
    them is mixed from those, so header, nav and hairlines follow along.
-   Palette: blush-cream ground, aubergine ink, raspberry accent, and a flat
-   flower set (pink, peach, sage, butter, lilac, orange) used by flora.jsx. */
+   Palette: a garden-paper ground, deep green ink and accent, and a few
+   flower colours for the botanical stems in flora.jsx. */
 :root {
-  --bg: #FBF1EA;
-  --card: #FFF8F3;
-  --chip: #F6E1DA;
-  --text: #2E1A22;
-  --text-dim: #7D6168;
-  --accent: #B8335E;
+  --bg: #F2EFE7;
+  --card: #FAF8F3;
+  --chip: #E6E2D6;
+  --text: #1F2B24;
+  --text-dim: #6B7268;
+  --accent: #2E4B3B;
 
-  --flower-pink: #F4A6BE;
-  --flower-peach: #F7BE95;
-  --flower-sage: #A8B898;
-  --flower-butter: #F4D272;
-  --flower-lilac: #BBA5DD;
-  --flower-orange: #EC7A3F;
-  --on-flower: #2E1A22;
+  --flower-rose: #D98F9B;
+  --flower-coral: #D9694F;
+  --flower-lilac: #B9A5DD;
+  --flower-butter: #E3CF72;
+  --leaf: #5C7A55;
 
   --danger: #A3271F;
   --danger-bg: rgba(163, 39, 31, 0.07);
   --danger-line: rgba(163, 39, 31, 0.25);
-  --toggle-off: rgba(46, 26, 34, 0.15);
+  --toggle-off: rgba(31, 43, 36, 0.15);
 }
 
 :root[data-theme="dark"] {
-  --bg: #141012;
-  --card: #1F191C;
-  --chip: #2E2428;
-  --text: #F8ECE4;
-  --text-dim: #B8A5A2;
-  --accent: #F29BB5;
+  --bg: #121A15;
+  --card: #1A241E;
+  --chip: #243029;
+  --text: #ECE8DE;
+  --text-dim: #A2AB9F;
+  --accent: #C9D8B4;
 
-  --flower-pink: #F2A2C0;
-  --flower-peach: #F6B48A;
-  --flower-sage: #9FB58F;
-  --flower-butter: #F6D33C;
-  --flower-lilac: #A784E6;
-  --flower-orange: #F26B2A;
+  --flower-rose: #E3A6B0;
+  --flower-coral: #E88468;
+  --flower-lilac: #C2B0E4;
+  --flower-butter: #E8D688;
+  --leaf: #7E9B72;
 
   --danger: #E5736C;
   --danger-bg: rgba(229, 115, 108, 0.1);
   --danger-line: rgba(229, 115, 108, 0.3);
-  --toggle-off: rgba(248, 236, 228, 0.25);
+  --toggle-off: rgba(236, 232, 222, 0.25);
 }
 
 /* Derived tokens, recomputed whenever a base token changes. */
@@ -59,7 +56,7 @@
   --header: color-mix(in srgb, var(--bg) 90%, transparent);
   --nav: color-mix(in srgb, var(--card) 94%, transparent);
   --shadow: none;
-  --shadow-nav: 0 14px 34px -18px color-mix(in srgb, var(--text) 45%, transparent);
+  --shadow-nav: 0 12px 30px -20px color-mix(in srgb, var(--text) 40%, transparent);
 }
 
 html,
@@ -106,18 +103,7 @@ body {
 }
 .lightbox { animation: lightbox-fade 0.25s ease-out both; }
 .lightbox-img { animation: lightbox-grow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-/* Flowers: a very slow turn for the ones marked spin, and a bloom-open on
-   load for event art. */
-@keyframes bloom-spin {
-  to { transform: rotate(360deg); }
-}
-@keyframes bloom-open {
-  from { opacity: 0; transform: scale(0.6) rotate(-25deg); }
-  to { opacity: 1; transform: scale(1) rotate(0); }
-}
-.bloom-spin { animation: bloom-spin 60s linear infinite; transform-origin: 50% 50%; }
-.bloom-open { animation: bloom-open 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo, .rise-in, .lightbox, .lightbox-img, .bloom-spin, .bloom-open { animation: none; }
+  .hero-photo, .rise-in, .lightbox, .lightbox-img { animation: none; }
   body { transition: none; }
 }

@@ -5,8 +5,8 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#FBF1EA",
-  "theme_color": "#FBF1EA",
+  "background_color": "#F2EFE7",
+  "theme_color": "#F2EFE7",
   "icons": [
     {
       "src": "https://zafhylwgfbncranqiosc.supabase.co/storage/v1/object/public/branding/app-icon-192.png",
