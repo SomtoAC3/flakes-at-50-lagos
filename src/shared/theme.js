@@ -53,11 +53,13 @@ export const CAPS = { textTransform: "uppercase", letterSpacing: "0.2em" };
 // Countdown target until the itinerary loads (the first day of the weekend).
 export const EVENT_START = new Date("2026-11-04T00:00:00");
 
-// Every form field in the app: a 48px pill to match GoldButton, with 16px
-// text so iOS doesn't zoom in on focus. Multi-line fields can't be a pill, so
-// they take the largest radius that still reads as one at three rows.
-export const FIELD_CLASS =
-  "w-full h-12 rounded-full px-5 text-[16px] outline-none border border-[var(--line)] transition-colors focus:border-[var(--accent)]";
-export const TEXTAREA_CLASS =
-  "w-full min-h-[104px] rounded-[24px] px-5 py-3 text-[16px] leading-snug outline-none border border-[var(--line)] transition-colors focus:border-[var(--accent)] resize-none block";
+// Every form field in the app: a fully rounded pill like GoldButton, with its
+// title inside (see TextInput in ui.jsx), so it stands 56px to fit the title
+// above the value. 16px text so iOS doesn't zoom in on focus. Hints show only
+// once the field is focused, under the lifted title. Multi-line fields can't
+// be a pill, so they take the largest radius that still reads as one.
+const FIELD_BASE =
+  "w-full px-5 text-[16px] outline-none border border-[var(--line)] transition-colors focus:border-[var(--accent)] placeholder:text-transparent focus:placeholder:text-[var(--text-dim)]";
+export const FIELD_CLASS = `${FIELD_BASE} h-14 pt-[18px] rounded-full`;
+export const TEXTAREA_CLASS = `${FIELD_BASE} block min-h-[124px] pt-7 pb-3 rounded-[26px] leading-snug resize-none`;
 export const FIELD_STYLE = { background: COLORS.card, color: COLORS.ivory, fontFamily: F.body };

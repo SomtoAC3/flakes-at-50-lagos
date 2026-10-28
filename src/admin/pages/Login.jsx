@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { COLORS, F, FIELD_CLASS, FIELD_STYLE } from "../../shared/theme";
+import { COLORS, F } from "../../shared/theme";
 import { ShieldCheck, LogIn } from "lucide-react";
-import { GoldButton, ErrorNote, FieldLabel } from "../../shared/ui";
+import { GoldButton, ErrorNote, TextInput } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 
 export default function AdminLogin() {
@@ -47,32 +47,26 @@ export default function AdminLogin() {
         ) : (
           <form onSubmit={handleSubmit}>
             <ErrorNote message={error} />
-            <label className="block mb-3">
-              <FieldLabel>Email address</FieldLabel>
-              <input
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className={FIELD_CLASS}
-                style={FIELD_STYLE}
-              />
-            </label>
-            <label className="block mb-4">
-              <FieldLabel>Password</FieldLabel>
-              <input
-                type="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className={FIELD_CLASS}
-                style={FIELD_STYLE}
-              />
-            </label>
+            <TextInput
+              wrapperClassName="mb-3"
+              label="Email address"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
+            <TextInput
+              wrapperClassName="mb-4"
+              label="Password"
+              type="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
             <GoldButton type="submit" icon={LogIn} className="w-full" disabled={status === "signing-in"}>
               {status === "signing-in" ? "Signing in…" : "Sign in"}
             </GoldButton>

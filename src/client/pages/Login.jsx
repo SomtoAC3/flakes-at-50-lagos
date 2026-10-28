@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
-import { COLORS, F, DISPLAY_LUXE, FIELD_CLASS, FIELD_STYLE } from "../../shared/theme";
-import { GoldButton, ErrorNote, LoadingNote, FieldLabel } from "../../shared/ui";
+import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
+import { GoldButton, ErrorNote, LoadingNote, TextInput } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 
 function friendlyError(err, step) {
@@ -76,19 +76,16 @@ export default function Login() {
               Sign in to RSVP, manage your trip details, see the guest directory, and share photos. We'll email you a code.
             </p>
             <ErrorNote message={error} />
-            <label className="block mb-3">
-              <FieldLabel>Email address</FieldLabel>
-              <input
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className={FIELD_CLASS}
-                style={FIELD_STYLE}
-              />
-            </label>
+            <TextInput
+              wrapperClassName="mb-3"
+              label="Email address"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
             <GoldButton type="submit" icon={Mail} className="w-full" disabled={busy}>
               {busy ? "Sending…" : "Send code"}
             </GoldButton>
@@ -100,20 +97,20 @@ export default function Login() {
               <span style={{ color: COLORS.ivory, fontWeight: 600 }}>{email}</span>. Enter it below.
             </p>
             <ErrorNote message={error} />
-            <label className="block mb-3">
-              <FieldLabel>Sign-in code</FieldLabel>
-              <input
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                autoFocus
-                maxLength={10}
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                className={`${FIELD_CLASS} text-[20px]! text-center tabular-nums`}
-                style={{ ...FIELD_STYLE, letterSpacing: "0.3em" }}
-              />
-            </label>
+            <TextInput
+              wrapperClassName="mb-3"
+              label="Sign-in code"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              autoFocus
+              maxLength={10}
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+              center
+              className="text-[20px]! tabular-nums"
+              style={{ letterSpacing: "0.3em" }}
+            />
             <GoldButton type="submit" className="w-full" disabled={busy || code.length < 6}>
               {busy ? "Checking…" : "Sign in"}
             </GoldButton>

@@ -134,52 +134,67 @@ export function FieldGroup({ title, children }) {
   );
 }
 
-// The label sits over a field, inset to line up with the text inside it.
-export function FieldLabel({ children }) {
+// A field with its title inside: the title sits where a placeholder would
+// while the field is empty, then lifts to the top edge once it's focused or
+// filled, so a filled-in form keeps its titles. Fields that always hold a
+// value (dates, selects) keep the title lifted. `center` centres both.
+const TITLE_UP = "top-[9px] text-[11px]";
+export function TextInput({ label, multiline, center, wrapperClassName = "", className = "", style, placeholder, ...rest }) {
+  const Comp = multiline ? "textarea" : "input";
+  const resting = multiline
+    ? "peer-placeholder-shown:top-[17px] peer-placeholder-shown:text-[16px]"
+    : "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-[16px]";
   return (
-    <span className="text-[11px] block mb-1.5 px-5" style={{ color: COLORS.ivoryDim }}>
-      {children}
-    </span>
+    <label className={`relative block ${wrapperClassName}`}>
+      <Comp
+        {...rest}
+        placeholder={placeholder || " "}
+        rows={multiline ? 3 : undefined}
+        className={`peer ${multiline ? TEXTAREA_CLASS : FIELD_CLASS} ${center ? "text-center" : ""} ${className}`}
+        style={{ ...FIELD_STYLE, ...style }}
+      />
+      <span
+        className={`pointer-events-none absolute inset-x-5 truncate leading-tight transition-all duration-150 ${TITLE_UP} ${resting} peer-focus:top-[9px] peer-focus:translate-y-0 peer-focus:text-[11px] ${center ? "text-center" : ""}`}
+        style={{ color: COLORS.ivoryDim, fontFamily: F.body }}
+      >
+        {label}
+      </span>
+    </label>
   );
 }
 
 export function Field({ label, value, onChange, placeholder, multiline, type = "text" }) {
-  const Comp = multiline ? "textarea" : "input";
   return (
-    <label className="block">
-      <FieldLabel>{label}</FieldLabel>
-      <Comp
-        type={multiline ? undefined : type}
-        value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder || `Enter ${label.toLowerCase()}`}
-        rows={multiline ? 3 : undefined}
-        className={multiline ? TEXTAREA_CLASS : FIELD_CLASS}
-        style={FIELD_STYLE}
-      />
-    </label>
+    <TextInput
+      label={label}
+      multiline={multiline}
+      type={multiline ? undefined : type}
+      value={value ?? ""}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+    />
   );
 }
 
 export function SelectField({ label, value, onChange, options }) {
   return (
-    <label className="block">
-      <FieldLabel>{label}</FieldLabel>
-      <span className="relative block">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`${FIELD_CLASS} appearance-none pr-11 cursor-pointer`}
-          style={FIELD_STYLE}
-        >
-          {options.map(([v, l]) => (
-            <option key={v} value={v}>
-              {l}
-            </option>
-          ))}
-        </select>
-        <ChevronDown size={16} strokeWidth={1.75} className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2" style={{ color: COLORS.ivoryDim }} />
+    <label className="relative block">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`${FIELD_CLASS} appearance-none pr-11 cursor-pointer`}
+        style={FIELD_STYLE}
+      >
+        {options.map(([v, l]) => (
+          <option key={v} value={v}>
+            {l}
+          </option>
+        ))}
+      </select>
+      <span className={`pointer-events-none absolute inset-x-5 truncate leading-tight ${TITLE_UP}`} style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
+        {label}
       </span>
+      <ChevronDown size={16} strokeWidth={1.75} className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2" style={{ color: COLORS.ivoryDim }} />
     </label>
   );
 }
