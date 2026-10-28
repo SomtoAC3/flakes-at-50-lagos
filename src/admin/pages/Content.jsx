@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Trash2, ChevronUp, ChevronDown } from "lucide-react";
+import { Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton, Field, ErrorNote, LoadingNote } from "../../shared/ui";
 import { fetchJsonContent, saveJsonContent, fetchSiteContent, saveSiteContent } from "../../lib/queries";
@@ -251,7 +251,7 @@ function ListEditor({ cfg }) {
             </div>
           ))}
 
-          <GoldButton variant="outline" icon={Plus} className="w-full" onClick={() => update([...items, cfg.blank])}>
+          <GoldButton variant="outline" className="w-full" onClick={() => update([...items, cfg.blank])}>
             Add Item
           </GoldButton>
           <GoldButton className="w-full" disabled={status === "saving" || status !== "dirty"} onClick={save}>

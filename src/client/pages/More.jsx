@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ArrowUpRight, LogIn, LogOut } from "lucide-react";
+import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ArrowUpRight } from "lucide-react";
 import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
@@ -37,11 +37,11 @@ export default function More() {
           </div>
         </div>
         {user ? (
-          <GoldButton variant="outline" icon={LogOut} onClick={signOut}>
+          <GoldButton variant="outline" onClick={signOut}>
             Sign out
           </GoldButton>
         ) : (
-          <GoldButton as={Link} to="/login" icon={LogIn}>
+          <GoldButton as={Link} to="/login">
             Sign in
           </GoldButton>
         )}

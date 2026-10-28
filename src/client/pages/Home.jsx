@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, ArrowUpRight, Plane, Users, Phone, Music } from "lucide-react";
+import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowUpRight, Plane, Users, Phone } from "lucide-react";
 import { COLORS, F, EVENT_START, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
 import { Stem } from "../../shared/flora";
@@ -192,7 +192,7 @@ export default function Home() {
           >
             {[["Days", cd.days], ["Hours", cd.hours], ["Minutes", cd.minutes], ["Seconds", cd.seconds]].map(([label, val], i) => (
               <div key={label} className="flex flex-col items-center py-1" style={i ? { borderLeft: `1px solid ${COLORS.line}` } : undefined} aria-hidden="true">
-                <span className="text-[34px] leading-none tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
+                <span className="text-[34px] leading-none lining-nums tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
                   {pad(val)}
                 </span>
                 <span className="text-[8.5px] mt-2.5 font-semibold" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>
@@ -204,7 +204,7 @@ export default function Home() {
         )}
 
         <div className="mt-8 grid gap-3">
-          <GoldButton icon={ArrowRight} className="flex-row-reverse" onClick={() => navigate("/itinerary")}>
+          <GoldButton onClick={() => navigate("/itinerary")}>
             Itinerary
           </GoldButton>
           <GoldButton variant="outline" onClick={() => navigate("/updates")}>
@@ -288,7 +288,7 @@ export default function Home() {
             <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: COLORS.ivoryDim }}>
               Our playlist for the celebration. Join it on Spotify and add the songs you want to hear in Lagos.
             </p>
-            <GoldButton as="a" icon={Music} href={PLAYLIST_INVITE_URL} target="_blank" rel="noopener noreferrer">
+            <GoldButton as="a" href={PLAYLIST_INVITE_URL} target="_blank" rel="noopener noreferrer">
               Join &amp; Add Songs
             </GoldButton>
           </Card>

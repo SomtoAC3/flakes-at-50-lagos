@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, Pencil, Trash2, ChevronUp, ChevronDown, ImagePlus } from "lucide-react";
+import { Pencil, Trash2, ChevronUp, ChevronDown, ImagePlus } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton, Field, ErrorNote, LoadingNote } from "../../shared/ui";
 import { supabase } from "../../lib/supabaseClient";
@@ -129,7 +129,7 @@ export default function AdminDressCodes() {
               <BannerUpload id={dc.id} title={dc.title} onError={setError} />
             </Card>
           ))}
-          <GoldButton variant="outline" icon={Plus} className="w-full" onClick={() => setEditing({})}>
+          <GoldButton variant="outline" className="w-full" onClick={() => setEditing({})}>
             Add Dress Code
           </GoldButton>
         </div>

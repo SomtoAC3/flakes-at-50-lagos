@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Check, X } from "lucide-react";
+import {} from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton, LoadingNote, ErrorNote } from "../../shared/ui";
 import { fetchPendingGallery, setGalleryStatus } from "../../lib/queries";
@@ -44,8 +44,8 @@ export default function AdminGallery() {
                 {p.category || "Uncategorized"} · {new Date(p.created_at).toLocaleDateString()}
               </div>
               <div className="grid gap-2">
-                <GoldButton icon={Check} onClick={() => decide(p.id, "approved")}>Approve</GoldButton>
-                <GoldButton icon={X} variant="outline" onClick={() => decide(p.id, "rejected")}>Reject</GoldButton>
+                <GoldButton onClick={() => decide(p.id, "approved")}>Approve</GoldButton>
+                <GoldButton variant="outline" onClick={() => decide(p.id, "rejected")}>Reject</GoldButton>
               </div>
             </Card>
           ))}

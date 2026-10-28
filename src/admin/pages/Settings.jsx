@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ImagePlus } from "lucide-react";
+import {} from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton, Field, ErrorNote } from "../../shared/ui";
 import { supabase } from "../../lib/supabaseClient";
@@ -130,7 +130,7 @@ function ImageUploadCard({ title, description, previewPath, sizes, rounded }) {
       </div>
 
       <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleFile} />
-      <GoldButton icon={ImagePlus} className="w-full" disabled={status === "uploading"} onClick={() => fileRef.current?.click()}>
+      <GoldButton className="w-full" disabled={status === "uploading"} onClick={() => fileRef.current?.click()}>
         {status === "uploading" ? "Uploading…" : previewFailed ? "Upload image" : "Replace image"}
       </GoldButton>
       {status === "done" && (

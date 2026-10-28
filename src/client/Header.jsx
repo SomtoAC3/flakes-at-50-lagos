@@ -70,15 +70,17 @@ function MenuPanel({ onClose, onNavigate, pathname }) {
   return (
     <div className="fixed inset-0 z-50 flex justify-center" role="dialog" aria-modal="true" aria-label="Menu">
       <button className="menu-backdrop absolute inset-0 w-full cursor-default" style={{ background: "rgba(10, 10, 10, 0.45)" }} onClick={onClose} aria-label="Close menu" tabIndex={-1} />
+      {/* The header row and the sign-in pill stay put; the links between
+          them scroll when the panel is taller than the screen. */}
       <div
-        className="menu-panel relative w-full max-w-[480px] self-start overflow-y-auto rounded-b-[28px]"
+        className="menu-panel relative w-full max-w-[480px] self-start flex flex-col rounded-b-[28px]"
         style={{
           maxHeight: "calc(100dvh - 24px)",
           background: "radial-gradient(120% 60% at 88% 0%, color-mix(in srgb, var(--flower-rose) 24%, transparent), transparent 70%), var(--card)",
           color: COLORS.ivory,
         }}
       >
-        <div className="px-3 pt-4 pb-2 grid grid-cols-[1fr_auto] items-center">
+        <div className="shrink-0 px-3 pt-4 pb-2 grid grid-cols-[1fr_auto] items-center">
           <div className="pl-2">
             <Wordmark />
           </div>
@@ -90,34 +92,36 @@ function MenuPanel({ onClose, onNavigate, pathname }) {
           </div>
         </div>
 
-        <nav className="px-5 pt-5 pb-6" aria-label="Main pages">
-          {MAIN_LINKS.map((l) => {
-            const current = l.end ? pathname === l.to : pathname.startsWith(l.to);
-            return (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={onNavigate}
-                aria-current={current ? "page" : undefined}
-                className="block text-[38px] leading-[1.2]"
-                style={{ ...DISPLAY_LUXE, letterSpacing: "-0.02em", color: current ? COLORS.gold : COLORS.ivory }}
-              >
-                {current ? <em>{l.label}</em> : l.label}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <nav className="px-5 pt-5 pb-6" aria-label="Main pages">
+            {MAIN_LINKS.map((l) => {
+              const current = l.end ? pathname === l.to : pathname.startsWith(l.to);
+              return (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={onNavigate}
+                  aria-current={current ? "page" : undefined}
+                  className="block text-[38px] leading-[1.2]"
+                  style={{ ...DISPLAY_LUXE, letterSpacing: "-0.02em", color: current ? COLORS.gold : COLORS.ivory }}
+                >
+                  {current ? <em>{l.label}</em> : l.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <nav className="px-5 py-6 grid gap-6" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
+            {MORE_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} onClick={onNavigate} aria-current={pathname === l.to ? "page" : undefined} className="block">
+                <div className="text-[15px] leading-snug" style={{ color: COLORS.ivory, fontWeight: pathname === l.to ? 600 : 400 }}>{l.label}</div>
+                <div className="text-[13px] leading-snug" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>
               </Link>
-            );
-          })}
-        </nav>
+            ))}
+          </nav>
+        </div>
 
-        <nav className="px-5 py-5 grid gap-3.5" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
-          {MORE_LINKS.map((l) => (
-            <Link key={l.to} to={l.to} onClick={onNavigate} aria-current={pathname === l.to ? "page" : undefined} className="block">
-              <div className="text-[15px] leading-snug" style={{ color: COLORS.ivory, fontWeight: pathname === l.to ? 600 : 400 }}>{l.label}</div>
-              <div className="text-[13px] leading-snug" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="px-5 pt-5 pb-6 grid gap-3" style={{ borderTop: `1px solid ${COLORS.line}` }}>
+        <div className="shrink-0 px-5 pt-5 pb-6 grid gap-3" style={{ borderTop: `1px solid ${COLORS.line}` }}>
           {user ? (
             <>
               <span className="text-[12px] truncate text-center" style={{ color: COLORS.ivoryDim }}>{user.email}</span>

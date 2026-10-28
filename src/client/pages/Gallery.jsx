@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Upload, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { COLORS } from "../../shared/theme";
 import { GoldButton, SectionTitle, LoadingNote, ErrorNote, Lightbox } from "../../shared/ui";
 import { GALLERY_FILTERS } from "../data/staticContent";
@@ -66,12 +66,12 @@ export default function Gallery() {
       {user ? (
         <>
           <input ref={fileInputRef} type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
-          <GoldButton icon={Upload} className="w-full mb-2" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+          <GoldButton className="w-full mb-2" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
             {uploading ? "Uploading…" : "Upload Photo or Video"}
           </GoldButton>
         </>
       ) : (
-        <GoldButton icon={Upload} className="w-full mb-2" onClick={() => navigate("/login", { state: { from: "/gallery" } })}>
+        <GoldButton className="w-full mb-2" onClick={() => navigate("/login", { state: { from: "/gallery" } })}>
           Sign in to share a photo
         </GoldButton>
       )}

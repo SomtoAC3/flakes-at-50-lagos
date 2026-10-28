@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { COLORS, F } from "../../shared/theme";
-import { ShieldCheck, LogIn } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { GoldButton, ErrorNote, TextInput } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 
@@ -67,7 +67,7 @@ export default function AdminLogin() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
             />
-            <GoldButton type="submit" icon={LogIn} className="w-full" disabled={status === "signing-in"}>
+            <GoldButton type="submit" className="w-full" disabled={status === "signing-in"}>
               {status === "signing-in" ? "Signing in…" : "Sign in"}
             </GoldButton>
           </form>

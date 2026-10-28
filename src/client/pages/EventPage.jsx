@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, MapPin, Clock, Shirt, Luggage, Compass, Info, Calendar, Bell } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Clock, Shirt, Luggage, Compass, Info } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, DetailRow, Eyebrow, LoadingNote, ErrorNote, GoldButton } from "../../shared/ui";
 import { Stem } from "../../shared/flora";
@@ -138,9 +138,12 @@ function dateParts(dateStr) {
   };
 }
 
+// Each time is kept whole ("5:00 PM" never splits); the line may only break
+// after the dash.
 function timeRange(act) {
-  const end = act.end_time && act.end_time !== "—" ? ` – ${act.end_time}` : "";
-  return `${act.start_time || "Time TBC"}${end}`;
+  const keep = (t) => t.replace(/ /g, " ");
+  const end = act.end_time && act.end_time !== "—" ? ` – ${keep(act.end_time)}` : "";
+  return `${keep(act.start_time || "Time TBC")}${end}`;
 }
 
 // The hero: the event's word set huge and tonal behind a single stem, like
@@ -282,14 +285,14 @@ export default function EventPage() {
 
         <div className="mt-7 grid gap-3">
           {act.maps_query && (
-            <GoldButton as="a" icon={MapPin} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
+            <GoldButton as="a" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
               Open in Maps
             </GoldButton>
           )}
-          <GoldButton variant="outline" icon={Calendar} onClick={() => downloadICS(act, day.date)}>
+          <GoldButton variant="outline" onClick={() => downloadICS(act, day.date)}>
             Add to Calendar
           </GoldButton>
-          <GoldButton variant={notify ? "solid" : "outline"} icon={Bell} onClick={() => setNotify((n) => !n)} aria-pressed={notify}>
+          <GoldButton variant={notify ? "solid" : "outline"} onClick={() => setNotify((n) => !n)} aria-pressed={notify}>
             {notify ? "Notifying" : "Notify Me"}
           </GoldButton>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import { ArrowLeft, Mail } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { GoldButton, ErrorNote, LoadingNote, TextInput } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
@@ -86,7 +86,7 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
             />
-            <GoldButton type="submit" icon={Mail} className="w-full" disabled={busy}>
+            <GoldButton type="submit" className="w-full" disabled={busy}>
               {busy ? "Sending…" : "Send code"}
             </GoldButton>
           </form>

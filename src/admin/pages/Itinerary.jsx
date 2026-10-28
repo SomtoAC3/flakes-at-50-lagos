@@ -185,7 +185,7 @@ export default function AdminItinerary() {
             </Card>
           )}
 
-          <GoldButton icon={Plus} className="w-full" onClick={() => setEditing({ type: "day" })}>
+          <GoldButton className="w-full" onClick={() => setEditing({ type: "day" })}>
             Add Day
           </GoldButton>
         </div>

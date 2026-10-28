@@ -46,7 +46,7 @@ export function SectionTitle({ eyebrow, title, sub }) {
 
 // Every action button in the app: full width and 48px tall. Pass `as` (a
 // Link or "a") when it navigates.
-export function GoldButton({ as: As = "button", children, variant = "solid", icon: Icon, className = "", type = "button", ...rest }) {
+export function GoldButton({ as: As = "button", children, variant = "solid", className = "", type = "button", ...rest }) {
   const base =
     "flex w-full h-12 shrink-0 items-center justify-center gap-2 px-6 rounded-full text-[11.5px] font-semibold whitespace-nowrap transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2";
   const styles =
@@ -57,7 +57,6 @@ export function GoldButton({ as: As = "button", children, variant = "solid", ico
       : { background: COLORS.chip, color: COLORS.ivory };
   return (
     <As {...(As === "button" && { type })} {...rest} className={`${base} ${className}`} style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.14em", ...styles }}>
-      {Icon && <Icon size={14} strokeWidth={1.75} />}
       {children}
     </As>
   );

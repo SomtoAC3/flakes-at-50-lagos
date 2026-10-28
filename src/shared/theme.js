@@ -6,12 +6,13 @@
 // Quiet botanical: garden-paper ground #F2EFE7 · deep green ink and accent
 // #2E4B3B, hairline rules, and one flat flower on its stem where a page needs
 // colour (src/shared/flora.jsx). Dark: #161616 ground, pale sage accent.
-// Display: Bodoni Moda with automatic optical sizing, italics for flourish.
+// Display: Petrona (it has every Yoruba letter and tone mark),
+// italics for flourish.
 // Body: Bricolage Grotesque. Soft round cards, pill buttons.
 // Fonts are loaded globally in src/index.css.
 
 export const F = {
-  display: "'Bodoni Moda', 'Didot', Georgia, serif",
+  display: "'Petrona', Georgia, serif",
   body: "'Bricolage Grotesque', system-ui, sans-serif",
   grotesk: "'Bricolage Grotesque', system-ui, sans-serif",
   mono: "'Bricolage Grotesque', sans-serif",
@@ -43,9 +44,8 @@ export const COLORS = {
   dangerLine: "var(--danger-line)",
 };
 
-// Bodoni Moda with automatic optical sizing: sturdier hairlines at small
-// sizes so it stays legible on phones, full couture contrast on headlines.
-export const DISPLAY_LUXE = { fontFamily: F.display, fontOpticalSizing: "auto", fontWeight: 400 };
+// Petrona at its regular weight for every headline and title.
+export const DISPLAY_LUXE = { fontFamily: F.display, fontWeight: 400 };
 
 // Small uppercase label style used for eyebrows, buttons and captions.
 export const CAPS = { textTransform: "uppercase", letterSpacing: "0.2em" };

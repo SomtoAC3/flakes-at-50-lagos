@@ -222,7 +222,7 @@ export default function MyTrip() {
         </FieldGroup>
       </div>
 
-      <GoldButton className="w-full mt-5" icon={saved ? Check : undefined} onClick={handleSave} disabled={saving}>
+      <GoldButton className="w-full mt-5" onClick={handleSave} disabled={saving}>
         {saving ? "Saving…" : saved ? "Saved" : "Save My Details"}
       </GoldButton>
     </div>
