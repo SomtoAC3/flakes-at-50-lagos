@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { X } from "lucide-react";
-import { COLORS, F, CAPS, DISPLAY_LUXE } from "./theme";
+import { ChevronDown, X } from "lucide-react";
+import { COLORS, F, CAPS, DISPLAY_LUXE, FIELD_CLASS, TEXTAREA_CLASS, FIELD_STYLE } from "./theme";
 import { Stem } from "./flora";
 
 // The `light`/`dark`/`tone` props on these components are kept for
@@ -134,21 +134,28 @@ export function FieldGroup({ title, children }) {
   );
 }
 
+// The label sits over a field, inset to line up with the text inside it.
+export function FieldLabel({ children }) {
+  return (
+    <span className="text-[11px] block mb-1.5 px-5" style={{ color: COLORS.ivoryDim }}>
+      {children}
+    </span>
+  );
+}
+
 export function Field({ label, value, onChange, placeholder, multiline, type = "text" }) {
   const Comp = multiline ? "textarea" : "input";
   return (
     <label className="block">
-      <span className="text-[11px] block mb-1" style={{ color: COLORS.ivoryDim }}>
-        {label}
-      </span>
+      <FieldLabel>{label}</FieldLabel>
       <Comp
         type={multiline ? undefined : type}
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder || `Enter ${label.toLowerCase()}`}
         rows={multiline ? 3 : undefined}
-        className="w-full rounded-[16px] px-4 py-2.5 text-[13px] outline-none min-h-[44px]"
-        style={{ background: COLORS.card, border: `1px solid ${COLORS.line}`, color: COLORS.ivory, fontFamily: F.body }}
+        className={multiline ? TEXTAREA_CLASS : FIELD_CLASS}
+        style={FIELD_STYLE}
       />
     </label>
   );
@@ -157,21 +164,22 @@ export function Field({ label, value, onChange, placeholder, multiline, type = "
 export function SelectField({ label, value, onChange, options }) {
   return (
     <label className="block">
-      <span className="text-[11px] block mb-1" style={{ color: COLORS.ivoryDim }}>
-        {label}
+      <FieldLabel>{label}</FieldLabel>
+      <span className="relative block">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${FIELD_CLASS} appearance-none pr-11 cursor-pointer`}
+          style={FIELD_STYLE}
+        >
+          {options.map(([v, l]) => (
+            <option key={v} value={v}>
+              {l}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={16} strokeWidth={1.75} className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2" style={{ color: COLORS.ivoryDim }} />
       </span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-[16px] px-4 py-2.5 text-[13px] outline-none min-h-[44px]"
-        style={{ background: COLORS.card, border: `1px solid ${COLORS.line}`, color: COLORS.ivory, fontFamily: F.body }}
-      >
-        {options.map(([v, l]) => (
-          <option key={v} value={v}>
-            {l}
-          </option>
-        ))}
-      </select>
     </label>
   );
 }

@@ -52,3 +52,12 @@ export const CAPS = { textTransform: "uppercase", letterSpacing: "0.2em" };
 
 // Countdown target until the itinerary loads (the first day of the weekend).
 export const EVENT_START = new Date("2026-11-04T00:00:00");
+
+// Every form field in the app: a 48px pill to match GoldButton, with 16px
+// text so iOS doesn't zoom in on focus. Multi-line fields can't be a pill, so
+// they take the largest radius that still reads as one at three rows.
+export const FIELD_CLASS =
+  "w-full h-12 rounded-full px-5 text-[16px] outline-none border border-[var(--line)] transition-colors focus:border-[var(--accent)]";
+export const TEXTAREA_CLASS =
+  "w-full min-h-[104px] rounded-[24px] px-5 py-3 text-[16px] leading-snug outline-none border border-[var(--line)] transition-colors focus:border-[var(--accent)] resize-none block";
+export const FIELD_STYLE = { background: COLORS.card, color: COLORS.ivory, fontFamily: F.body };

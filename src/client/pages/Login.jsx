@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Mail } from "lucide-react";
-import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
-import { GoldButton, ErrorNote, LoadingNote } from "../../shared/ui";
+import { COLORS, F, DISPLAY_LUXE, FIELD_CLASS, FIELD_STYLE } from "../../shared/theme";
+import { GoldButton, ErrorNote, LoadingNote, FieldLabel } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
-
-const inputStyle = { background: "var(--card)", border: "1px solid var(--line)", color: COLORS.ivory, fontFamily: F.body };
 
 function friendlyError(err, step) {
   const msg = err?.message || "";
@@ -79,9 +77,7 @@ export default function Login() {
             </p>
             <ErrorNote message={error} />
             <label className="block mb-3">
-              <span className="text-[11px] block mb-1" style={{ color: COLORS.ivoryDim }}>
-                Email address
-              </span>
+              <FieldLabel>Email address</FieldLabel>
               <input
                 type="email"
                 required
@@ -89,8 +85,8 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-[16px] px-4 py-2.5 text-[16px] outline-none min-h-[44px]"
-                style={inputStyle}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
               />
             </label>
             <GoldButton type="submit" icon={Mail} className="w-full" disabled={busy}>
@@ -105,9 +101,7 @@ export default function Login() {
             </p>
             <ErrorNote message={error} />
             <label className="block mb-3">
-              <span className="text-[11px] block mb-1" style={{ color: COLORS.ivoryDim }}>
-                Sign-in code
-              </span>
+              <FieldLabel>Sign-in code</FieldLabel>
               <input
                 type="text"
                 inputMode="numeric"
@@ -116,8 +110,8 @@ export default function Login() {
                 maxLength={10}
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                className="w-full rounded-[16px] px-4 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
-                style={{ ...inputStyle, letterSpacing: "0.3em" }}
+                className={`${FIELD_CLASS} text-[20px]! text-center tabular-nums`}
+                style={{ ...FIELD_STYLE, letterSpacing: "0.3em" }}
               />
             </label>
             <GoldButton type="submit" className="w-full" disabled={busy || code.length < 6}>

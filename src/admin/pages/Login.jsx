@@ -1,16 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { COLORS, F } from "../../shared/theme";
+import { COLORS, F, FIELD_CLASS, FIELD_STYLE } from "../../shared/theme";
 import { ShieldCheck, LogIn } from "lucide-react";
-import { GoldButton, ErrorNote } from "../../shared/ui";
+import { GoldButton, ErrorNote, FieldLabel } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
-
-const inputStyle = {
-  background: "var(--card)",
-  border: "1px solid var(--line)",
-  color: COLORS.ivory,
-  fontFamily: F.body,
-};
 
 export default function AdminLogin() {
   const { signInWithPassword, configured } = useAuth();
@@ -55,9 +48,7 @@ export default function AdminLogin() {
           <form onSubmit={handleSubmit}>
             <ErrorNote message={error} />
             <label className="block mb-3">
-              <span className="text-[11px] block mb-1" style={{ color: COLORS.ivoryDim }}>
-                Email address
-              </span>
+              <FieldLabel>Email address</FieldLabel>
               <input
                 type="email"
                 required
@@ -65,14 +56,12 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-[3px] px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
-                style={inputStyle}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
               />
             </label>
             <label className="block mb-4">
-              <span className="text-[11px] block mb-1" style={{ color: COLORS.ivoryDim }}>
-                Password
-              </span>
+              <FieldLabel>Password</FieldLabel>
               <input
                 type="password"
                 required
@@ -80,8 +69,8 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-[3px] px-3 py-2.5 text-[13px] outline-none min-h-[44px]"
-                style={inputStyle}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
               />
             </label>
             <GoldButton type="submit" icon={LogIn} className="w-full" disabled={status === "signing-in"}>
