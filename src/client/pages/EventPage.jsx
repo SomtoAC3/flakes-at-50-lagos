@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, MapPin, Clock, Shirt, Luggage, Compass, Info, Calendar, Bell } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, DetailRow, Eyebrow, LoadingNote, ErrorNote, GoldButton } from "../../shared/ui";
@@ -28,6 +28,103 @@ function useEventTokens(colors) {
       meta?.setAttribute("content", META_COLORS[mode]);
     };
   }, [colors]);
+}
+
+// Swiping the page sideways moves to the event before or after it. The page
+// follows the finger; at the first and last event it only gives a little and
+// springs back. Vertical scrolling and pinch-zoom stay with the browser.
+function useEventSwipe(ref, ready, prevId, nextId) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const el = ref.current;
+    if (!ready || !el) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const EASE = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+    let start = null;
+    let horizontal = null;
+    let dx = 0;
+    let dragged = false;
+
+    const place = (x, transition = "none", opacity = "") => {
+      el.style.transition = transition;
+      el.style.transform = x ? `translateX(${x}px)` : "";
+      el.style.opacity = opacity;
+    };
+
+    // Slide the page off, switch events, and bring the new one in from the
+    // side the finger was heading.
+    const go = (id, dir) => {
+      const w = el.offsetWidth;
+      const arrive = () => {
+        navigate(`/itinerary/${id}`);
+        window.scrollTo(0, 0);
+        if (still) return place(0);
+        place(-dir * w * 0.25, "none", "0");
+        requestAnimationFrame(() => requestAnimationFrame(() => place(0, `transform 320ms ${EASE}, opacity 240ms ease-out`)));
+      };
+      if (still) return arrive();
+      place(dir * w, "transform 200ms ease-in, opacity 200ms ease-in", "0");
+      setTimeout(arrive, 200);
+    };
+
+    const down = (e) => {
+      dragged = false;
+      if (e.pointerType === "mouse" || start) return;
+      // Leave the browser's own edge swipe (back/forward) alone.
+      if (e.clientX < 24 || e.clientX > window.innerWidth - 24) return;
+      start = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId };
+      horizontal = null;
+      dx = 0;
+    };
+
+    const move = (e) => {
+      if (!start || e.pointerId !== start.id) return;
+      const x = e.clientX - start.x;
+      const y = e.clientY - start.y;
+      if (horizontal === null) {
+        if (Math.abs(x) < 10 && Math.abs(y) < 10) return;
+        horizontal = Math.abs(x) > Math.abs(y);
+        if (!horizontal) return (start = null);
+      }
+      const w = el.offsetWidth;
+      const target = x > 0 ? prevId : nextId;
+      dx = target ? x : Math.sign(x) * (1 - 1 / ((Math.abs(x) * 0.55) / w + 1)) * w;
+      dragged = true;
+      place(dx);
+    };
+
+    const up = (e) => {
+      if (!start || e.pointerId !== start.id) return;
+      const speed = Math.abs(e.clientX - start.x) / Math.max(1, e.timeStamp - start.t);
+      const target = dx > 0 ? prevId : nextId;
+      start = null;
+      if (!horizontal) return;
+      const far = Math.abs(dx) > el.offsetWidth * 0.25 || (speed > 0.5 && Math.abs(dx) > 30);
+      if (e.type === "pointerup" && target && far) go(target, Math.sign(dx));
+      else place(0, `transform 320ms ${EASE}`);
+    };
+
+    // A swipe that ends over a link or button shouldn't also press it.
+    const click = (e) => {
+      if (!dragged) return;
+      dragged = false;
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    el.addEventListener("pointerdown", down);
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerup", up);
+    el.addEventListener("pointercancel", up);
+    el.addEventListener("click", click, true);
+    return () => {
+      el.removeEventListener("pointerdown", down);
+      el.removeEventListener("pointermove", move);
+      el.removeEventListener("pointerup", up);
+      el.removeEventListener("pointercancel", up);
+      el.removeEventListener("click", click, true);
+    };
+  }, [ref, ready, prevId, nextId, navigate]);
 }
 
 function dateParts(dateStr) {
@@ -147,6 +244,8 @@ export default function EventPage() {
   const theme = entry ? eventTheme(entry.act, idx) : null;
   const colors = theme ? themeColors(theme, mode) : null;
   useEventTokens(colors);
+  const pageRef = useRef(null);
+  useEventSwipe(pageRef, !!entry, all[idx - 1]?.act.id, all[idx + 1]?.act.id);
 
   if (error) return <div className="px-5 pt-5"><ErrorNote message={error} /></div>;
   if (!days) return <LoadingNote label="Loading the event…" />;
@@ -165,74 +264,76 @@ export default function EventPage() {
   const showNotes = act.notes && act.notes !== "To Be Confirmed";
 
   return (
-    <article className="px-5 pt-5 pb-6">
-      <EventHero theme={theme} colors={colors} act={act} day={day} number={idx + 1} total={all.length} />
+    <div className="overflow-x-clip">
+      <article ref={pageRef} className="px-5 pt-5 pb-6 touch-pan-y touch-pinch-zoom">
+        <EventHero theme={theme} colors={colors} act={act} day={day} number={idx + 1} total={all.length} />
 
-      <header className="mt-7 rise-in">
-        <Eyebrow>{day.label} · {dp.weekday} {dp.day} {dp.month}</Eyebrow>
-        <EventTitle theme={theme} act={act} />
-      </header>
+        <header className="mt-7 rise-in">
+          <Eyebrow>{day.label} · {dp.weekday} {dp.day} {dp.month}</Eyebrow>
+          <EventTitle theme={theme} act={act} />
+        </header>
 
-      <dl className="mt-7 grid grid-cols-2" style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}>
-        <div className="py-4 pr-3">
-          <dt className="text-[10px] font-semibold mb-1.5" style={{ color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>When</dt>
-          <dd className="text-[19px] leading-tight" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>{timeRange(act)}</dd>
-        </div>
-        <div className="py-4 pl-4" style={{ borderLeft: `1px solid ${COLORS.line}` }}>
-          <dt className="text-[10px] font-semibold mb-1.5" style={{ color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>Where</dt>
-          <dd className="text-[16px] leading-snug" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>{act.location || "To be confirmed"}</dd>
-        </div>
-      </dl>
+        <dl className="mt-7 grid grid-cols-2" style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}>
+          <div className="py-4 pr-3">
+            <dt className="text-[10px] font-semibold mb-1.5" style={{ color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>When</dt>
+            <dd className="text-[19px] leading-tight" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>{timeRange(act)}</dd>
+          </div>
+          <div className="py-4 pl-4" style={{ borderLeft: `1px solid ${COLORS.line}` }}>
+            <dt className="text-[10px] font-semibold mb-1.5" style={{ color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>Where</dt>
+            <dd className="text-[16px] leading-snug" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>{act.location || "To be confirmed"}</dd>
+          </div>
+        </dl>
 
-      {act.description && (
-        <p className="mt-8 text-[19px] leading-[1.5] italic" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, textWrap: "pretty" }}>
-          {act.description}
-        </p>
-      )}
-
-      <div className="mt-7 grid gap-3">
-        {act.maps_query && (
-          <GoldButton as="a" icon={MapPin} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
-            Open in Maps
-          </GoldButton>
+        {act.description && (
+          <p className="mt-8 text-[19px] leading-[1.5] italic" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, textWrap: "pretty" }}>
+            {act.description}
+          </p>
         )}
-        <GoldButton variant="outline" icon={Calendar} onClick={() => downloadICS(act, day.date)}>
-          Add to Calendar
-        </GoldButton>
-        <GoldButton variant={notify ? "solid" : "outline"} icon={Bell} onClick={() => setNotify((n) => !n)} aria-pressed={notify}>
-          {notify ? "Notifying" : "Notify Me"}
-        </GoldButton>
-      </div>
 
-      {/* The dress code gets its own card below when it matches a guide. */}
-      {(act.meeting_point || act.departure_time || (act.dress_code && !dc) || act.what_to_bring || act.transport) && (
-        <Card className="mt-8 space-y-3.5">
-          <DetailRow icon={MapPin} label="Meeting Point" value={act.meeting_point} />
-          <DetailRow icon={Clock} label="Departures" value={act.departure_time} />
-          {!dc && <DetailRow icon={Shirt} label="Dress Code" value={act.dress_code} />}
-          <DetailRow icon={Luggage} label="What to Bring" value={act.what_to_bring} />
-          <DetailRow icon={Compass} label="Transportation" value={act.transport} />
-        </Card>
-      )}
-
-      {showNotes && (
-        <div className="mt-4 flex items-start gap-3 rounded-[24px] p-4" style={{ background: COLORS.chip }}>
-          <Info size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
-          <p className="text-[13px] leading-relaxed" style={{ color: COLORS.ivory }}>{act.notes}</p>
+        <div className="mt-7 grid gap-3">
+          {act.maps_query && (
+            <GoldButton as="a" icon={MapPin} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
+              Open in Maps
+            </GoldButton>
+          )}
+          <GoldButton variant="outline" icon={Calendar} onClick={() => downloadICS(act, day.date)}>
+            Add to Calendar
+          </GoldButton>
+          <GoldButton variant={notify ? "solid" : "outline"} icon={Bell} onClick={() => setNotify((n) => !n)} aria-pressed={notify}>
+            {notify ? "Notifying" : "Notify Me"}
+          </GoldButton>
         </div>
-      )}
 
-      {dc && (
-        <div className="mt-4">
-          <DressCodeCard dc={dc} />
-        </div>
-      )}
+        {/* The dress code gets its own card below when it matches a guide. */}
+        {(act.meeting_point || act.departure_time || (act.dress_code && !dc) || act.what_to_bring || act.transport) && (
+          <Card className="mt-8 space-y-3.5">
+            <DetailRow icon={MapPin} label="Meeting Point" value={act.meeting_point} />
+            <DetailRow icon={Clock} label="Departures" value={act.departure_time} />
+            {!dc && <DetailRow icon={Shirt} label="Dress Code" value={act.dress_code} />}
+            <DetailRow icon={Luggage} label="What to Bring" value={act.what_to_bring} />
+            <DetailRow icon={Compass} label="Transportation" value={act.transport} />
+          </Card>
+        )}
 
-      <nav className="mt-12 pt-5 grid grid-cols-2 gap-4" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="Other events">
-        {prev ? <EventStep entry={prev} index={idx - 1} dir="prev" /> : <span />}
-        {next ? <EventStep entry={next} index={idx + 1} dir="next" /> : <span />}
-      </nav>
-    </article>
+        {showNotes && (
+          <div className="mt-4 flex items-start gap-3 rounded-[24px] p-4" style={{ background: COLORS.chip }}>
+            <Info size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
+            <p className="text-[13px] leading-relaxed" style={{ color: COLORS.ivory }}>{act.notes}</p>
+          </div>
+        )}
+
+        {dc && (
+          <div className="mt-4">
+            <DressCodeCard dc={dc} />
+          </div>
+        )}
+
+        <nav className="mt-12 pt-5 grid grid-cols-2 gap-4" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="Other events">
+          {prev ? <EventStep entry={prev} index={idx - 1} dir="prev" /> : <span />}
+          {next ? <EventStep entry={next} index={idx + 1} dir="next" /> : <span />}
+        </nav>
+      </article>
+    </div>
   );
 }
 
