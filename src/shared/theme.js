@@ -5,7 +5,7 @@
 // accept var() strings, so every COLORS.* usage follows the active theme.
 // Quiet botanical: garden-paper ground #F2EFE7 · deep green ink and accent
 // #2E4B3B, hairline rules, and one flat flower on its stem where a page needs
-// colour (src/shared/flora.jsx). Dark: #121A15 ground, pale sage accent.
+// colour (src/shared/flora.jsx). Dark: #161616 ground, pale sage accent.
 // Display: Bodoni Moda with automatic optical sizing, italics for flourish.
 // Body: Bricolage Grotesque. Soft round cards, pill buttons.
 // Fonts are loaded globally in src/index.css.

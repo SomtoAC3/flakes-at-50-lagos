@@ -22,7 +22,7 @@ function EventCard({ act, day, index }) {
     <Link
       to={`/itinerary/${act.id}`}
       className="relative block overflow-hidden rounded-[28px] px-5 pt-5 pb-12 pr-[92px] min-h-[188px] active:scale-[0.995] transition-transform"
-      style={{ background: c.panel, color: c.onPanel, boxShadow: "0 -14px 28px -22px rgba(0, 0, 0, 0.45)" }}
+      style={{ background: c.panel, color: c.onPanel }}
     >
       <Stem {...theme.stem} width={66} className="absolute" style={{ right: 14, top: 40 }} />
       <div className="text-[10px] font-semibold mb-3" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.2em", opacity: 0.75 }}>

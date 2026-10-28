@@ -30,11 +30,11 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #121A15;
-  --card: #1A241E;
-  --chip: #243029;
+  --bg: #161616;
+  --card: #1F1F1F;
+  --chip: #2A2A2A;
   --text: #ECE8DE;
-  --text-dim: #A2AB9F;
+  --text-dim: #A6A49F;
   --accent: #C9D8B4;
 
   --flower-rose: #E3A6B0;
