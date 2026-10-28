@@ -167,18 +167,11 @@ export default function EventPage() {
   const colors = theme ? themeColors(theme, mode) : null;
   useEventTokens(colors);
 
-  const back = (
-    <Link to="/itinerary" className="inline-flex items-center gap-1.5 text-[11px] font-semibold min-h-[36px] mb-4" style={{ color: COLORS.ivoryDim, fontFamily: F.body, ...CAPS, letterSpacing: "0.16em" }}>
-      <ArrowLeft size={14} /> Itinerary
-    </Link>
-  );
-
-  if (error) return <div className="px-5 pt-5">{back}<ErrorNote message={error} /></div>;
+  if (error) return <div className="px-5 pt-5"><ErrorNote message={error} /></div>;
   if (!days) return <LoadingNote label="Loading the event…" />;
   if (!entry)
     return (
       <div className="px-5 pt-5">
-        {back}
         <p className="text-[14px]" style={{ color: COLORS.ivoryDim }}>This event isn't on the itinerary any more. The full schedule is in the Itinerary.</p>
       </div>
     );
@@ -192,7 +185,6 @@ export default function EventPage() {
 
   return (
     <article className="px-5 pt-5 pb-6">
-      {back}
       <EventHero theme={theme} colors={colors} act={act} day={day} number={idx + 1} total={all.length} />
 
       <header className="mt-7 rise-in">

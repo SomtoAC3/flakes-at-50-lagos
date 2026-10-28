@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle, Sun, Moon } from "lucide-react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Moon, Sun } from "@phosphor-icons/react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../shared/theme";
 import { useThemeMode } from "../shared/themeMode";
 import { Stem } from "../shared/flora";
@@ -15,6 +16,15 @@ const NAV_MAIN = [
   { to: "/more", label: "More", icon: Menu },
 ];
 
+// Where the header's back arrow goes: event pages return to the itinerary,
+// pages opened from More return there, and the tab pages have none.
+const TAB_PATHS = new Set(NAV_MAIN.map((item) => item.to));
+function backPath(pathname) {
+  if (TAB_PATHS.has(pathname)) return null;
+  if (pathname.startsWith("/itinerary/")) return "/itinerary";
+  return "/more";
+}
+
 export default function ClientLayout() {
   const { configured } = useAuth();
   const [urgent, setUrgent] = useState(null);
@@ -22,6 +32,7 @@ export default function ClientLayout() {
   const scrollRef = useRef(null);
   const location = useLocation();
   const { theme, toggle } = useThemeMode();
+  const back = backPath(location.pathname);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTo(0, 0);
@@ -60,11 +71,15 @@ export default function ClientLayout() {
           </div>
         )}
 
-        <div
-          className="px-5 pt-5 pb-3 flex items-center justify-between sticky top-0 z-30 backdrop-blur"
-          style={{ background: "var(--header)", borderBottom: `1px solid ${COLORS.line}` }}
-        >
-          <NavLink to="/" aria-label="Flakes@50 Lagos Edition, home">
+        <div className="px-3 pt-4 pb-2 grid grid-cols-[44px_1fr_44px] items-center sticky top-0 z-30 backdrop-blur" style={{ background: "var(--header)" }}>
+          {back ? (
+            <Link to={back} className="flex items-center justify-center min-h-[44px] min-w-[44px]" style={{ color: COLORS.ivory }} aria-label="Back">
+              <ArrowLeft size={20} weight="fill" />
+            </Link>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          <NavLink to="/" className="justify-self-center" aria-label="Flakes@50 Lagos Edition, home">
             <span className="flex items-center gap-2 text-[23px] leading-none" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.015em", color: COLORS.ivory }}>
               <Stem kind="tulip" headOnly width={15} flower={COLORS.flowerCoral} />
               <span>
@@ -75,11 +90,11 @@ export default function ClientLayout() {
           </NavLink>
           <button
             onClick={toggle}
-            className="flex items-center justify-center rounded-full min-h-[36px] min-w-[36px]"
-            style={{ background: COLORS.chip, color: COLORS.ivory }}
+            className="flex items-center justify-center min-h-[44px] min-w-[44px]"
+            style={{ color: COLORS.ivory }}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === "dark" ? <Sun size={20} weight="fill" /> : <Moon size={20} weight="fill" />}
           </button>
         </div>
 
