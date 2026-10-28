@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import { Home as HomeIcon, CalendarDays, Bell, Images, Menu, X, AlertTriangle } from "lucide-react";
-import { ArrowLeft, Moon, Sun } from "@phosphor-icons/react";
+import { ArrowLeft, X, AlertTriangle } from "lucide-react";
+import { House, CalendarDots, Bell, Images, List, Moon, Sun } from "@phosphor-icons/react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../shared/theme";
 import { useThemeMode } from "../shared/themeMode";
 import { Stem } from "../shared/flora";
@@ -9,11 +9,11 @@ import { useAuth } from "../lib/auth";
 import { fetchAnnouncements } from "../lib/queries";
 
 const NAV_MAIN = [
-  { to: "/", label: "Home", icon: HomeIcon, end: true },
-  { to: "/itinerary", label: "Itinerary", icon: CalendarDays },
+  { to: "/", label: "Home", icon: House, end: true },
+  { to: "/itinerary", label: "Itinerary", icon: CalendarDots },
   { to: "/updates", label: "Updates", icon: Bell },
   { to: "/gallery", label: "Gallery", icon: Images },
-  { to: "/more", label: "More", icon: Menu },
+  { to: "/more", label: "More", icon: List },
 ];
 
 // Where the header's back arrow goes: event pages return to the itinerary,
@@ -74,7 +74,7 @@ export default function ClientLayout() {
         <div className="px-3 pt-4 pb-2 grid grid-cols-[44px_1fr_44px] items-center sticky top-0 z-30 backdrop-blur" style={{ background: "var(--header)" }}>
           {back ? (
             <Link to={back} className="flex items-center justify-center min-h-[44px] min-w-[44px]" style={{ color: COLORS.ivory }} aria-label="Back">
-              <ArrowLeft size={20} weight="fill" />
+              <ArrowLeft size={20} strokeWidth={1.75} />
             </Link>
           ) : (
             <span aria-hidden="true" />
@@ -121,7 +121,7 @@ export default function ClientLayout() {
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon size={18} strokeWidth={isActive ? 1.9 : 1.5} color={isActive ? COLORS.ivory : COLORS.ivoryDim} />
+                    <item.icon size={19} weight="fill" color={isActive ? COLORS.ivory : COLORS.ivoryDim} />
                     <span
                       className="text-[8.5px] mt-1"
                       style={{ color: isActive ? COLORS.ivory : COLORS.ivoryDim, fontFamily: F.body, fontWeight: isActive ? 700 : 500, ...CAPS, letterSpacing: "0.1em" }}
