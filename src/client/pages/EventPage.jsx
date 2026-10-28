@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, MapPin, Clock, Shirt, Luggage, Compass, Info, Calendar, Bell } from "lucide-react";
 import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
-import { Card, DetailRow, Eyebrow, LoadingNote, ErrorNote } from "../../shared/ui";
+import { Card, DetailRow, Eyebrow, LoadingNote, ErrorNote, GoldButton } from "../../shared/ui";
 import { Stem } from "../../shared/flora";
 import { META_COLORS, useObservedTheme } from "../../shared/themeMode";
 import { useAuth } from "../../lib/auth";
@@ -120,25 +120,6 @@ function DressCodeCard({ dc }) {
   );
 }
 
-function Pill({ as: As = "button", solid, children, ...rest }) {
-  return (
-    <As
-      {...rest}
-      className="inline-flex items-center gap-2 text-[11px] font-semibold px-4 py-2.5 rounded-full min-h-[42px] active:scale-[0.98] transition-all"
-      style={{
-        fontFamily: F.body,
-        ...CAPS,
-        letterSpacing: "0.12em",
-        background: solid ? COLORS.ivory : "transparent",
-        color: solid ? COLORS.ink : COLORS.ivory,
-        border: `1.5px solid ${COLORS.ivory}`,
-      }}
-    >
-      {children}
-    </As>
-  );
-}
-
 export default function EventPage() {
   const { activityId } = useParams();
   const { configured } = useAuth();
@@ -209,18 +190,18 @@ export default function EventPage() {
         </p>
       )}
 
-      <div className="mt-7 flex flex-wrap gap-2">
+      <div className="mt-7 grid gap-3">
         {act.maps_query && (
-          <Pill as="a" solid href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
-            <MapPin size={13} /> Open in Maps
-          </Pill>
+          <GoldButton as="a" icon={MapPin} href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
+            Open in Maps
+          </GoldButton>
         )}
-        <Pill onClick={() => downloadICS(act, day.date)}>
-          <Calendar size={13} /> Add to Calendar
-        </Pill>
-        <Pill onClick={() => setNotify((n) => !n)} solid={notify} aria-pressed={notify}>
-          <Bell size={13} /> {notify ? "Notifying" : "Notify Me"}
-        </Pill>
+        <GoldButton variant="outline" icon={Calendar} onClick={() => downloadICS(act, day.date)}>
+          Add to Calendar
+        </GoldButton>
+        <GoldButton variant={notify ? "solid" : "outline"} icon={Bell} onClick={() => setNotify((n) => !n)} aria-pressed={notify}>
+          {notify ? "Notifying" : "Notify Me"}
+        </GoldButton>
       </div>
 
       {/* The dress code gets its own card below when it matches a guide. */}

@@ -145,7 +145,7 @@ function NotificationOptIn({ userId }) {
   return (
     <Card dark className="!p-4 mb-4">
       <ErrorNote message={error} />
-      <div className="flex items-center justify-between gap-3">
+      <div className="grid gap-3">
         <div className="flex items-start gap-2.5 min-w-0">
           <Bell size={15} color={COLORS.gold} className="shrink-0 mt-0.5" />
           <p className="text-[12px] leading-relaxed" style={{ color: subscribed ? COLORS.ivory : COLORS.ivoryDim }}>
@@ -155,12 +155,12 @@ function NotificationOptIn({ userId }) {
           </p>
         </div>
         {subscribed ? (
-          <button onClick={disable} disabled={busy} className="text-[11.5px] font-semibold shrink-0 min-h-[38px] px-4 rounded-full" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
-            {busy ? "…" : "Turn off"}
-          </button>
+          <GoldButton variant="outline" onClick={disable} disabled={busy}>
+            {busy ? "…" : "Turn off notifications"}
+          </GoldButton>
         ) : (
-          <GoldButton onClick={enable} disabled={busy} className="shrink-0 !px-4">
-            {busy ? "…" : "Enable"}
+          <GoldButton onClick={enable} disabled={busy}>
+            {busy ? "…" : "Enable notifications"}
           </GoldButton>
         )}
       </div>

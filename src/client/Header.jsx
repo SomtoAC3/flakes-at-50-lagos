@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Moon, Sun } from "@phosphor-icons/react";
-import { COLORS, F, CAPS, DISPLAY_LUXE } from "../shared/theme";
+import { COLORS, DISPLAY_LUXE } from "../shared/theme";
+import { GoldButton } from "../shared/ui";
 import { useThemeMode } from "../shared/themeMode";
 import { Stem } from "../shared/flora";
 import { useAuth } from "../lib/auth";
@@ -66,9 +67,6 @@ function MenuPanel({ onClose, onNavigate, pathname }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const pill = "inline-flex items-center text-[11px] font-semibold px-3.5 rounded-full min-h-[32px]";
-  const pillType = { fontFamily: F.body, ...CAPS, letterSpacing: "0.14em" };
-
   return (
     <div className="fixed inset-0 z-50 flex justify-center" role="dialog" aria-modal="true" aria-label="Menu">
       <button className="menu-backdrop absolute inset-0 w-full cursor-default" style={{ background: "rgba(10, 10, 10, 0.45)" }} onClick={onClose} aria-label="Close menu" tabIndex={-1} />
@@ -92,7 +90,7 @@ function MenuPanel({ onClose, onNavigate, pathname }) {
           </div>
         </div>
 
-        <nav className="px-5 pt-7 pb-7" aria-label="Main pages">
+        <nav className="px-5 pt-5 pb-6" aria-label="Main pages">
           {MAIN_LINKS.map((l) => {
             const current = l.end ? pathname === l.to : pathname.startsWith(l.to);
             return (
@@ -110,7 +108,7 @@ function MenuPanel({ onClose, onNavigate, pathname }) {
           })}
         </nav>
 
-        <nav className="px-5 py-6 grid gap-3.5" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
+        <nav className="px-5 py-5 grid gap-3.5" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
           {MORE_LINKS.map((l) => (
             <Link key={l.to} to={l.to} onClick={onNavigate} aria-current={pathname === l.to ? "page" : undefined} className="block">
               <div className="text-[15px] leading-snug" style={{ color: COLORS.ivory, fontWeight: pathname === l.to ? 600 : 400 }}>{l.label}</div>
@@ -119,18 +117,18 @@ function MenuPanel({ onClose, onNavigate, pathname }) {
           ))}
         </nav>
 
-        <div className="px-5 pt-5 pb-6 flex items-center justify-between gap-3" style={{ borderTop: `1px solid ${COLORS.line}` }}>
+        <div className="px-5 pt-5 pb-6 grid gap-3" style={{ borderTop: `1px solid ${COLORS.line}` }}>
           {user ? (
             <>
-              <span className="text-[12px] truncate" style={{ color: COLORS.ivoryDim }}>{user.email}</span>
-              <button onClick={signOut} className={pill} style={{ ...pillType, border: `1px solid ${COLORS.line}`, color: COLORS.ivory }}>
+              <span className="text-[12px] truncate text-center" style={{ color: COLORS.ivoryDim }}>{user.email}</span>
+              <GoldButton variant="outline" onClick={signOut}>
                 Sign out
-              </button>
+              </GoldButton>
             </>
           ) : (
-            <Link to="/login" onClick={onNavigate} className={pill} style={{ ...pillType, background: COLORS.gold, color: COLORS.ink }}>
+            <GoldButton as={Link} to="/login" onClick={onNavigate}>
               Sign in
-            </Link>
+            </GoldButton>
           )}
         </div>
       </div>

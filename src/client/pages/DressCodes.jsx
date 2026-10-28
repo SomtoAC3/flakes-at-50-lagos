@@ -34,9 +34,7 @@ export default function DressCodes() {
             <Upload size={18} color={COLORS.gold} className="mx-auto mb-2" />
             <p className="text-[13px] mb-3" style={{ color: COLORS.ivory }}>Share Your Look</p>
             <p className="text-[12px] mb-3" style={{ color: COLORS.ivoryDim }}>Upload your outfit for a dress code to inspire fellow guests, from the Gallery tab.</p>
-            <Link to="/gallery">
-              <GoldButton icon={Upload} variant="outline">Go to Gallery</GoldButton>
-            </Link>
+            <GoldButton as={Link} to="/gallery" icon={Upload} variant="outline">Go to Gallery</GoldButton>
           </Card>
           <p className="text-[11px] text-center pt-2 pb-4" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
             Final dress codes &amp; event details may be updated by the organizers.

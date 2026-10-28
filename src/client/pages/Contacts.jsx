@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Phone, MessageCircle, Clock } from "lucide-react";
 import { COLORS } from "../../shared/theme";
-import { Card, SectionTitle } from "../../shared/ui";
+import { Card, SectionTitle, GoldButton } from "../../shared/ui";
 import { CONTACTS } from "../data/staticContent";
 import { fetchJsonContent, fetchSiteContent } from "../../lib/queries";
 
@@ -80,20 +80,14 @@ export default function Contacts() {
         )}
       </div>
       {whatsappLink && (
-        <Card dark className="flex items-center justify-between">
+        <Card dark className="grid gap-3">
           <div className="flex items-center gap-2.5">
             <MessageCircle size={17} color={COLORS.gold} />
             <span className="text-[13px] font-semibold" style={{ color: COLORS.ivory }}>Group WhatsApp</span>
           </div>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noreferrer"
-            className="text-[11.5px] font-semibold px-4 py-2 rounded-full min-h-[38px] flex items-center"
-            style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
-          >
+          <GoldButton as="a" variant="outline" href={whatsappLink} target="_blank" rel="noreferrer">
             Join Group
-          </a>
+          </GoldButton>
         </Card>
       )}
     </div>

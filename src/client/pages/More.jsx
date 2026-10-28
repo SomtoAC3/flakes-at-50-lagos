@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ArrowUpRight, LogIn, LogOut } from "lucide-react";
 import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
-import { Card, SectionTitle } from "../../shared/ui";
+import { Card, SectionTitle, GoldButton } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 import { MORE_LINKS } from "../data/navigation";
 
@@ -27,7 +27,7 @@ export default function More() {
     <div className="px-5 pt-6">
       <SectionTitle eyebrow="Explore" title="More" light />
 
-      <Card dark className="mb-4 flex items-center justify-between">
+      <Card dark className="mb-4 grid gap-3">
         <div>
           <div className="text-[13px] font-semibold" style={{ color: COLORS.ivory }}>
             {user ? user.email : "Not signed in"}
@@ -37,13 +37,13 @@ export default function More() {
           </div>
         </div>
         {user ? (
-          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-full min-h-[38px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
-            <LogOut size={13} /> Sign out
-          </button>
+          <GoldButton variant="outline" icon={LogOut} onClick={signOut}>
+            Sign out
+          </GoldButton>
         ) : (
-          <Link to="/login" className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-full min-h-[38px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
-            <LogIn size={13} /> Sign in
-          </Link>
+          <GoldButton as={Link} to="/login" icon={LogIn}>
+            Sign in
+          </GoldButton>
         )}
       </Card>
 

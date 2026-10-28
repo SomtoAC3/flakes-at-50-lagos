@@ -43,9 +43,9 @@ export default function AdminGallery() {
               <div className="text-[11.5px] mb-3" style={{ color: COLORS.ivoryDim }}>
                 {p.category || "Uncategorized"} · {new Date(p.created_at).toLocaleDateString()}
               </div>
-              <div className="flex gap-2">
-                <GoldButton icon={Check} className="flex-1" onClick={() => decide(p.id, "approved")}>Approve</GoldButton>
-                <GoldButton icon={X} variant="outline" className="flex-1" onClick={() => decide(p.id, "rejected")}>Reject</GoldButton>
+              <div className="grid gap-2">
+                <GoldButton icon={Check} onClick={() => decide(p.id, "approved")}>Approve</GoldButton>
+                <GoldButton icon={X} variant="outline" onClick={() => decide(p.id, "rejected")}>Reject</GoldButton>
               </div>
             </Card>
           ))}

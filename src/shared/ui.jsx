@@ -44,9 +44,11 @@ export function SectionTitle({ eyebrow, title, sub }) {
   );
 }
 
-export function GoldButton({ children, onClick, variant = "solid", icon: Icon, className = "", type = "button", disabled = false }) {
+// Every action button in the app: full width and 48px tall. Pass `as` (a
+// Link or "a") when it navigates.
+export function GoldButton({ as: As = "button", children, variant = "solid", icon: Icon, className = "", type = "button", ...rest }) {
   const base =
-    "inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-[11.5px] font-semibold transition-all active:scale-[0.98] min-h-[48px] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2";
+    "flex w-full h-12 shrink-0 items-center justify-center gap-2 px-6 rounded-full text-[11.5px] font-semibold whitespace-nowrap transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2";
   const styles =
     variant === "solid"
       ? { background: COLORS.ivory, color: COLORS.ink }
@@ -54,10 +56,10 @@ export function GoldButton({ children, onClick, variant = "solid", icon: Icon, c
       ? { border: `1.5px solid ${COLORS.ivory}`, color: COLORS.ivory, background: "transparent" }
       : { background: COLORS.chip, color: COLORS.ivory };
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${className}`} style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.14em", ...styles }}>
+    <As {...(As === "button" && { type })} {...rest} className={`${base} ${className}`} style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.14em", ...styles }}>
       {Icon && <Icon size={14} strokeWidth={1.75} />}
       {children}
-    </button>
+    </As>
   );
 }
 

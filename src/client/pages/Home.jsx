@@ -203,11 +203,11 @@ export default function Home() {
           </div>
         )}
 
-        <div className="mt-8 flex gap-3">
-          <GoldButton icon={ArrowRight} className="flex-1 flex-row-reverse" onClick={() => navigate("/itinerary")}>
+        <div className="mt-8 grid gap-3">
+          <GoldButton icon={ArrowRight} className="flex-row-reverse" onClick={() => navigate("/itinerary")}>
             Itinerary
           </GoldButton>
-          <GoldButton variant="outline" className="flex-1" onClick={() => navigate("/updates")}>
+          <GoldButton variant="outline" onClick={() => navigate("/updates")}>
             Updates
           </GoldButton>
         </div>
@@ -288,16 +288,9 @@ export default function Home() {
             <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: COLORS.ivoryDim }}>
               Our playlist for the celebration. Join it on Spotify and add the songs you want to hear in Lagos.
             </p>
-            <a
-              href={PLAYLIST_INVITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-[11px] font-semibold min-h-[48px] active:scale-[0.98] transition-all"
-              style={{ background: COLORS.ivory, color: COLORS.ink, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}
-            >
-              <Music size={14} strokeWidth={1.75} />
+            <GoldButton as="a" icon={Music} href={PLAYLIST_INVITE_URL} target="_blank" rel="noopener noreferrer">
               Join &amp; Add Songs
-            </a>
+            </GoldButton>
           </Card>
         )}
 

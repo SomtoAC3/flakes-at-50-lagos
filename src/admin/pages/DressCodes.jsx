@@ -235,12 +235,12 @@ function DressCodeForm({ initial, onSave, onCancel }) {
         <Field label="Avoid" value={form.avoid} onChange={set("avoid")} />
         <Field label="Weather" value={form.weather} onChange={set("weather")} />
       </div>
-      <div className="flex gap-2">
-        <GoldButton variant="ghost" className="flex-1" onClick={onCancel}>
-          Cancel
-        </GoldButton>
-        <GoldButton className="flex-1" disabled={saving || !form.title.trim() || !form.event.trim() || !form.date.trim()} onClick={submit}>
+      <div className="grid gap-2">
+        <GoldButton disabled={saving || !form.title.trim() || !form.event.trim() || !form.date.trim()} onClick={submit}>
           {saving ? "Saving…" : "Save"}
+        </GoldButton>
+        <GoldButton variant="ghost" onClick={onCancel}>
+          Cancel
         </GoldButton>
       </div>
     </Card>
