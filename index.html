@@ -35,19 +35,27 @@
          app loads underneath, then a fade. Plain CSS so it paints before
          any JavaScript arrives. */
       #splash {
-        position: fixed; inset: 0; z-index: 9999; overflow: hidden;
+        position: fixed; inset: 0; z-index: 9999;
         background: #7DC2B0; color: #FBF3EE; cursor: pointer;
         font-family: "Bricolage Grotesque", system-ui, sans-serif;
         transition: opacity 0.6s ease, visibility 0.6s;
       }
       #splash.out { opacity: 0; visibility: hidden; }
+      /* The photo and its fade reach past the visible page to the full
+         screen height and into the safe areas, so they run behind
+         see-through browser bars instead of leaving flat bands. The copy
+         stays inside the visible page. */
+      #splash img, #splash .veil {
+        position: fixed; left: 0; right: 0;
+        top: calc(-1 * env(safe-area-inset-top));
+        height: calc(100lvh + env(safe-area-inset-top) + env(safe-area-inset-bottom));
+      }
       #splash img {
-        position: absolute; inset: 0; width: 100%; height: 100%;
+        width: 100%;
         object-fit: cover; object-position: 20% 50%;
         animation: splash-zoom 3.6s cubic-bezier(0.2, 0.6, 0.2, 1) both;
       }
       #splash .veil {
-        position: absolute; inset: 0;
         background: linear-gradient(180deg, rgba(15, 45, 41, 0) 40%, rgba(15, 45, 41, 0.7) 66%, rgba(15, 45, 41, 0.94) 100%);
       }
       #splash .copy {
