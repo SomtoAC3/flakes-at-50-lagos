@@ -3,16 +3,22 @@ import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ArrowUpRight,
 import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, SectionTitle } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
+import { MORE_LINKS } from "../data/navigation";
 
-const MORE_LINKS = [
-  { to: "/dress-codes", label: "Dress Codes", icon: Shirt, desc: "Style guides for every event" },
-  { to: "/travel", label: "Travel Information", icon: Plane, desc: "Flights, visas, hotels & more" },
-  { to: "/my-trip", label: "My Trip", icon: Users, desc: "Your profile & checklist" },
-  { to: "/directory", label: "Guest Directory", icon: Globe2, desc: "See who's celebrating" },
-  { to: "/story", label: "Folake's Story", icon: BookOpen, desc: "Fifty years of grace" },
-  { to: "/faq", label: "FAQs", icon: HelpCircle, desc: "Answers to common questions" },
-  { to: "/contacts", label: "Contacts", icon: Phone, desc: "Emergency & organizer info" },
-];
+const ICONS = {
+  "/dress-codes": Shirt,
+  "/travel": Plane,
+  "/my-trip": Users,
+  "/directory": Globe2,
+  "/story": BookOpen,
+  "/faq": HelpCircle,
+  "/contacts": Phone,
+};
+
+function LinkIcon({ to, ...props }) {
+  const Icon = ICONS[to];
+  return <Icon {...props} />;
+}
 
 export default function More() {
   const { user, signOut } = useAuth();
@@ -44,7 +50,7 @@ export default function More() {
       <nav className="mt-6" style={{ borderTop: `1px solid ${COLORS.line}` }} aria-label="More pages">
         {MORE_LINKS.map((l) => (
           <Link key={l.to} to={l.to} className="group flex items-center gap-4 py-4 min-h-[60px]" style={{ borderBottom: `1px solid ${COLORS.line}` }}>
-            <l.icon size={17} strokeWidth={1.5} color={COLORS.ivoryDim} className="shrink-0" />
+            <LinkIcon to={l.to} size={17} strokeWidth={1.5} color={COLORS.ivoryDim} className="shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="text-[19px] leading-tight" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>{l.label}</div>
               <div className="text-[12px] mt-0.5" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>

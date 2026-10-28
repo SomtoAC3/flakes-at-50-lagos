@@ -54,9 +54,7 @@
   --line: color-mix(in srgb, var(--text) 13%, transparent);
   --accent-soft: color-mix(in srgb, var(--accent) 11%, transparent);
   --header: color-mix(in srgb, var(--bg) 90%, transparent);
-  --nav: color-mix(in srgb, var(--card) 94%, transparent);
   --shadow: none;
-  --shadow-nav: 0 12px 30px -20px color-mix(in srgb, var(--text) 40%, transparent);
 }
 
 html,
@@ -73,12 +71,6 @@ body {
   color: var(--text);
   -webkit-tap-highlight-color: transparent;
   font-variant-numeric: tabular-nums;
-}
-
-/* Safe-area padding for notched phones, layered on top of the bottom nav's
-   own padding rather than replacing it. */
-.safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* Hero photo: a slow settle on load. */
@@ -103,7 +95,14 @@ body {
 }
 .lightbox { animation: lightbox-fade 0.25s ease-out both; }
 .lightbox-img { animation: lightbox-grow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* Header menu: the panel drops from the top while the page dims. */
+@keyframes menu-drop {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.menu-backdrop { animation: lightbox-fade 0.25s ease-out both; }
+.menu-panel { animation: menu-drop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo, .rise-in, .lightbox, .lightbox-img { animation: none; }
+  .hero-photo, .rise-in, .lightbox, .lightbox-img, .menu-backdrop, .menu-panel { animation: none; }
   body { transition: none; }
 }
