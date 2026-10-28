@@ -64,7 +64,7 @@ function DressCodeCard({ dc }) {
         {dc.title}
       </h3>
       {dc.palette?.length > 0 && (
-        <div className="flex gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           {dc.palette.map((c) => (
             <span key={c} className="w-7 h-7 rounded-[3px]" style={{ background: c, border: "1px solid var(--line)" }} />
           ))}

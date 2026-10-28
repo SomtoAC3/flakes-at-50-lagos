@@ -43,5 +43,5 @@ export const DISPLAY_LUXE = { fontFamily: "'Fraunces', Georgia, serif", fontOpti
 // Small uppercase label style used for eyebrows, buttons and captions.
 export const CAPS = { textTransform: "uppercase", letterSpacing: "0.2em" };
 
-// Countdown target until the itinerary is published; null hides the countdown.
-export const EVENT_START = null;
+// Countdown target until the itinerary loads (the first day of the weekend).
+export const EVENT_START = new Date("2026-11-04T00:00:00");

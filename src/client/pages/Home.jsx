@@ -7,7 +7,7 @@ import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
 
 const FALLBACK_WELCOME_NOTE =
-  "Dear Guests,\n\nFifty is a milestone, and celebrating it with Folake at home in Lagos is a rare gift. Thank you for showing up with love, and for choosing to make these memories evergreen. Here's to the laughter, the dancing, and a celebration we'll never forget. See you in Lagos.";
+  "Dear Guests,\n\nThe countdown to 50 continues in Lagos. Thank you for showing up with love for Flakes. From arrival and thanksgiving to beachside ease and a night out together, this weekend is a celebration of grace, life and friendship. Here's to beautiful people and meaningful moments. See you in Lagos.";
 
 // Collaborative Spotify playlist for the celebration. Paste the playlist's
 // invite link (with its pt/pi parameters) here and the Soundtrack card
@@ -111,10 +111,10 @@ function Hero() {
   return (
     <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4 / 5", background: "#E8E7E4" }}>
       <img
-        src="/hero/folake.jpg"
-        alt="Folake in a black wide-brim hat and turtleneck"
+        src="/hero/flakes.jpg"
+        alt="Folake in cream ruffles and crystal hoop earrings"
         className="hero-photo absolute inset-0 w-full h-full object-cover"
-        style={{ objectPosition: "50% 18%" }}
+        style={{ objectPosition: "50% 10%" }}
         fetchpriority="high"
       />
       {/* Sits on the photo's pale studio backdrop, so it stays ink in both themes. */}
