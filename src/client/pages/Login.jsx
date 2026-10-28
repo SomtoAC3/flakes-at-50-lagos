@@ -89,7 +89,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-[3px] px-3 py-2.5 text-[16px] outline-none min-h-[44px]"
+                className="w-full rounded-[16px] px-4 py-2.5 text-[16px] outline-none min-h-[44px]"
                 style={inputStyle}
               />
             </label>
@@ -116,7 +116,7 @@ export default function Login() {
                 maxLength={10}
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                className="w-full rounded-[3px] px-3 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
+                className="w-full rounded-[16px] px-4 py-2.5 text-[20px] text-center outline-none min-h-[48px] tabular-nums"
                 style={{ ...inputStyle, letterSpacing: "0.3em" }}
               />
             </label>

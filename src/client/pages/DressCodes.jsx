@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Sparkles, Compass, X, Sun, Upload, Maximize2 } from "lucide-react";
-import { COLORS, F } from "../../shared/theme";
+import { COLORS, F, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, SectionTitle, DetailRow, GoldButton, LoadingNote, ErrorNote, Lightbox } from "../../shared/ui";
 import { useAuth } from "../../lib/auth";
 import { fetchDressCodes } from "../../lib/queries";
 import { brandingUrl, dressCodePhotoPath } from "../../lib/branding";
+import { Bloom } from "../../shared/flora";
+
+const SWATCH_KINDS = ["petal6", "scallop", "petal4", "daisy"];
 
 export default function DressCodes() {
   const { configured } = useAuth();
@@ -60,13 +63,13 @@ function DressCodeCard({ dc }) {
           {dc.event} · {dc.date}
         </div>
       </div>
-      <h3 className="text-[19px] mb-2" style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}>
+      <h3 className="text-[24px] leading-tight mb-3 italic" style={{ ...DISPLAY_LUXE, letterSpacing: "-0.015em", color: COLORS.ivory }}>
         {dc.title}
       </h3>
       {dc.palette?.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3">
-          {dc.palette.map((c) => (
-            <span key={c} className="w-7 h-7 rounded-[3px]" style={{ background: c, border: "1px solid var(--line)" }} />
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {dc.palette.map((c, i) => (
+            <Bloom key={c} kind={SWATCH_KINDS[i % SWATCH_KINDS.length]} color={c} size={32} rotate={i * 12} style={{ filter: "drop-shadow(0 0 0.5px var(--line))" }} />
           ))}
         </div>
       )}
@@ -90,7 +93,7 @@ function DressCodeCard({ dc }) {
           <img
             src={photoUrl}
             alt={photoAlt}
-            className="w-full rounded-[3px] object-cover aspect-[16/7]"
+            className="w-full rounded-[22px] object-cover aspect-[16/7]"
             style={{ border: `1px solid ${COLORS.line}` }}
             onError={() => setPhotoOk(false)}
           />

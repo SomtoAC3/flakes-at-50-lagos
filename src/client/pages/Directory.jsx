@@ -9,7 +9,7 @@ function GuestAvatar({ guest }) {
   const showImg = guest.avatar_path && imgOk;
   return (
     <div
-      className="w-14 h-14 rounded-[3px] shrink-0 overflow-hidden flex items-center justify-center"
+      className="w-14 h-14 rounded-full shrink-0 overflow-hidden flex items-center justify-center"
       style={{ border: "1px solid var(--line)", background: "var(--chip)" }}
     >
       {showImg ? (

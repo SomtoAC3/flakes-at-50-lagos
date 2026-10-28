@@ -155,7 +155,7 @@ function NotificationOptIn({ userId }) {
           </p>
         </div>
         {subscribed ? (
-          <button onClick={disable} disabled={busy} className="text-[11.5px] font-semibold shrink-0 min-h-[36px] px-3 rounded-[3px]" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
+          <button onClick={disable} disabled={busy} className="text-[11.5px] font-semibold shrink-0 min-h-[38px] px-4 rounded-full" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             {busy ? "…" : "Turn off"}
           </button>
         ) : (

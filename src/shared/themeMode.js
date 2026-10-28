@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // Theme (light/dark) state. Light is the default regardless of the device
 // setting; dark applies only after a guest picks it with the header toggle.
@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 // <meta name="theme-color"> tag in sync after that.
 
 const STORAGE_KEY = "theme";
-const META_COLORS = { light: "#F3F2EF", dark: "#0F0E0D" };
+export const META_COLORS = { light: "#FBF1EA", dark: "#141012" };
 
 export function currentTheme() {
   return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
@@ -34,4 +34,16 @@ export function useThemeMode() {
   }, []);
 
   return { theme, toggle };
+}
+
+// Follows the active theme without owning the toggle, for components that
+// only need to react to it (the header's toggle changes data-theme).
+export function useObservedTheme() {
+  const [theme, setTheme] = useState(currentTheme);
+  useEffect(() => {
+    const obs = new MutationObserver(() => setTheme(currentTheme()));
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
+  return theme;
 }

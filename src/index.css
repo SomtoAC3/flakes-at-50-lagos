@@ -1,48 +1,65 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Figtree:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap');
 
 /* Theme tokens. Light is the default for everyone; [data-theme="dark"] is
    set on <html> only when a guest picks dark with the header toggle (applied
    before first paint by the inline script in index.html). JS reads these
-   through COLORS in src/shared/theme.js.
-   Palette: studio-stone ground (matched to the hero photo's backdrop),
-   near-black ink, warm grey, antique gold from the earring. */
+   through COLORS in src/shared/theme.js. Event pages (EventPage.jsx) override
+   the six base tokens inline on <html> while they're open; everything after
+   them is mixed from those, so header, nav and hairlines follow along.
+   Palette: blush-cream ground, aubergine ink, raspberry accent, and a flat
+   flower set (pink, peach, sage, butter, lilac, orange) used by flora.jsx. */
 :root {
-  --bg: #F3F2EF;
-  --card: #FBFAF8;
-  --chip: #E8E6E1;
-  --text: #0F0E0D;
-  --text-dim: #6F6A62;
-  --line: rgba(15, 14, 13, 0.12);
-  --accent: #82612D;
-  --accent-soft: rgba(130, 97, 45, 0.09);
-  --header: rgba(243, 242, 239, 0.92);
-  --nav: rgba(251, 250, 248, 0.96);
-  --toggle-off: rgba(15, 14, 13, 0.15);
+  --bg: #FBF1EA;
+  --card: #FFF8F3;
+  --chip: #F6E1DA;
+  --text: #2E1A22;
+  --text-dim: #7D6168;
+  --accent: #B8335E;
+
+  --flower-pink: #F4A6BE;
+  --flower-peach: #F7BE95;
+  --flower-sage: #A8B898;
+  --flower-butter: #F4D272;
+  --flower-lilac: #BBA5DD;
+  --flower-orange: #EC7A3F;
+  --on-flower: #2E1A22;
+
   --danger: #A3271F;
   --danger-bg: rgba(163, 39, 31, 0.07);
   --danger-line: rgba(163, 39, 31, 0.25);
-  --shadow: none;
-  --shadow-nav: 0 10px 30px -18px rgba(15, 14, 13, 0.35);
+  --toggle-off: rgba(46, 26, 34, 0.15);
 }
 
 :root[data-theme="dark"] {
-  --bg: #0F0E0D;
-  --card: #1A1917;
-  --chip: #26241F;
-  --text: #F3F0EA;
-  --text-dim: #A8A196;
-  --line: rgba(243, 240, 234, 0.12);
-  --accent: #CDA968;
-  --accent-soft: rgba(205, 169, 104, 0.12);
-  --header: rgba(15, 14, 13, 0.92);
-  --nav: rgba(26, 25, 23, 0.96);
-  --toggle-off: rgba(243, 240, 234, 0.25);
+  --bg: #141012;
+  --card: #1F191C;
+  --chip: #2E2428;
+  --text: #F8ECE4;
+  --text-dim: #B8A5A2;
+  --accent: #F29BB5;
+
+  --flower-pink: #F2A2C0;
+  --flower-peach: #F6B48A;
+  --flower-sage: #9FB58F;
+  --flower-butter: #F6D33C;
+  --flower-lilac: #A784E6;
+  --flower-orange: #F26B2A;
+
   --danger: #E5736C;
   --danger-bg: rgba(229, 115, 108, 0.1);
   --danger-line: rgba(229, 115, 108, 0.3);
+  --toggle-off: rgba(248, 236, 228, 0.25);
+}
+
+/* Derived tokens, recomputed whenever a base token changes. */
+:root {
+  --line: color-mix(in srgb, var(--text) 13%, transparent);
+  --accent-soft: color-mix(in srgb, var(--accent) 11%, transparent);
+  --header: color-mix(in srgb, var(--bg) 90%, transparent);
+  --nav: color-mix(in srgb, var(--card) 94%, transparent);
   --shadow: none;
-  --shadow-nav: 0 10px 30px -18px rgba(0, 0, 0, 0.7);
+  --shadow-nav: 0 14px 34px -18px color-mix(in srgb, var(--text) 45%, transparent);
 }
 
 html,
@@ -53,6 +70,7 @@ body,
 
 body {
   margin: 0;
+  transition: background-color 0.4s ease;
   overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
@@ -88,6 +106,18 @@ body {
 }
 .lightbox { animation: lightbox-fade 0.25s ease-out both; }
 .lightbox-img { animation: lightbox-grow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* Flowers: a very slow turn for the ones marked spin, and a bloom-open on
+   load for event art. */
+@keyframes bloom-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes bloom-open {
+  from { opacity: 0; transform: scale(0.6) rotate(-25deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+.bloom-spin { animation: bloom-spin 60s linear infinite; transform-origin: 50% 50%; }
+.bloom-open { animation: bloom-open 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo, .rise-in, .lightbox, .lightbox-img { animation: none; }
+  .hero-photo, .rise-in, .lightbox, .lightbox-img, .bloom-spin, .bloom-open { animation: none; }
+  body { transition: none; }
 }

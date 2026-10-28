@@ -28,7 +28,7 @@ export default function Story() {
         <img
           src={brandingUrl(BRANDING_PATHS.storyHero)}
           alt="Folake"
-          className="w-full rounded-[3px] object-cover aspect-[4/5] mb-5"
+          className="w-full rounded-[28px] object-cover aspect-[4/5] mb-5"
           style={{ border: `1px solid ${COLORS.line}` }}
           onError={() => setHeroOk(false)}
         />

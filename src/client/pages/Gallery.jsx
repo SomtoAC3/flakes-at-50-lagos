@@ -51,7 +51,7 @@ export default function Gallery() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className="shrink-0 rounded-[3px] px-3.5 py-1.5 text-[11.5px] font-medium min-h-[36px]"
+            className="shrink-0 rounded-full px-4 py-1.5 text-[11.5px] font-medium min-h-[36px]"
             style={{
               background: filter === f ? COLORS.gold : COLORS.card,
               color: filter === f ? COLORS.ink : COLORS.ivoryDim,
@@ -91,7 +91,7 @@ export default function Gallery() {
               type="button"
               onClick={() => setOpen(p)}
               aria-label={`View ${p.caption || (p.isVideo ? "guest video" : "guest photo")} full screen`}
-              className="relative aspect-square rounded-[3px] overflow-hidden"
+              className="relative aspect-square rounded-[18px] overflow-hidden"
               style={{ border: "1px solid var(--line)", cursor: "zoom-in" }}
             >
               <GalleryThumb item={p} />

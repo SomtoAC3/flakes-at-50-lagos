@@ -1,18 +1,74 @@
 import { useEffect, useState } from "react";
-import { MapPin, Clock, Shirt, Luggage, Compass, Info, ChevronDown, ExternalLink, Calendar, Bell } from "lucide-react";
-import { COLORS, F } from "../../shared/theme";
-import { Card, SectionTitle, DetailRow, LoadingNote, ErrorNote } from "../../shared/ui";
+import { Link } from "react-router-dom";
+import { ArrowUpRight, MapPin } from "lucide-react";
+import { COLORS, F, CAPS, DISPLAY_LUXE } from "../../shared/theme";
+import { SectionTitle, LoadingNote, ErrorNote } from "../../shared/ui";
+import { Bloom } from "../../shared/flora";
+import { useObservedTheme } from "../../shared/themeMode";
 import { useAuth } from "../../lib/auth";
 import { fetchItinerary } from "../../lib/queries";
-import { downloadICS } from "../../lib/ics";
+import { eventTheme, themeColors, splitTitle } from "../data/eventThemes";
+
+function timeRange(act) {
+  const end = act.end_time && act.end_time !== "—" ? ` – ${act.end_time}` : "";
+  return `${act.start_time || "Time TBC"}${end}`;
+}
+
+// One event, dressed in its own theme, with a flower peeking off the edge.
+function EventCard({ act, index }) {
+  const mode = useObservedTheme();
+  const theme = eventTheme(act, index);
+  const c = themeColors(theme, mode);
+  const { kicker, lead, joiner, tail } = splitTitle(act.name);
+  const grotesk = theme.headline === "grotesk";
+  return (
+    <Link
+      to={`/itinerary/${act.id}`}
+      className="group relative block overflow-hidden rounded-[30px] p-5 pr-24 min-h-[150px] active:scale-[0.99] transition-transform"
+      style={{ background: c.panel, color: c.onPanel }}
+    >
+      <Bloom
+        kind={theme.kinds[0]}
+        color={theme.petals[0]}
+        center={theme.kinds[0] === "daisy" ? theme.petals[1] : null}
+        size={150}
+        spin
+        className="absolute"
+        style={{ right: -48, top: "50%", marginTop: -75 }}
+      />
+      <Bloom kind={theme.kinds[1] || theme.kinds[0]} color={theme.petals[1 % theme.petals.length]} size={38} rotate={20} className="absolute" style={{ right: 70, bottom: 14 }} />
+      <div className="relative">
+        <div className="text-[10px] font-semibold mb-2.5" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.22em", opacity: 0.85 }}>
+          {timeRange(act)}
+        </div>
+        {kicker && (
+          <div className="text-[10px] font-semibold mb-1" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.18em", opacity: 0.7 }}>
+            {kicker}
+          </div>
+        )}
+        <div
+          className={grotesk ? "text-[25px] leading-[0.95] font-extrabold" : "text-[25px] leading-[1.05]"}
+          style={grotesk ? { fontFamily: F.grotesk, textTransform: "uppercase", letterSpacing: "-0.03em", textWrap: "balance" } : { ...DISPLAY_LUXE, letterSpacing: "-0.02em", textWrap: "balance" }}
+        >
+          {lead}
+          {tail && (grotesk ? <span style={{ opacity: 0.7 }}>{joiner}{tail}</span> : <em>{joiner}{tail}</em>)}
+        </div>
+        {act.location && (
+          <div className="flex items-center gap-1.5 mt-3 text-[12px]" style={{ opacity: 0.8 }}>
+            <MapPin size={12} className="shrink-0" /> <span className="truncate">{act.location}</span>
+          </div>
+        )}
+      </div>
+      <span className="sr-only">{theme.name}</span>
+      <ArrowUpRight size={18} className="absolute right-4 top-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+    </Link>
+  );
+}
 
 export default function Itinerary() {
   const { configured } = useAuth();
   const [days, setDays] = useState(null);
   const [error, setError] = useState("");
-  const [dayIdx, setDayIdx] = useState(0);
-  const [expanded, setExpanded] = useState(null);
-  const [notify, setNotify] = useState({});
 
   useEffect(() => {
     if (!configured) {
@@ -27,121 +83,50 @@ export default function Itinerary() {
   if (error) {
     return (
       <div className="px-5 pt-6">
-        <SectionTitle eyebrow="Day by Day" title="The Itinerary" light />
+        <SectionTitle eyebrow="Day by Day" title="The Itinerary" />
         <ErrorNote message={error} />
       </div>
     );
   }
   if (!days) return <LoadingNote label="Loading the itinerary…" />;
-  if (days.length === 0) return <div className="px-5 pt-6"><SectionTitle eyebrow="Day by Day" title="The Itinerary" light sub="No days published yet." /></div>;
+  if (days.length === 0) return <div className="px-5 pt-6"><SectionTitle eyebrow="Day by Day" title="The Itinerary" sub="No days published yet." /></div>;
 
-  const day = days[Math.min(dayIdx, days.length - 1)];
+  // Position across the whole weekend, so fallback themes don't repeat by day.
+  let n = 0;
 
   return (
     <div className="px-5 pt-6">
-      <SectionTitle eyebrow="Day by Day" title="The Itinerary" light sub="Tap a day to explore, tap an activity to see full details." />
+      <SectionTitle eyebrow="Day by Day" title="The Itinerary" sub="Every event has its own page, with directions, timings and what to wear." />
 
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-5 -mx-5 px-5" style={{ scrollbarWidth: "none" }}>
-        {days.map((d, i) => (
-          <button
-            key={d.id}
-            onClick={() => setDayIdx(i)}
-            className="shrink-0 rounded-[3px] px-3.5 py-2.5 text-left min-h-[44px]"
-            style={{
-              minWidth: 92,
-              background: i === dayIdx ? COLORS.gold : COLORS.card,
-              border: i === dayIdx ? "none" : `1px solid ${COLORS.line}`,
-            }}
-          >
-            <div className="text-[10px] font-semibold" style={{ fontFamily: F.body, color: i === dayIdx ? COLORS.ink : COLORS.gold }}>
-              {d.label}
-            </div>
-            <div className="text-[12px] font-semibold mt-0.5" style={{ color: i === dayIdx ? COLORS.ink : COLORS.ivory }}>
-              {new Date(d.date + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-            </div>
-          </button>
-        ))}
-      </div>
-
-      <div className="mb-4">
-        <div className="text-[11px] font-semibold" style={{ fontFamily: F.body, color: COLORS.gold }}>
-          {day.weekday} · {day.city}
-        </div>
-        <div className="text-[19px]" style={{ fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em", color: COLORS.ivory }}>
-          {day.theme}
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {day.activities.map((act) => {
-          const isOpen = expanded === act.id;
+      <div className="space-y-10">
+        {days.map((d) => {
+          const date = new Date(`${d.date}T00:00:00`);
           return (
-            <Card dark key={act.id} className="!p-0 overflow-hidden">
-              <button onClick={() => setExpanded(isOpen ? null : act.id)} className="w-full text-left p-4 flex items-start justify-between gap-3 min-h-[44px]">
-                <div className="flex-1 min-w-0">
-                  <div className="text-[10.5px] font-semibold mb-1" style={{ fontFamily: F.body, color: COLORS.gold }}>
-                    {act.start_time}
-                    {act.end_time && act.end_time !== "—" ? ` – ${act.end_time}` : ""}
-                  </div>
-                  <div className="text-[15.5px] leading-snug" style={{ color: COLORS.ivory, fontFamily: F.display, fontWeight: 500, letterSpacing: "-0.02em" }}>
-                    {act.name}
-                  </div>
-                  <div className="flex items-center gap-1 mt-1.5 text-[12px]" style={{ color: COLORS.ivoryDim }}>
-                    <MapPin size={11} /> {act.location}
-                  </div>
+            <section key={d.id} aria-labelledby={`day-${d.id}`}>
+              <header className="flex items-end gap-4 mb-4 pb-3" style={{ borderBottom: `1px solid ${COLORS.line}` }}>
+                <div className="text-[52px] leading-[0.8] shrink-0" style={{ ...DISPLAY_LUXE, color: COLORS.gold }}>
+                  {String(date.getDate()).padStart(2, "0")}
                 </div>
-                <ChevronDown size={16} color={COLORS.gold} style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} className="shrink-0 mt-1" />
-              </button>
-              {isOpen && (
-                <div className="px-4 pb-4 pt-1 space-y-3" style={{ borderTop: `1px solid ${COLORS.line}` }}>
-                  <p className="text-[13px] leading-relaxed pt-3" style={{ color: COLORS.ivoryDim }}>
-                    {act.description}
-                  </p>
-                  <DetailRow icon={MapPin} label="Meeting Point" value={act.meeting_point} />
-                  <DetailRow icon={Clock} label="Departure Time" value={act.departure_time} />
-                  <DetailRow icon={Shirt} label="Dress Code" value={act.dress_code} />
-                  <DetailRow icon={Luggage} label="What to Bring" value={act.what_to_bring} />
-                  <DetailRow icon={Compass} label="Transportation" value={act.transport} />
-                  {act.notes && act.notes !== "To Be Confirmed" && (
-                    <div className="flex items-start gap-2 rounded-[3px] p-2.5" style={{ background: COLORS.chip }}>
-                      <Info size={13} color={COLORS.gold} className="shrink-0 mt-0.5" />
-                      <span className="text-[12px]" style={{ color: COLORS.ivory }}>{act.notes}</span>
+                <div className="min-w-0 pb-0.5">
+                  <div id={`day-${d.id}`} className="text-[10px] font-semibold mb-1" style={{ fontFamily: F.body, ...CAPS, letterSpacing: "0.22em", color: COLORS.ivoryDim }}>
+                    {d.label} · {d.weekday} {date.toLocaleDateString("en-GB", { month: "long" })}
+                  </div>
+                  {d.theme && (
+                    <div className="text-[19px] leading-tight italic" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
+                      {d.theme}
                     </div>
                   )}
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {act.maps_query && (
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px]"
-                        style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
-                      >
-                        <MapPin size={12} /> Open in Maps <ExternalLink size={10} />
-                      </a>
-                    )}
-                    <button
-                      onClick={() => downloadICS({ ...act, location: act.location }, day.date)}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px]"
-                      style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}
-                    >
-                      <Calendar size={12} /> Add to Calendar
-                    </button>
-                    <button
-                      onClick={() => setNotify((s) => ({ ...s, [act.id]: !s[act.id] }))}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px]"
-                      style={{
-                        background: notify[act.id] ? COLORS.gold : "transparent",
-                        border: `1.5px solid ${COLORS.gold}`,
-                        color: notify[act.id] ? COLORS.ink : COLORS.gold,
-                      }}
-                    >
-                      <Bell size={12} /> {notify[act.id] ? "Notifying" : "Notify Me"}
-                    </button>
-                  </div>
                 </div>
-              )}
-            </Card>
+              </header>
+              <div className="space-y-3">
+                {d.activities.map((act) => (
+                  <EventCard key={act.id} act={act} index={n++} />
+                ))}
+                {d.activities.length === 0 && (
+                  <p className="text-[13px]" style={{ color: COLORS.ivoryDim }}>Details for this day are coming soon.</p>
+                )}
+              </div>
+            </section>
           );
         })}
       </div>

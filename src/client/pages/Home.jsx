@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MapPin, Clock, Shirt, Bell, Sparkles, ArrowRight, Plane, Users, Phone, Music } from "lucide-react";
 import { COLORS, F, EVENT_START, CAPS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, Eyebrow, SectionTitle, GoldButton, Badge, LintelDivider } from "../../shared/ui";
+import { Bloom, BloomFrame, BloomIcon, BloomPhoto } from "../../shared/flora";
 import { useAuth } from "../../lib/auth";
 import { fetchItinerary, fetchAnnouncements, fetchSiteContent } from "../../lib/queries";
 
@@ -107,20 +108,29 @@ function formatLongDateRange(days) {
   return `${fmt(first)} – ${fmt(last)} ${last.getFullYear()}`;
 }
 
+// The portrait cropped to a soft eight-lobed flower, with a few flat blooms
+// tucked around its edge like a pressed-flower card.
 function Hero() {
   return (
-    <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4 / 5", background: "#E8E7E4" }}>
-      <img
-        src="/hero/flakes.jpg"
-        alt="Folake in cream ruffles and crystal hoop earrings"
-        className="hero-photo absolute inset-0 w-full h-full object-cover"
-        style={{ objectPosition: "50% 10%" }}
-        fetchpriority="high"
-      />
-      {/* Sits on the photo's pale studio backdrop, so it stays ink in both themes. */}
+    <div className="relative px-6 pt-6">
+      <div className="relative">
+        <BloomPhoto src="/hero/flakes.jpg" alt="Folake in cream ruffles and crystal hoop earrings" ratio={1.2} kind="cloud" className="hero-photo" />
+        <div className="absolute bloom-open" style={{ left: -14, bottom: "6%", width: "30%" }}>
+          <Bloom kind="petal6" color={COLORS.flowerPink} center={COLORS.flowerButter} spin />
+        </div>
+        <div className="absolute bloom-open" style={{ right: -6, top: "4%", width: "19%", animationDelay: "0.12s" }}>
+          <Bloom kind="daisy" color={COLORS.card} center={COLORS.flowerButter} />
+        </div>
+        <div className="absolute bloom-open" style={{ right: "8%", bottom: -10, width: "15%", animationDelay: "0.2s" }}>
+          <Bloom kind="petal4" color={COLORS.flowerSage} rotate={20} />
+        </div>
+        <div className="absolute bloom-open" style={{ left: "6%", top: -6, width: "10%", animationDelay: "0.26s" }}>
+          <Bloom kind="petal4" color={COLORS.flowerPeach} rotate={45} />
+        </div>
+      </div>
       <div
-        className="absolute right-3 top-5 text-[9px] font-semibold"
-        style={{ writingMode: "vertical-rl", color: "rgba(15,14,13,0.72)", fontFamily: F.body, ...CAPS, letterSpacing: "0.36em" }}
+        className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] font-semibold"
+        style={{ writingMode: "vertical-rl", color: COLORS.ivoryDim, fontFamily: F.body, ...CAPS, letterSpacing: "0.36em" }}
         aria-hidden="true"
       >
         Lagos · MMXXVI
@@ -128,6 +138,14 @@ function Hero() {
     </div>
   );
 }
+
+// Each countdown number sits in its own flower.
+const COUNTDOWN_BLOOMS = [
+  ["petal6", COLORS.flowerPink],
+  ["scallop", COLORS.flowerPeach],
+  ["petal4", COLORS.flowerSage],
+  ["daisy", COLORS.flowerButter],
+];
 
 export default function Home() {
   const { configured } = useAuth();
@@ -168,9 +186,9 @@ export default function Home() {
       <div className="px-6 pt-9 pb-12">
         <div className="rise-in">
           <Eyebrow>A Golden Jubilee · Lagos Edition</Eyebrow>
-          <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, fontWeight: 300, color: COLORS.ivory, letterSpacing: "-0.03em" }}>
-            <span className="block whitespace-nowrap text-[58px] sm:text-[72px]">
-              Flakes<span style={{ color: COLORS.gold }}>@50</span>
+          <h1 className="leading-[0.9]" style={{ ...DISPLAY_LUXE, color: COLORS.ivory, letterSpacing: "-0.035em" }}>
+            <span className="block whitespace-nowrap text-[62px] sm:text-[76px]">
+              <em>Flakes</em><span style={{ color: COLORS.gold }}>@50</span>
             </span>
           </h1>
           <p className="text-[16px] italic mt-5" style={{ ...DISPLAY_LUXE, color: COLORS.ivoryDim }}>
@@ -180,21 +198,17 @@ export default function Home() {
 
         {countdownTarget && status?.phase !== "after" && (
           <div
-            className="mt-9 grid grid-cols-4"
-            style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}
+            className="mt-9 grid grid-cols-4 gap-2"
             role="timer"
             aria-label={`${cd.days} days, ${cd.hours} hours, ${cd.minutes} minutes until the celebration`}
           >
             {[["Days", cd.days], ["Hours", cd.hours], ["Minutes", cd.minutes], ["Seconds", cd.seconds]].map(([label, val], i) => (
-              <div
-                key={label}
-                className="py-4 flex flex-col items-center"
-                style={{ borderLeft: i ? `1px solid ${COLORS.line}` : "none" }}
-                aria-hidden="true"
-              >
-                <span className="text-[34px] leading-none tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.ivory }}>
-                  {pad(val)}
-                </span>
+              <div key={label} className="flex flex-col items-center" aria-hidden="true">
+                <BloomFrame kind={COUNTDOWN_BLOOMS[i][0]} color={COUNTDOWN_BLOOMS[i][1]} rotate={i * 15} className="w-full aspect-square">
+                  <span className="text-[27px] leading-none tabular-nums" style={{ ...DISPLAY_LUXE, color: COLORS.onFlower }}>
+                    {pad(val)}
+                  </span>
+                </BloomFrame>
                 <span className="text-[8.5px] mt-2 font-semibold" style={{ fontFamily: F.body, color: COLORS.ivoryDim, ...CAPS, letterSpacing: "0.22em" }}>
                   {label}
                 </span>
@@ -256,13 +270,14 @@ export default function Home() {
               <QuickRow icon={Sparkles} label={status?.phase === "during" ? "Next Activity" : "First Activity"} value={nextActivity.name} />
               {(nextActivity.departure_time || nextActivity.start_time) && (
                 <QuickRow
+                  kind="petal4"
                   icon={Clock}
                   label="Meeting Time"
                   value={parseTimeOn("1970-01-01", nextActivity.departure_time) ? nextActivity.departure_time : nextActivity.start_time}
                 />
               )}
-              {nextActivity.meeting_point && <QuickRow icon={MapPin} label="Meeting Point" value={nextActivity.meeting_point} />}
-              {nextActivity.dress_code && <QuickRow icon={Shirt} label="Dress Code" value={nextActivity.dress_code} />}
+              {nextActivity.meeting_point && <QuickRow kind="scallop" icon={MapPin} label="Meeting Point" value={nextActivity.meeting_point} />}
+              {nextActivity.dress_code && <QuickRow kind="daisy" icon={Shirt} label="Dress Code" value={nextActivity.dress_code} />}
               {latestUpdate && (
                 <QuickRow icon={Bell} label={`Latest Update — ${latestUpdate.category}`} value={latestUpdate.message} />
               )}
@@ -292,7 +307,7 @@ export default function Home() {
               href={PLAYLIST_INVITE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-[2px] text-[11px] font-semibold min-h-[46px] active:scale-[0.98] transition-all"
+              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-[11px] font-semibold min-h-[48px] active:scale-[0.98] transition-all"
               style={{ background: COLORS.ivory, color: COLORS.ink, fontFamily: F.body, ...CAPS, letterSpacing: "0.18em" }}
             >
               <Music size={14} strokeWidth={1.75} />
@@ -302,25 +317,20 @@ export default function Home() {
         )}
 
         <div className="grid grid-cols-2 gap-3 mb-10">
-          <QuickLinkCard icon={Shirt} title="Dress Codes" to="/dress-codes" />
-          <QuickLinkCard icon={Plane} title="Travel Info" to="/travel" />
-          <QuickLinkCard icon={Users} title="My Trip" to="/my-trip" />
-          <QuickLinkCard icon={Phone} title="Emergency Contacts" to="/contacts" />
+          <QuickLinkCard icon={Shirt} title="Dress Codes" to="/dress-codes" kind="petal6" color={COLORS.flowerPink} />
+          <QuickLinkCard icon={Plane} title="Travel Info" to="/travel" kind="scallop" color={COLORS.flowerPeach} />
+          <QuickLinkCard icon={Users} title="My Trip" to="/my-trip" kind="petal4" color={COLORS.flowerSage} />
+          <QuickLinkCard icon={Phone} title="Emergency Contacts" to="/contacts" kind="daisy" color={COLORS.flowerButter} />
         </div>
       </div>
     </div>
   );
 }
 
-function QuickRow({ icon: Icon, label, value }) {
+function QuickRow({ icon: Icon, label, value, kind = "petal6" }) {
   return (
     <div className="flex items-center gap-3">
-      <div
-        className="w-[38px] h-[38px] shrink-0 flex items-center justify-center"
-        style={{ background: COLORS.chip, borderRadius: 2 }}
-      >
-        <Icon size={16} color={COLORS.gold} />
-      </div>
+      <BloomIcon icon={Icon} kind={kind} />
       <div className="min-w-0">
         <div className="text-[11px]" style={{ color: COLORS.ivoryDim, fontFamily: F.body }}>
           {label}
@@ -333,16 +343,11 @@ function QuickRow({ icon: Icon, label, value }) {
   );
 }
 
-function QuickLinkCard({ icon: Icon, title, to }) {
+function QuickLinkCard({ icon: Icon, title, to, kind, color }) {
   return (
     <Link to={to}>
       <Card dark className="!p-4 h-full flex flex-col gap-3">
-        <span
-          className="w-[38px] h-[38px] flex items-center justify-center"
-          style={{ background: COLORS.chip, borderRadius: 2 }}
-        >
-          <Icon size={17} color={COLORS.gold} />
-        </span>
+        <BloomIcon icon={Icon} kind={kind} color={color} iconColor={COLORS.onFlower} size={44} iconSize={17} />
         <span className="text-[17px] leading-tight" style={{ ...DISPLAY_LUXE, fontWeight: 400, color: COLORS.ivory }}>
           {title}
         </span>

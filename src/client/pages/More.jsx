@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import { Shirt, Plane, Users, Globe2, BookOpen, HelpCircle, Phone, ChevronRight, LogIn, LogOut } from "lucide-react";
 import { COLORS, F } from "../../shared/theme";
 import { Card, SectionTitle } from "../../shared/ui";
+import { BloomIcon } from "../../shared/flora";
 import { useAuth } from "../../lib/auth";
+
+const MORE_KINDS = ["petal6", "scallop", "petal4", "daisy"];
 
 const MORE_LINKS = [
   { to: "/dress-codes", label: "Dress Codes", icon: Shirt, desc: "Style guides for every event" },
@@ -31,23 +34,21 @@ export default function More() {
           </div>
         </div>
         {user ? (
-          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
+          <button onClick={signOut} className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-full min-h-[38px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogOut size={13} /> Sign out
           </button>
         ) : (
-          <Link to="/login" className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-[3px] min-h-[36px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
+          <Link to="/login" className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-full min-h-[38px] whitespace-nowrap shrink-0" style={{ border: `1.5px solid ${COLORS.gold}`, color: COLORS.gold }}>
             <LogIn size={13} /> Sign in
           </Link>
         )}
       </Card>
 
       <div className="space-y-2.5">
-        {MORE_LINKS.map((l) => (
+        {MORE_LINKS.map((l, i) => (
           <Link key={l.to} to={l.to}>
             <Card dark className="flex items-center gap-3 !py-3.5">
-              <div className="w-[38px] h-[38px] flex items-center justify-center shrink-0" style={{ background: COLORS.chip, borderRadius: 2 }}>
-                <l.icon size={16} color={COLORS.gold} />
-              </div>
+              <BloomIcon icon={l.icon} kind={MORE_KINDS[i % MORE_KINDS.length]} />
               <div className="flex-1 text-left min-w-0">
                 <div className="text-[13.5px] font-semibold" style={{ color: COLORS.ivory }}>{l.label}</div>
                 <div className="text-[11.5px]" style={{ color: COLORS.ivoryDim }}>{l.desc}</div>
