@@ -127,6 +127,9 @@ function useEventSwipe(ref, ready, prevId, nextId) {
   }, [ref, ready, prevId, nextId, navigate]);
 }
 
+// The glam session sends guests to the makeup artists in the Directory.
+const isGlam = (act) => /glam|make-?up/i.test(act.name || "");
+
 function dateParts(dateStr) {
   const d = new Date(`${dateStr}T00:00:00`);
   return {
@@ -254,7 +257,9 @@ export default function EventPage() {
   const prev = all[idx - 1];
   const next = all[idx + 1];
   const dc = act.dress_code ? codes.find((c) => c.title?.trim().toLowerCase() === act.dress_code.trim().toLowerCase()) : null;
-  const showNotes = act.notes && act.notes !== "To Be Confirmed";
+  // Older notes pointed to "Makeup Appointments" in Travel, which is gone:
+  // the Find a Makeup Artist button replaces them.
+  const showNotes = act.notes && act.notes !== "To Be Confirmed" && !/makeup appointments/i.test(act.notes);
 
   return (
     <div className="overflow-x-clip">
@@ -284,6 +289,11 @@ export default function EventPage() {
         )}
 
         <div className="mt-7 grid gap-3">
+          {isGlam(act) && (
+            <GoldButton as={Link} to="/directory?category=Makeup">
+              Find a Makeup Artist
+            </GoldButton>
+          )}
           {act.maps_query && (
             <GoldButton as="a" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.maps_query)}`} target="_blank" rel="noreferrer">
               Open in Maps

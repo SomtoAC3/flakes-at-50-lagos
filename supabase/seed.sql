@@ -25,7 +25,7 @@ select * from (values
    'Glam & Getting Ready', 'Morning', null, 'Lekki Phase 1', null, null,
    null, null, null,
    'Recommended places to get your makeup done before the service: Glam by Tola, Beauty by Tejj Studio, House of Tara and Beautiebycassie.',
-   'Addresses and phone numbers are under Makeup Appointments in Travel Information. Book ahead.',
+   null,
    null, 1),
   ('d2-a2', (select id from public.itinerary_days where date = '2026-11-05'),
    'Thanksgiving Service: Fí Ọlá Kẹ – Blossomed in Grace', '2:00 PM', '5:00 PM',

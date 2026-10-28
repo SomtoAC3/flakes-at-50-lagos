@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Phone, MessageCircle, MapPin, Star, ArrowUpRight } from "lucide-react";
 import { COLORS, DISPLAY_LUXE } from "../../shared/theme";
 import { Card, SectionTitle, GoldButton } from "../../shared/ui";
@@ -213,7 +214,9 @@ function PersonRow({ entry }) {
 export default function Directory() {
   const [entries, setEntries] = useState(DIRECTORY);
   const [whatsappLink, setWhatsappLink] = useState("");
-  const [filter, setFilter] = useState(null);
+  // ?category=Makeup opens that category (event pages link straight to it).
+  const [params] = useSearchParams();
+  const [filter, setFilter] = useState(() => params.get("category"));
 
   useEffect(() => {
     let active = true;
@@ -230,7 +233,7 @@ export default function Directory() {
 
   const groups = groupByCategory(entries.filter(isConfirmed));
   // One category at a time; the first is open until a guest picks another.
-  const index = Math.max(0, groups.findIndex(([category]) => category === filter));
+  const index = Math.max(0, groups.findIndex(([category]) => category.toLowerCase() === filter?.toLowerCase()));
   const [current, list = []] = groups[index] || [];
   const flower = COVER_FLOWERS[index % COVER_FLOWERS.length];
   const places = list.filter(isPlace);

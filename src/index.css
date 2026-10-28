@@ -54,15 +54,19 @@
   --line: color-mix(in srgb, var(--text) 13%, transparent);
   --accent-soft: color-mix(in srgb, var(--accent) 11%, transparent);
   --header: color-mix(in srgb, var(--bg) 90%, transparent);
-  --nav: color-mix(in srgb, var(--card) 94%, transparent);
   --shadow: none;
-  --shadow-nav: 0 12px 30px -20px color-mix(in srgb, var(--text) 40%, transparent);
 }
 
 html,
 body,
 #root {
   height: 100%;
+}
+
+/* Safari tints its top and bottom bars from the page behind them, so the
+   root carries the theme colour too, not just the body. */
+html {
+  background: var(--bg);
 }
 
 body {

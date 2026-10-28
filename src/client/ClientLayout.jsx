@@ -27,6 +27,8 @@ export default function ClientLayout() {
   const location = useLocation();
 
   useEffect(() => {
+    // The document scrolls (so Safari's bars can collapse); reset both.
+    window.scrollTo(0, 0);
     if (scrollRef.current) scrollRef.current.scrollTo(0, 0);
   }, [location.pathname]);
 
@@ -78,21 +80,19 @@ export default function ClientLayout() {
 
         <Header hasNew={hasNew} />
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto pb-28">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto pb-24">
           <Outlet />
         </div>
 
-        <div className="safe-bottom fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] px-3 pb-3 pt-2 z-40">
-          <nav
-            className="flex items-center justify-between rounded-full px-2 py-1.5"
-            style={{
-              background: "var(--nav)",
-              border: `1px solid ${COLORS.line}`,
-              boxShadow: "var(--shadow-nav)",
-              backdropFilter: "blur(8px)",
-            }}
-            aria-label="Main pages"
-          >
+        {/* Full width and opaque in the page colour: Safari (iOS 26) paints
+            its bottom bar to match a fixed element touching it, so a solid
+            bar in --bg keeps that bar in the theme (and in each event's
+            colours). Hidden during the splash so it runs full height. */}
+        <div
+          className="app-nav safe-bottom fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-40"
+          style={{ background: "var(--bg)", borderTop: `1px solid ${COLORS.line}` }}
+        >
+          <nav className="flex items-center justify-between px-2 pt-1" aria-label="Main pages">
             {MAIN_LINKS.map((item) => (
               <NavLink
                 key={item.to}

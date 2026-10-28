@@ -72,8 +72,8 @@ export default function Header({ hasNew = false }) {
   // theme toggle; on the tab pages it sits left, in line with the page.
   return (
     <div
-      className={`px-3 pt-4 pb-2 grid items-center sticky top-0 z-30 backdrop-blur ${back ? "grid-cols-[88px_1fr_88px]" : "grid-cols-[1fr_auto]"}`}
-      style={{ background: "var(--header)" }}
+      className={`px-3 pt-4 pb-2 grid items-center sticky top-0 z-30 ${back ? "grid-cols-[88px_1fr_88px]" : "grid-cols-[1fr_auto]"}`}
+      style={{ background: "var(--bg)" }}
     >
       {back && (
         <Link to={back} className="justify-self-start flex items-center justify-center min-h-[44px] min-w-[44px]" style={{ color: COLORS.ivory }} aria-label="Back">
