@@ -10,7 +10,7 @@ import ClientLayout from "./client/ClientLayout";
 import RequireGuestAuth from "./client/RequireGuestAuth";
 import Home from "./client/pages/Home";
 import Itinerary from "./client/pages/Itinerary";
-import EventPage from "./client/pages/EventPage";
+import DayPage from "./client/pages/DayPage";
 import DressCodes from "./client/pages/DressCodes";
 import Travel from "./client/pages/Travel";
 import MyTrip from "./client/pages/MyTrip";
@@ -47,7 +47,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/" element={<ClientLayout />}>
             <Route index element={<Home />} />
             <Route path="itinerary" element={<Itinerary />} />
-            <Route path="itinerary/:activityId" element={<EventPage />} />
+            <Route path="itinerary/:id" element={<DayPage />} />
             <Route path="dress-codes" element={<DressCodes />} />
             <Route path="travel" element={<Travel />} />
             <Route path="my-trip" element={<RequireGuestAuth><MyTrip /></RequireGuestAuth>} />

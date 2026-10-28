@@ -98,6 +98,12 @@ export function eventTheme(act, index = 0) {
   return { key, ...THEMES[key] };
 }
 
+// The look a day takes: its first activity's theme. A day without
+// activities yet borrows one from its own theme line.
+export function dayTheme(day, index = 0) {
+  return eventTheme(day.activities[0] || { name: day.theme || "" }, index);
+}
+
 // The theme's colours for a light/dark mode.
 export function themeColors(theme, mode) {
   return mode === "dark" ? theme.dark : theme.light;

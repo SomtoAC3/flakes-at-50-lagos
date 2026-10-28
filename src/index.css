@@ -4,7 +4,7 @@
 /* Theme tokens. Light is the default for everyone; [data-theme="dark"] is
    set on <html> only when a guest picks dark with the header toggle (applied
    before first paint by the inline script in index.html). JS reads these
-   through COLORS in src/shared/theme.js. Event pages (EventPage.jsx) override
+   through COLORS in src/shared/theme.js. Day pages (DayPage.jsx) override
    the six base tokens inline on <html> while they're open; everything after
    them is mixed from those, so header, nav and hairlines follow along.
    Palette: a garden-paper ground, deep green ink and accent, and a few
