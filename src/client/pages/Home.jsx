@@ -35,6 +35,8 @@ function useCountdown(target) {
   }, []);
   const diff = target ? Math.max(0, target.getTime() - now.getTime()) : 0;
   return {
+    // The countdown hides itself once the celebration starts.
+    running: diff > 0,
     days: Math.floor(diff / 86400000),
     hours: Math.floor((diff % 86400000) / 3600000),
     minutes: Math.floor((diff % 3600000) / 60000),
@@ -183,7 +185,7 @@ export default function Home() {
           </p>
         </div>
 
-        {countdownTarget && status?.phase !== "after" && (
+        {cd.running && (
           <div
             className="mt-9 grid grid-cols-4 py-4"
             style={{ borderTop: `1px solid ${COLORS.line}`, borderBottom: `1px solid ${COLORS.line}` }}
